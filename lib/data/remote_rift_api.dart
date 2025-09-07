@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:http/io_client.dart';
-import 'package:remote_rift_client/models.dart';
+import 'package:remote_rift_client/data/models.dart';
 import 'package:web_socket_channel/io.dart';
 
 class RemoteRiftApi {
