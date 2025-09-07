@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:remote_rift_client/data/models.dart';
+import 'package:remote_rift_client/i18n/strings.g.dart';
 import 'package:remote_rift_client/ui/home/home_cubit.dart';
 import 'package:remote_rift_client/ui/home/home_state.dart';
 import 'package:remote_rift_client/ui/widgets/lifecycle.dart';
@@ -31,34 +32,37 @@ class HomePage extends StatelessWidget {
                   if (state case PreGame())
                     ElevatedButton(
                       onPressed: !loading ? cubit.createLobby : null,
-                      child: Text('Create lobby'),
+                      child: Text(t.home.createLobbyButton),
                     ),
 
                   if (state case Lobby(state: GameLobbyState.idle)) ...[
                     ElevatedButton(
                       onPressed: !loading ? cubit.searchMatch : null,
-                      child: Text('Search game'),
+                      child: Text(t.home.searchGameButton),
                     ),
                     SizedBox(height: 4),
                     TextButton(
                       onPressed: !loading ? cubit.leaveLobby : null,
-                      child: Text('Leave lobby'),
+                      child: Text(t.home.leaveLobbyButton),
                     ),
                   ],
 
                   if (state case Lobby(state: GameLobbyState.searching))
                     ElevatedButton(
                       onPressed: !loading ? cubit.stopMatchSearch : null,
-                      child: Text('Cancel search'),
+                      child: Text(t.home.cancelSearchButton),
                     ),
 
                   if (state case Found(state: GameFoundState.pending)) ...[
                     ElevatedButton(
                       onPressed: !loading ? cubit.acceptMatch : null,
-                      child: Text('Accept game'),
+                      child: Text(t.home.acceptGameButton),
                     ),
                     SizedBox(height: 4),
-                    TextButton(onPressed: cubit.declineMatch, child: Text('Decline game')),
+                    TextButton(
+                      onPressed: cubit.declineMatch,
+                      child: Text(t.home.declineGameButton),
+                    ),
                   ],
                 ],
               },

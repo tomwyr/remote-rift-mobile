@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:remote_rift_client/i18n/strings.g.dart';
 
 part 'models.g.dart';
 
@@ -18,18 +19,18 @@ sealed class RemoteRiftState {
   }
 
   String get displayName => switch (this) {
-    PreGame() => 'Pre game',
+    PreGame() => t.gameState.preGame,
     Lobby(:var state) => switch (state) {
-      GameLobbyState.idle => 'Lobby',
-      GameLobbyState.searching => 'Searching game',
+      GameLobbyState.idle => t.gameState.lobbyIdle,
+      GameLobbyState.searching => t.gameState.lobbySearching,
     },
     Found(:var state) => switch (state) {
-      GameFoundState.pending => 'Game found',
-      GameFoundState.accepted => 'Game accepted',
-      GameFoundState.declined => 'Game rejected',
+      GameFoundState.pending => t.gameState.foundPending,
+      GameFoundState.accepted => t.gameState.foundAccepted,
+      GameFoundState.declined => t.gameState.foundDeclined,
     },
-    InGame() => 'In game',
-    Unknown() => 'Unknown',
+    InGame() => t.gameState.inGame,
+    Unknown() => t.gameState.unknown,
   };
 }
 

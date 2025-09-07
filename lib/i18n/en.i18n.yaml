@@ -1,0 +1,20 @@
+app:
+  title: "Remote Rift"
+
+gameState:
+  preGame: "Pre game"
+  lobbyIdle: "Lobby"
+  lobbySearching: "Searching game"
+  foundPending: "Game found"
+  foundAccepted: "Game accepted"
+  foundDeclined: "Game declined"
+  inGame: "In game"
+  unknown: "Unknown"
+
+home:
+  createLobbyButton: "Create lobby"
+  searchGameButton: "Search game"
+  leaveLobbyButton: "Leave lobby"
+  cancelSearchButton: "Cancel search"
+  acceptGameButton: "Accept game"
+  declineGameButton: "Decline game"
