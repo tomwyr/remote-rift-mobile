@@ -1,9 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:remote_rift_client/ui/home/home_state.dart';
 import 'package:remote_rift_client/data/remote_rift_api.dart';
+import 'package:remote_rift_client/ui/home/home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit({required this.api}) : super(HomeState.initial());
+  HomeCubit({required this.api}) : super(Initial());
 
   final RemoteRiftApi api;
 
@@ -12,32 +13,61 @@ class HomeCubit extends Cubit<HomeState> {
   void initialize() async {
     if (_initialized) return;
     _initialized = true;
-    await for (var state in api.getCurrentStateStream()) {
-      emit(HomeState(data: state));
+    await for (var gameState in api.getCurrentStateStream()) {
+      emit(switch (state) {
+        Initial() => Data(state: gameState),
+        Data data => data.produce((draft) => draft.state = gameState),
+      });
     }
   }
 
-  void createLobby() async {
-    await api.createLobby();
+  void createLobby() {
+    _runAsync(() async {
+      await api.createLobby();
+    });
   }
 
-  void searchMatch() async {
-    await api.searchMatch();
+  void searchMatch() {
+    _runAsync(() async {
+      await api.searchMatch();
+    });
   }
 
-  void leaveLobby() async {
-    await api.leaveLobby();
+  void leaveLobby() {
+    _runAsync(() async {
+      await api.leaveLobby();
+    });
   }
 
-  void stopMatchSearch() async {
-    await api.stopMatchSearch();
+  void stopMatchSearch() {
+    _runAsync(() async {
+      await api.stopMatchSearch();
+    });
   }
 
-  void acceptMatch() async {
-    await api.acceptMatch();
+  void acceptMatch() {
+    _runAsync(() async {
+      await api.acceptMatch();
+    });
   }
 
-  void declineMatch() async {
-    await api.declineMatch();
+  void declineMatch() {
+    _runAsync(() async {
+      await api.declineMatch();
+    });
+  }
+
+  Future<void> _runAsync(AsyncCallback action) async {
+    final currentState = switch (state) {
+      Initial() => throw StateError('Unexpected async action in initial state'),
+      Data data => data,
+    };
+
+    try {
+      emit(currentState.produce((draft) => draft.loading = true));
+      await action();
+    } finally {
+      emit(currentState.produce((draft) => draft.loading = false));
+    }
   }
 }

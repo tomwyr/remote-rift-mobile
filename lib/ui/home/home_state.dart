@@ -1,9 +1,16 @@
+import 'package:draft/draft.dart';
 import 'package:remote_rift_client/data/models.dart';
 
-class HomeState {
-  const HomeState({required this.data});
+part 'home_state.draft.dart';
 
-  const HomeState.initial() : this(data: null);
+sealed class HomeState {}
 
-  final RemoteRiftState? data;
+class Initial extends HomeState {}
+
+@draft
+class Data extends HomeState {
+  Data({required this.state, this.loading = false});
+
+  final RemoteRiftState state;
+  final bool loading;
 }
