@@ -17,7 +17,7 @@ class RemoteRiftApi {
   factory RemoteRiftApi.create({required String noSchemeBaseUrl, String? proxy}) {
     final client = HttpClient();
     if (proxy != null) {
-      client.findProxy = (url) => 'PROXY 192.168.50.252:9090';
+      client.findProxy = (url) => proxy;
     }
 
     return RemoteRiftApi(
