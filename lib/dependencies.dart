@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:remote_rift_client/data/remote_rift_api.dart';
-import 'package:remote_rift_client/ui/home/home_cubit.dart';
+import 'package:remote_rift_mobile/data/remote_rift_api.dart';
+import 'package:remote_rift_mobile/ui/home/home_cubit.dart';
 
 class Dependencies {
   static HomeCubit homeCubit(BuildContext context) => HomeCubit(

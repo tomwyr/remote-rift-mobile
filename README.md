@@ -1,4 +1,4 @@
-# remote_rift_client
+# remote_rift_mobile
 
 A new Flutter project.
 

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:remote_rift_client/data/models.dart';
-import 'package:remote_rift_client/i18n/strings.g.dart';
-import 'package:remote_rift_client/ui/home/home_cubit.dart';
-import 'package:remote_rift_client/ui/home/home_state.dart';
-import 'package:remote_rift_client/ui/widgets/lifecycle.dart';
+import 'package:remote_rift_mobile/data/models.dart';
+import 'package:remote_rift_mobile/i18n/strings.g.dart';
+import 'package:remote_rift_mobile/ui/home/home_cubit.dart';
+import 'package:remote_rift_mobile/ui/home/home_state.dart';
+import 'package:remote_rift_mobile/ui/widgets/lifecycle.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

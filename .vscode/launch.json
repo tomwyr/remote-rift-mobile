@@ -5,18 +5,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "remote-rift-client",
+      "name": "remote-rift-mobile",
       "request": "launch",
       "type": "dart"
     },
     {
-      "name": "remote-rift-client (profile mode)",
+      "name": "remote-rift-mobile (profile mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "profile"
     },
     {
-      "name": "remote-rift-client (release mode)",
+      "name": "remote-rift-mobile (release mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "release"

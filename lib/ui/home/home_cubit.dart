@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:remote_rift_client/data/remote_rift_api.dart';
-import 'package:remote_rift_client/ui/home/home_state.dart';
+import 'package:remote_rift_mobile/data/remote_rift_api.dart';
+import 'package:remote_rift_mobile/ui/home/home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit({required this.api}) : super(Initial());

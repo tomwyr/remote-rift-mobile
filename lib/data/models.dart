@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:remote_rift_client/i18n/strings.g.dart';
+import 'package:remote_rift_mobile/i18n/strings.g.dart';
 
 part 'models.g.dart';
 
