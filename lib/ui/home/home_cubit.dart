@@ -1,59 +1,79 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:remote_rift_mobile/data/local_storage.dart';
+import 'package:remote_rift_mobile/data/models.dart';
 import 'package:remote_rift_mobile/data/remote_rift_api.dart';
 import 'package:remote_rift_mobile/ui/home/home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit({required this.api}) : super(Initial());
+  HomeCubit({required this.remoteRiftApi, required this.localStorage}) : super(Initial());
 
-  final RemoteRiftApi api;
+  final RemoteRiftApi remoteRiftApi;
+  final LocalStorage localStorage;
+
+  StreamSubscription? _gameStateSubscription;
 
   var _initialized = false;
 
   void initialize() async {
     if (_initialized) return;
     _initialized = true;
-    await for (var gameState in api.getCurrentStateStream()) {
-      emit(switch (state) {
-        Initial() => Data(state: gameState),
-        Data data => data.produce((draft) => draft.state = gameState),
-      });
+    await for (var apiAddress in localStorage.apiAddressStream) {
+      remoteRiftApi.setApiAddress(apiAddress);
+      _resetGameStateListener(apiAddress);
     }
   }
 
   void createLobby() {
     _runAsync(() async {
-      await api.createLobby();
+      await remoteRiftApi.createLobby();
     });
   }
 
   void searchMatch() {
     _runAsync(() async {
-      await api.searchMatch();
+      await remoteRiftApi.searchMatch();
     });
   }
 
   void leaveLobby() {
     _runAsync(() async {
-      await api.leaveLobby();
+      await remoteRiftApi.leaveLobby();
     });
   }
 
   void stopMatchSearch() {
     _runAsync(() async {
-      await api.stopMatchSearch();
+      await remoteRiftApi.stopMatchSearch();
     });
   }
 
   void acceptMatch() {
     _runAsync(() async {
-      await api.acceptMatch();
+      await remoteRiftApi.acceptMatch();
     });
   }
 
   void declineMatch() {
     _runAsync(() async {
-      await api.declineMatch();
+      await remoteRiftApi.declineMatch();
+    });
+  }
+
+  void _resetGameStateListener(String apiAddress) {
+    emit(Initial());
+    _gameStateSubscription?.cancel();
+    if (apiAddress.isNotEmpty) {
+      _gameStateSubscription = remoteRiftApi.getCurrentStateStream().listen(_emitGameState);
+    }
+  }
+
+  void _emitGameState(RemoteRiftState gameState) {
+    emit(switch (state) {
+      Initial() => Data(state: gameState),
+      Data data => data.produce((draft) => draft.state = gameState),
     });
   }
 

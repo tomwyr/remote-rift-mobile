@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:remote_rift_mobile/data/models.dart';
+import 'package:remote_rift_mobile/dependencies.dart';
 import 'package:remote_rift_mobile/i18n/strings.g.dart';
 import 'package:remote_rift_mobile/ui/home/home_cubit.dart';
 import 'package:remote_rift_mobile/ui/home/home_state.dart';
+import 'package:remote_rift_mobile/ui/settings/settings_drawer.dart';
+import 'package:remote_rift_mobile/ui/widgets/drawer.dart';
 import 'package:remote_rift_mobile/ui/widgets/lifecycle.dart';
 
 class HomePage extends StatelessWidget {
@@ -16,7 +19,11 @@ class HomePage extends StatelessWidget {
     return Lifecycle(
       onInit: context.read<HomeCubit>().initialize,
       child: Scaffold(
-        appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary),
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          actions: [EndDrawerIcon(icon: Icons.tune)],
+        ),
+        endDrawer: BlocProvider(create: Dependencies.settingsCubit, child: SettingsDrawer()),
         body: Padding(
           padding: const EdgeInsets.all(24),
           child: Center(

@@ -7,40 +7,26 @@ import 'package:remote_rift_mobile/data/models.dart';
 import 'package:web_socket_channel/io.dart';
 
 class RemoteRiftApi {
-  RemoteRiftApi({
-    required this.httpClient,
-    required this.httpBaseUrl,
-    required this.webSocketClient,
-    required this.webSocketBaseUrl,
-  });
-
-  factory RemoteRiftApi.create({required String noSchemeBaseUrl, String? proxy}) {
-    final client = HttpClient();
-    if (proxy != null) {
-      client.findProxy = (url) => proxy;
-    }
-
-    return RemoteRiftApi(
-      httpClient: IOClient(client),
-      httpBaseUrl: 'http://$noSchemeBaseUrl',
-      webSocketClient: client,
-      webSocketBaseUrl: 'ws://$noSchemeBaseUrl',
-    );
-  }
+  RemoteRiftApi({required HttpClient client})
+    : httpClient = IOClient(client),
+      webSocketClient = client;
 
   final Client httpClient;
-  final String httpBaseUrl;
   final HttpClient webSocketClient;
-  final String webSocketBaseUrl;
+
+  String? _apiAddress;
+  void setApiAddress(String? value) {
+    _apiAddress = value;
+  }
 
   Future<RemoteRiftState> getCurrentState() async {
-    final url = '$httpBaseUrl/state/current';
+    final url = '${await _httpBaseUrl}/state/current';
     final response = await httpClient.get(Uri.parse(url));
     return RemoteRiftState.fromJson(jsonDecode(response.body));
   }
 
   Stream<RemoteRiftState> getCurrentStateStream() async* {
-    final url = '$webSocketBaseUrl/state/watch';
+    final url = '${await _webSocketBaseUrl}/state/watch';
     final ws = IOWebSocketChannel.connect(Uri.parse(url), customClient: webSocketClient);
     await for (var message in ws.stream) {
       yield RemoteRiftState.fromJson(jsonDecode(message));
@@ -48,32 +34,54 @@ class RemoteRiftApi {
   }
 
   Future<void> createLobby() async {
-    final url = '$httpBaseUrl/lobby/create';
+    final url = '${await _httpBaseUrl}/lobby/create';
     await httpClient.post(Uri.parse(url));
   }
 
   Future<void> leaveLobby() async {
-    final url = '$httpBaseUrl/lobby/leave';
+    final url = '${await _httpBaseUrl}/lobby/leave';
     await httpClient.post(Uri.parse(url));
   }
 
   Future<void> searchMatch() async {
-    final url = '$httpBaseUrl/queue/start';
+    final url = '${await _httpBaseUrl}/queue/start';
     await httpClient.post(Uri.parse(url));
   }
 
   Future<void> stopMatchSearch() async {
-    final url = '$httpBaseUrl/queue/stop';
+    final url = '${await _httpBaseUrl}/queue/stop';
     await httpClient.post(Uri.parse(url));
   }
 
   Future<void> acceptMatch() async {
-    final url = '$httpBaseUrl/queue/accept';
+    final url = '${await _httpBaseUrl}/queue/accept';
     await httpClient.post(Uri.parse(url));
   }
 
   Future<void> declineMatch() async {
-    final url = '$httpBaseUrl/queue/decline';
+    final url = '${await _httpBaseUrl}/queue/decline';
     await httpClient.post(Uri.parse(url));
   }
+
+  Future<String> get _httpBaseUrl async {
+    final apiAddress = await _requireApiAddres();
+    return 'http://$apiAddress';
+  }
+
+  Future<String> get _webSocketBaseUrl async {
+    final apiAddress = await _requireApiAddres();
+    return 'ws://$apiAddress';
+  }
+
+  Future<String> _requireApiAddres() async {
+    if (_apiAddress case var value?) {
+      return value;
+    } else {
+      throw ApiAddressNotSet();
+    }
+  }
 }
+
+sealed class RemoteRiftApiError implements Exception {}
+
+class ApiAddressNotSet extends RemoteRiftApiError {}
