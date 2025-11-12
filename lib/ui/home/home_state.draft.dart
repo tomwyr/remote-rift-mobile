@@ -10,21 +10,22 @@ part of 'home_state.dart';
 // DraftGenerator
 // **************************************************************************
 
-class DataDraft implements Data {
+class ConnectedDraft implements Connected {
   // Mutable fields
   RemoteRiftState state;
   bool loading;
 
   // Getters and setters for nested draftable fields
 
-  DataDraft({required this.state, required this.loading});
+  ConnectedDraft({required this.state, required this.loading});
 
-  Data save() => Data(state: state, loading: loading);
+  Connected save() => Connected(state: state, loading: loading);
 }
 
-extension DataDraftExtension on Data {
-  DataDraft draft() => DataDraft(state: this.state, loading: this.loading);
-  Data produce(void Function(DataDraft draft) producer) {
+extension ConnectedDraftExtension on Connected {
+  ConnectedDraft draft() =>
+      ConnectedDraft(state: this.state, loading: this.loading);
+  Connected produce(void Function(ConnectedDraft draft) producer) {
     final draft = this.draft();
     producer(draft);
     return draft.save();

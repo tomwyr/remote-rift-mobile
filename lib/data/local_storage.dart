@@ -22,6 +22,10 @@ class LocalStorage {
 }
 
 extension LocalStorageExtensions on LocalStorage {
+  Future<bool> hasApiAddress() async {
+    return await getApiAddress() != null;
+  }
+
   Stream<String> get apiAddressStream async* {
     if (await getApiAddress() case var apiAddress?) {
       yield apiAddress;

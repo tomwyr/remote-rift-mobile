@@ -41,6 +41,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	// Translations
 	late final TranslationsAppEn app = TranslationsAppEn._(_root);
 	late final TranslationsGameStateEn gameState = TranslationsGameStateEn._(_root);
+	late final TranslationsConnectionEn connection = TranslationsConnectionEn._(_root);
 	late final TranslationsHomeEn home = TranslationsHomeEn._(_root);
 }
 
@@ -89,6 +90,33 @@ class TranslationsGameStateEn {
 	String get unknown => 'Unknown';
 }
 
+// Path: connection
+class TranslationsConnectionEn {
+	TranslationsConnectionEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Configuration required'
+	String get configurationRequiredTitle => 'Configuration required';
+
+	/// en: 'Setup game connection in the settings panel'
+	String get configurationRequiredDescription => 'Setup game connection in the settings panel';
+
+	/// en: 'Connecting...'
+	String get connecting => 'Connecting...';
+
+	/// en: 'Connection error'
+	String get errorTitle => 'Connection error';
+
+	/// en: 'Unable to connect to the game client'
+	String get errorDescription => 'Unable to connect to the game client';
+
+	/// en: 'Reconnect'
+	String get errorRetry => 'Reconnect';
+}
+
 // Path: home
 class TranslationsHomeEn {
 	TranslationsHomeEn._(this._root);
@@ -116,10 +144,17 @@ class TranslationsHomeEn {
 	String get declineGameButton => 'Decline game';
 }
 
-/// Flat map(s) containing all translations.
+/// The flat map containing all translations for locale <en>.
 /// Only for edge cases! For simple maps, use the map function of this library.
+///
+/// The Dart AOT compiler has issues with very large switch statements,
+/// so the map is split into smaller functions (512 entries each).
 extension on Translations {
 	dynamic _flatMapFunction(String path) {
+		return _flatMapFunction$0(path);
+	}
+
+	dynamic _flatMapFunction$0(String path) {
 		switch (path) {
 			case 'app.title': return 'Remote Rift';
 			case 'gameState.preGame': return 'Pre game';
@@ -130,6 +165,12 @@ extension on Translations {
 			case 'gameState.foundDeclined': return 'Game declined';
 			case 'gameState.inGame': return 'In game';
 			case 'gameState.unknown': return 'Unknown';
+			case 'connection.configurationRequiredTitle': return 'Configuration required';
+			case 'connection.configurationRequiredDescription': return 'Setup game connection in the settings panel';
+			case 'connection.connecting': return 'Connecting...';
+			case 'connection.errorTitle': return 'Connection error';
+			case 'connection.errorDescription': return 'Unable to connect to the game client';
+			case 'connection.errorRetry': return 'Reconnect';
 			case 'home.createLobbyButton': return 'Create lobby';
 			case 'home.searchGameButton': return 'Search game';
 			case 'home.leaveLobbyButton': return 'Leave lobby';

@@ -20,6 +20,8 @@ class HomePage extends StatelessWidget {
       onInit: context.read<HomeCubit>().initialize,
       child: Scaffold(
         appBar: AppBar(
+          title: Text(t.app.title),
+          centerTitle: false,
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           actions: [EndDrawerIcon(icon: Icons.tune)],
         ),
@@ -30,12 +32,30 @@ class HomePage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: switch (cubit.state) {
-                Initial() => [CircularProgressIndicator()],
-                Data(:var state, :var loading) => [
+                Initial() => [],
+                ConfigurationRequired() => [
+                  Text(
+                    t.connection.configurationRequiredTitle,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  SizedBox(height: 4),
+                  Text(t.connection.configurationRequiredDescription),
+                ],
+                Connecting() => [
+                  Text(t.connection.connecting, style: Theme.of(context).textTheme.titleMedium),
+                  SizedBox(height: 16),
+                  CircularProgressIndicator(),
+                ],
+                ConnectionError() => [
+                  Text(t.connection.errorTitle, style: Theme.of(context).textTheme.titleMedium),
+                  SizedBox(height: 4),
+                  Text(t.connection.errorDescription),
+                  SizedBox(height: 8),
+                  ElevatedButton(onPressed: cubit.reconnect, child: Text(t.connection.errorRetry)),
+                ],
+                Connected(:var state, :var loading) => [
                   Text(state.displayName),
-
                   SizedBox(height: 12),
-
                   if (state case PreGame())
                     ElevatedButton(
                       onPressed: !loading ? cubit.createLobby : null,

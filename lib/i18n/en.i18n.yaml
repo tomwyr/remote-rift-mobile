@@ -11,6 +11,14 @@ gameState:
   inGame: "In game"
   unknown: "Unknown"
 
+connection:
+  configurationRequiredTitle: "Configuration required"
+  configurationRequiredDescription: "Setup game connection in the settings panel"
+  connecting: "Connecting..."
+  errorTitle: "Connection error"
+  errorDescription: "Unable to connect to the game client"
+  errorRetry: "Reconnect"
+
 home:
   createLobbyButton: "Create lobby"
   searchGameButton: "Search game"
