@@ -7,19 +7,8 @@
     {
       "name": "remote-rift-mobile",
       "request": "launch",
-      "type": "dart"
-    },
-    {
-      "name": "remote-rift-mobile (profile mode)",
-      "request": "launch",
       "type": "dart",
-      "flutterMode": "profile"
+      "flutterMode": "debug",
     },
-    {
-      "name": "remote-rift-mobile (release mode)",
-      "request": "launch",
-      "type": "dart",
-      "flutterMode": "release"
-    }
   ]
 }
