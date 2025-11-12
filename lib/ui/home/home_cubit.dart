@@ -2,11 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:remote_rift_mobile/data/local_storage.dart';
-import 'package:remote_rift_mobile/data/models.dart';
-import 'package:remote_rift_mobile/data/remote_rift_api.dart';
-import 'package:remote_rift_mobile/ui/home/home_state.dart';
 import 'package:rxdart/rxdart.dart';
+
+import '../../data/local_storage.dart';
+import '../../data/models.dart';
+import '../../data/remote_rift_api.dart';
+import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit({required this.remoteRiftApi, required this.localStorage}) : super(Initial());

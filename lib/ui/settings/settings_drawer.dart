@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:remote_rift_mobile/ui/settings/settings_cubit.dart';
-import 'package:remote_rift_mobile/ui/settings/settings_state.dart';
-import 'package:remote_rift_mobile/ui/widgets/lifecycle.dart';
-import 'package:remote_rift_mobile/ui/widgets/text_field.dart';
+
+import '../widgets/lifecycle.dart';
+import '../widgets/text_field.dart';
+import 'settings_cubit.dart';
+import 'settings_state.dart';
 
 class SettingsDrawer extends StatelessWidget {
   const SettingsDrawer({super.key});

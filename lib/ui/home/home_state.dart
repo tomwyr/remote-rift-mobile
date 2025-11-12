@@ -1,5 +1,6 @@
 import 'package:draft/draft.dart';
-import 'package:remote_rift_mobile/data/models.dart';
+
+import '../../data/models.dart';
 
 part 'home_state.draft.dart';
 

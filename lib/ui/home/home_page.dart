@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:remote_rift_mobile/data/models.dart';
-import 'package:remote_rift_mobile/dependencies.dart';
-import 'package:remote_rift_mobile/i18n/strings.g.dart';
-import 'package:remote_rift_mobile/ui/home/home_cubit.dart';
-import 'package:remote_rift_mobile/ui/home/home_state.dart';
-import 'package:remote_rift_mobile/ui/settings/settings_drawer.dart';
-import 'package:remote_rift_mobile/ui/widgets/drawer.dart';
-import 'package:remote_rift_mobile/ui/widgets/lifecycle.dart';
+
+import '../../data/models.dart';
+import '../../dependencies.dart';
+import '../../i18n/strings.g.dart';
+import '../settings/settings_drawer.dart';
+import '../widgets/drawer.dart';
+import '../widgets/lifecycle.dart';
+import 'home_cubit.dart';
+import 'home_state.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:remote_rift_mobile/data/local_storage.dart';
 
+import '../../data/local_storage.dart';
 import 'settings_state.dart';
 
 class SettingsCubit extends Cubit<SettingsState> {
