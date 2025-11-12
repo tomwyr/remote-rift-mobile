@@ -28,10 +28,10 @@ class HomePage extends StatelessWidget {
         ),
         endDrawer: BlocProvider(create: Dependencies.settingsCubit, child: SettingsDrawer()),
         body: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const .all(24),
           child: Center(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: .center,
               children: switch (cubit.state) {
                 Initial() => [],
                 ConfigurationRequired() => [
@@ -63,7 +63,7 @@ class HomePage extends StatelessWidget {
                       child: Text(t.home.createLobbyButton),
                     ),
 
-                  if (state case Lobby(state: GameLobbyState.idle)) ...[
+                  if (state case Lobby(state: .idle)) ...[
                     ElevatedButton(
                       onPressed: !loading ? cubit.searchMatch : null,
                       child: Text(t.home.searchGameButton),
@@ -75,13 +75,13 @@ class HomePage extends StatelessWidget {
                     ),
                   ],
 
-                  if (state case Lobby(state: GameLobbyState.searching))
+                  if (state case Lobby(state: .searching))
                     ElevatedButton(
                       onPressed: !loading ? cubit.stopMatchSearch : null,
                       child: Text(t.home.cancelSearchButton),
                     ),
 
-                  if (state case Found(state: GameFoundState.pending)) ...[
+                  if (state case Found(state: .pending)) ...[
                     ElevatedButton(
                       onPressed: !loading ? cubit.acceptMatch : null,
                       child: Text(t.home.acceptGameButton),

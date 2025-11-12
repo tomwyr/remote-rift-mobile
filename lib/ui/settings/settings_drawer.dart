@@ -17,16 +17,16 @@ class SettingsDrawer extends StatelessWidget {
       onInit: cubit.initialize,
       child: Drawer(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          padding: .symmetric(horizontal: 24, vertical: 12),
           child: SafeArea(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: .start,
               children: [
                 Text('Settings', style: Theme.of(context).textTheme.headlineMedium),
                 SizedBox(height: 12),
                 switch (cubit.state) {
                   Initial() => Padding(
-                    padding: const EdgeInsets.all(12),
+                    padding: const .all(12),
                     child: Center(child: CircularProgressIndicator()),
                   ),
                   Data(:var apiAddress) => ApiAddressField(
@@ -90,7 +90,7 @@ class _ApiAddressFieldState extends State<ApiAddressField> {
 
   Widget _suffixButtons() {
     return Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: .min,
       children: [
         TextFieldSuffixButton(
           icon: Icons.clear,

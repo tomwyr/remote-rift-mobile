@@ -22,13 +22,13 @@ sealed class RemoteRiftState {
   String get displayName => switch (this) {
     PreGame() => t.gameState.preGame,
     Lobby(:var state) => switch (state) {
-      GameLobbyState.idle => t.gameState.lobbyIdle,
-      GameLobbyState.searching => t.gameState.lobbySearching,
+      .idle => t.gameState.lobbyIdle,
+      .searching => t.gameState.lobbySearching,
     },
     Found(:var state) => switch (state) {
-      GameFoundState.pending => t.gameState.foundPending,
-      GameFoundState.accepted => t.gameState.foundAccepted,
-      GameFoundState.declined => t.gameState.foundDeclined,
+      .pending => t.gameState.foundPending,
+      .accepted => t.gameState.foundAccepted,
+      .declined => t.gameState.foundDeclined,
     },
     InGame() => t.gameState.inGame,
     Unknown() => t.gameState.unknown,

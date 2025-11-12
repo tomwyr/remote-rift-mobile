@@ -10,7 +10,7 @@ class TextFieldSuffixButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Padding(padding: const EdgeInsets.all(4), child: Icon(icon)),
+      child: Padding(padding: const .all(4), child: Icon(icon)),
     );
   }
 }

@@ -22,46 +22,46 @@ class RemoteRiftApi {
 
   Future<RemoteRiftState> getCurrentState() async {
     final url = '${await _httpBaseUrl}/state/current';
-    final response = await httpClient.get(Uri.parse(url));
-    return RemoteRiftState.fromJson(jsonDecode(response.body));
+    final response = await httpClient.get(.parse(url));
+    return .fromJson(jsonDecode(response.body));
   }
 
   Stream<RemoteRiftState> getCurrentStateStream() async* {
     final url = '${await _webSocketBaseUrl}/state/watch';
     final ws = IOWebSocketChannel.connect(Uri.parse(url), customClient: webSocketClient);
     await for (var message in ws.stream) {
-      yield RemoteRiftState.fromJson(jsonDecode(message));
+      yield .fromJson(jsonDecode(message));
     }
   }
 
   Future<void> createLobby() async {
     final url = '${await _httpBaseUrl}/lobby/create';
-    await httpClient.post(Uri.parse(url));
+    await httpClient.post(.parse(url));
   }
 
   Future<void> leaveLobby() async {
     final url = '${await _httpBaseUrl}/lobby/leave';
-    await httpClient.post(Uri.parse(url));
+    await httpClient.post(.parse(url));
   }
 
   Future<void> searchMatch() async {
     final url = '${await _httpBaseUrl}/queue/start';
-    await httpClient.post(Uri.parse(url));
+    await httpClient.post(.parse(url));
   }
 
   Future<void> stopMatchSearch() async {
     final url = '${await _httpBaseUrl}/queue/stop';
-    await httpClient.post(Uri.parse(url));
+    await httpClient.post(.parse(url));
   }
 
   Future<void> acceptMatch() async {
     final url = '${await _httpBaseUrl}/queue/accept';
-    await httpClient.post(Uri.parse(url));
+    await httpClient.post(.parse(url));
   }
 
   Future<void> declineMatch() async {
     final url = '${await _httpBaseUrl}/queue/decline';
-    await httpClient.post(Uri.parse(url));
+    await httpClient.post(.parse(url));
   }
 
   Future<String> get _httpBaseUrl async {
