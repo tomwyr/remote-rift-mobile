@@ -20,4 +20,9 @@ class Connected extends HomeState {
   final bool loading;
 }
 
-class ConnectionError extends HomeState {}
+@draft
+class ConnectionError extends HomeState {
+  ConnectionError({this.reconnectTriggered = false});
+
+  final bool reconnectTriggered;
+}

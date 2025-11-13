@@ -2,11 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rxdart/rxdart.dart';
 
 import '../../data/local_storage.dart';
 import '../../data/models.dart';
 import '../../data/remote_rift_api.dart';
+import '../../utils/retry_scheduler.dart';
+import '../../utils/stream_extensions.dart';
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
@@ -15,7 +16,8 @@ class HomeCubit extends Cubit<HomeState> {
   final RemoteRiftApi remoteRiftApi;
   final LocalStorage localStorage;
 
-  final _cancelGameStateListener = StreamController.broadcast();
+  StreamController<RemoteRiftState>? _gameStateListener;
+  RetryScheduler? _reconnectScheduler;
 
   void initialize() {
     if (state is! Initial) {
@@ -25,20 +27,50 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void reconnect() {
-    if (state is! ConnectionError) {
-      throw StateError('Tried to reconnect while not in error state (was ${state.runtimeType})');
+    final connectionError = switch (state) {
+      ConnectionError state => state,
+      _ => throw StateError(
+        'Tried to reconnect while not in error state (was ${state.runtimeType})',
+      ),
+    };
+
+    final scheduler = _reconnectScheduler;
+    if (scheduler == null || scheduler.status == .idle) {
+      throw StateError('Reconnect scheduler was not running while in connection erro state');
     }
-    _connectToGameApi();
+
+    emit(connectionError.produce((draft) => draft.reconnectTriggered = true));
+    scheduler.trigger();
+  }
+
+  Future<void> _reconnectToGameApi() async {
+    final apiAddress = await localStorage.getApiAddress();
+    if (apiAddress case null || '') {
+      _onApiAddressMissing();
+      return;
+    }
+
+    final completer = Completer<void>();
+    _resetGameStateListener(apiAddress, onAttemptDone: completer.complete);
+    return completer.future;
   }
 
   void _connectToGameApi() async {
-    if (!await localStorage.hasApiAddress()) {
-      emit(ConfigurationRequired());
-    }
     await for (var apiAddress in localStorage.apiAddressStream) {
       remoteRiftApi.setApiAddress(apiAddress);
-      _resetGameStateListener(apiAddress);
+      if (apiAddress case null || '') {
+        _onApiAddressMissing();
+      } else {
+        emit(Connecting());
+        _resetGameStateListener(apiAddress);
+      }
     }
+  }
+
+  void _onApiAddressMissing() {
+    emit(ConfigurationRequired());
+    _gameStateListener?.close();
+    _reconnectScheduler?.reset();
   }
 
   void createLobby() {
@@ -77,31 +109,45 @@ class HomeCubit extends Cubit<HomeState> {
     });
   }
 
-  void _resetGameStateListener(String apiAddress) {
-    _cancelGameStateListener.add(null);
-    emit(Connecting());
-    if (apiAddress.isNotEmpty) {
-      final gameStateStream = remoteRiftApi.getCurrentStateStream().takeUntil(
-        _cancelGameStateListener.stream,
-      );
-      _listenGameState(gameStateStream);
+  void _resetGameStateListener(String apiAddress, {VoidCallback? onAttemptDone}) {
+    final listener = remoteRiftApi.getCurrentStateStream().pipeToController();
+    _gameStateListener?.close();
+    _gameStateListener = listener;
+    if (onAttemptDone != null) {
+      listener.stream.first.whenComplete(onAttemptDone);
     }
+    _listenGameState(listener.stream);
   }
 
   void _listenGameState(Stream<RemoteRiftState> gameStateStream) async {
     try {
       await for (var gameState in gameStateStream) {
+        if (state is ConnectionError) {
+          _reconnectScheduler?.reset();
+        }
         emit(switch (state) {
-          Connecting() => Connected(state: gameState),
-          Connected data => data.produce((draft) => draft.state = gameState),
+          Connecting() || ConnectionError() => Connected(state: gameState),
+          Connected connected => connected.produce((draft) => draft.state = gameState),
           _ => throw StateError(
             'Tried to emit game state without active connection to the game api (was ${state.runtimeType})',
           ),
         });
       }
     } catch (_) {
+      if (state is! ConnectionError) {
+        _reconnectScheduler = _createReconnectScheduler()..start();
+      }
       emit(ConnectionError());
     }
+  }
+
+  RetryScheduler _createReconnectScheduler() {
+    return RetryScheduler(
+      startDelay: Duration(seconds: 1),
+      maxDelay: Duration(seconds: 5),
+      delayStep: Duration(seconds: 1),
+      onRetry: _reconnectToGameApi,
+    );
   }
 
   Future<void> _runGameAction(AsyncCallback action) async {

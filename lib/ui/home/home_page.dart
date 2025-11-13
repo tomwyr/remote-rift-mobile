@@ -47,12 +47,20 @@ class HomePage extends StatelessWidget {
                   SizedBox(height: 16),
                   CircularProgressIndicator(),
                 ],
-                ConnectionError() => [
+                ConnectionError(: var reconnectTriggered) => [
                   Text(t.connection.errorTitle, style: Theme.of(context).textTheme.titleMedium),
                   SizedBox(height: 4),
                   Text(t.connection.errorDescription),
-                  SizedBox(height: 8),
-                  ElevatedButton(onPressed: cubit.reconnect, child: Text(t.connection.errorRetry)),
+                  if (!reconnectTriggered) ...[
+                    SizedBox(height: 8),
+                    ElevatedButton(
+                      onPressed: cubit.reconnect,
+                      child: Text(t.connection.errorRetry),
+                    ),
+                  ] else ...[
+                    SizedBox(height: 16),
+                    CircularProgressIndicator(),
+                  ],
                 ],
                 Connected(:var state, :var loading) => [
                   Text(state.displayName),

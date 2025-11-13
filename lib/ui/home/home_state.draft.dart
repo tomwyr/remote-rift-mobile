@@ -31,3 +31,25 @@ extension ConnectedDraftExtension on Connected {
     return draft.save();
   }
 }
+
+class ConnectionErrorDraft implements ConnectionError {
+  // Mutable fields
+  bool reconnectTriggered;
+
+  // Getters and setters for nested draftable fields
+
+  ConnectionErrorDraft({required this.reconnectTriggered});
+
+  ConnectionError save() =>
+      ConnectionError(reconnectTriggered: reconnectTriggered);
+}
+
+extension ConnectionErrorDraftExtension on ConnectionError {
+  ConnectionErrorDraft draft() =>
+      ConnectionErrorDraft(reconnectTriggered: this.reconnectTriggered);
+  ConnectionError produce(void Function(ConnectionErrorDraft draft) producer) {
+    final draft = this.draft();
+    producer(draft);
+    return draft.save();
+  }
+}
