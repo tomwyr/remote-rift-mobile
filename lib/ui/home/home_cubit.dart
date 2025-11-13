@@ -110,7 +110,7 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void _resetGameStateListener(String apiAddress, {VoidCallback? onAttemptDone}) {
-    final listener = remoteRiftApi.getCurrentStateStream().pipeToController();
+    final listener = remoteRiftApi.getCurrentStateStream().pipeToController(broadcast: true);
     _gameStateListener?.close();
     _gameStateListener = listener;
     if (onAttemptDone != null) {
