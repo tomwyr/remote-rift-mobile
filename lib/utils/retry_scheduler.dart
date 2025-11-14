@@ -23,7 +23,7 @@ class RetryScheduler {
   RetrySchedulerStatus get status => _status;
 
   var _status = RetrySchedulerStatus.idle;
-  var _attempt = 0;
+  var _stepsCount = 0;
   Timer? _timer;
 
   void start() {
@@ -42,7 +42,7 @@ class RetryScheduler {
   void reset() {
     _timer?.cancel();
     _status = .idle;
-    _attempt = 0;
+    _stepsCount = 0;
   }
 
   void _scheduleRetry() {
@@ -51,7 +51,7 @@ class RetryScheduler {
   }
 
   Duration _calculateDelay() {
-    var delay = startDelay + delayStep * _attempt;
+    var delay = startDelay + delayStep * _stepsCount;
     if (maxDelay case var maxDelay?) {
       delay = delay <= maxDelay ? delay : maxDelay;
     }
@@ -64,7 +64,7 @@ class RetryScheduler {
       await onRetry();
     } finally {
       if (_status != .idle) {
-        if (countAttempt) _attempt++;
+        if (countAttempt) _stepsCount++;
         _scheduleRetry();
       }
     }
