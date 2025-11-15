@@ -6,8 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/local_storage.dart';
 import '../../data/models.dart';
 import '../../data/remote_rift_api.dart';
+import '../../utils/cancelable_stream.dart';
 import '../../utils/retry_scheduler.dart';
-import '../../utils/stream_extensions.dart';
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
@@ -16,7 +16,7 @@ class HomeCubit extends Cubit<HomeState> {
   final RemoteRiftApi remoteRiftApi;
   final LocalStorage localStorage;
 
-  StreamController<RemoteRiftState>? _gameStateListener;
+  CancelableStream<RemoteRiftState>? _gameStateStream;
   RetryScheduler? _reconnectScheduler;
 
   void initialize() {
@@ -43,18 +43,6 @@ class HomeCubit extends Cubit<HomeState> {
     scheduler.trigger();
   }
 
-  Future<void> _reconnectToGameApi() async {
-    final apiAddress = await localStorage.getApiAddress();
-    if (apiAddress case null || '') {
-      _onApiAddressMissing();
-      return;
-    }
-
-    final completer = Completer<void>();
-    _resetGameStateListener(apiAddress, onAttemptDone: completer.complete);
-    return completer.future;
-  }
-
   void _connectToGameApi() async {
     await for (var apiAddress in localStorage.apiAddressStream) {
       remoteRiftApi.setApiAddress(apiAddress);
@@ -67,9 +55,20 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
+  Future<void> _reconnectToGameApi() async {
+    final apiAddress = await localStorage.getApiAddress();
+    if (apiAddress case null || '') {
+      _onApiAddressMissing();
+    } else {
+      final completer = Completer<void>();
+      _resetGameStateListener(apiAddress, onAttemptDone: completer.complete);
+      await completer.future;
+    }
+  }
+
   void _onApiAddressMissing() {
     emit(ConfigurationRequired());
-    _gameStateListener?.close();
+    _gameStateStream?.cancel();
     _reconnectScheduler?.reset();
   }
 
@@ -110,13 +109,13 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void _resetGameStateListener(String apiAddress, {VoidCallback? onAttemptDone}) {
-    final listener = remoteRiftApi.getCurrentStateStream().pipeToController(broadcast: true);
-    _gameStateListener?.close();
-    _gameStateListener = listener;
+    final stream = remoteRiftApi.getCurrentStateStream().asBroadcastStream().cancelable();
+    _gameStateStream?.cancel();
+    _gameStateStream = stream;
     if (onAttemptDone != null) {
-      listener.stream.first.whenComplete(onAttemptDone);
+      stream.first.whenComplete(onAttemptDone);
     }
-    _listenGameState(listener.stream);
+    _listenGameState(stream);
   }
 
   void _listenGameState(Stream<RemoteRiftState> gameStateStream) async {
