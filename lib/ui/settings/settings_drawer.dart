@@ -93,7 +93,7 @@ class _ApiAddressFieldState extends State<ApiAddressField> {
       mainAxisSize: .min,
       children: [
         TextFieldSuffixButton(
-          icon: Icons.clear,
+          icon: Icons.undo,
           onTap: () {
             _controller.text = widget.initialValue;
           },
