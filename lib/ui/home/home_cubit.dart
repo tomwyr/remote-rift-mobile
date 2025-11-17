@@ -1,13 +1,14 @@
 import 'dart:async';
 
+import 'package:cancelable_stream/cancelable_stream.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/local_storage.dart';
 import '../../data/models.dart';
 import '../../data/remote_rift_api.dart';
-import '../../utils/cancelable_stream.dart';
 import '../../utils/retry_scheduler.dart';
+import '../../utils/stream_extensions.dart';
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
@@ -23,7 +24,7 @@ class HomeCubit extends Cubit<HomeState> {
     if (state is! Initial) {
       throw StateError('Tried to initialize while not in initial state (was ${state.runtimeType})');
     }
-    _connectToGameApi();
+    _initConnectingToGameApi();
   }
 
   void reconnect() {
@@ -43,27 +44,40 @@ class HomeCubit extends Cubit<HomeState> {
     scheduler.trigger();
   }
 
-  void _connectToGameApi() async {
+  void _initConnectingToGameApi() async {
     await for (var apiAddress in localStorage.apiAddressStream) {
       remoteRiftApi.setApiAddress(apiAddress);
-      if (apiAddress case null || '') {
-        _onApiAddressMissing();
-      } else {
-        emit(Connecting());
-        _resetGameStateListener(apiAddress);
-      }
+      _connectToGameApiAt(apiAddress);
+    }
+  }
+
+  void _connectToCurrentGameApi() async {
+    final apiAddress = await localStorage.getApiAddress();
+    _connectToGameApiAt(apiAddress);
+  }
+
+  void _connectToGameApiAt(String? apiAddress) {
+    if (_verifyApiAddress(apiAddress) case var apiAddress?) {
+      emit(Connecting());
+      _resetGameStateListener(apiAddress);
     }
   }
 
   Future<void> _reconnectToGameApi() async {
     final apiAddress = await localStorage.getApiAddress();
-    if (apiAddress case null || '') {
-      _onApiAddressMissing();
-    } else {
+    if (_verifyApiAddress(apiAddress) case var apiAddress?) {
       final completer = Completer<void>();
-      _resetGameStateListener(apiAddress, onAttemptDone: completer.complete);
+      _resetGameStateListener(apiAddress, onConnectionAttempted: completer.complete);
       await completer.future;
     }
+  }
+
+  String? _verifyApiAddress(String? apiAddress) {
+    if (apiAddress case null || '') {
+      _onApiAddressMissing();
+      return null;
+    }
+    return apiAddress;
   }
 
   void _onApiAddressMissing() {
@@ -108,13 +122,13 @@ class HomeCubit extends Cubit<HomeState> {
     });
   }
 
-  void _resetGameStateListener(String apiAddress, {VoidCallback? onAttemptDone}) {
-    final stream = remoteRiftApi.getCurrentStateStream().asBroadcastStream().cancelable();
+  void _resetGameStateListener(String apiAddress, {VoidCallback? onConnectionAttempted}) {
+    final stream = remoteRiftApi
+        .getCurrentStateStream()
+        .peek(onFirstOrError: onConnectionAttempted, onDone: _connectToCurrentGameApi)
+        .cancelable();
     _gameStateStream?.cancel();
     _gameStateStream = stream;
-    if (onAttemptDone != null) {
-      stream.first.whenComplete(onAttemptDone);
-    }
     _listenGameState(stream);
   }
 
@@ -133,7 +147,7 @@ class HomeCubit extends Cubit<HomeState> {
         });
       }
     } catch (_) {
-      if (state is! ConnectionError) {
+      if (state case Connecting() || Connected()) {
         _reconnectScheduler = _createReconnectScheduler()..start();
       }
       emit(ConnectionError());

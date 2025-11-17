@@ -8,13 +8,13 @@ environment:
   sdk: ^3.10.0
 
 dependencies:
+  cancelable_stream: ^1.0.0
   draft: ^0.0.12
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
   http: ^1.5.0
   json_annotation: ^4.9.0
-  rxdart: ^0.28.0
   shared_preferences: ^2.5.3
   slang: ^4.8.1
   slang_flutter: ^4.8.0
