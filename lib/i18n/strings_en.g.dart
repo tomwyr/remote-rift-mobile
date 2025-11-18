@@ -41,6 +41,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	// Translations
 	late final TranslationsAppEn app = TranslationsAppEn._(_root);
 	late final TranslationsGameStateEn gameState = TranslationsGameStateEn._(_root);
+	late final TranslationsGameErrorEn gameError = TranslationsGameErrorEn._(_root);
 	late final TranslationsConnectionEn connection = TranslationsConnectionEn._(_root);
 	late final TranslationsHomeEn home = TranslationsHomeEn._(_root);
 }
@@ -90,6 +91,27 @@ class TranslationsGameStateEn {
 	String get unknown => 'Unknown';
 }
 
+// Path: gameError
+class TranslationsGameErrorEn {
+	TranslationsGameErrorEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Unable to connect'
+	String get unableToConnectTitle => 'Unable to connect';
+
+	/// en: 'The game client could not be reached. Make sure that it is running to interact with the game.'
+	String get unableToConnectDescription => 'The game client could not be reached. Make sure that it is running to interact with the game.';
+
+	/// en: 'Unknown game state'
+	String get unknownTitle => 'Unknown game state';
+
+	/// en: 'The game's state could not be accessed due to an unexpected error.'
+	String get unknownDescription => 'The game\'s state could not be accessed due to an unexpected error.';
+}
+
 // Path: connection
 class TranslationsConnectionEn {
 	TranslationsConnectionEn._(this._root);
@@ -101,8 +123,8 @@ class TranslationsConnectionEn {
 	/// en: 'Configuration required'
 	String get configurationRequiredTitle => 'Configuration required';
 
-	/// en: 'Setup game connection in the settings panel'
-	String get configurationRequiredDescription => 'Setup game connection in the settings panel';
+	/// en: 'Setup game connection in the settings panel.'
+	String get configurationRequiredDescription => 'Setup game connection in the settings panel.';
 
 	/// en: 'Connecting...'
 	String get connecting => 'Connecting...';
@@ -110,8 +132,8 @@ class TranslationsConnectionEn {
 	/// en: 'Connection error'
 	String get errorTitle => 'Connection error';
 
-	/// en: 'Unable to connect to the game client'
-	String get errorDescription => 'Unable to connect to the game client';
+	/// en: 'Unable to connect to the game client.'
+	String get errorDescription => 'Unable to connect to the game client.';
 
 	/// en: 'Reconnect'
 	String get errorRetry => 'Reconnect';
@@ -165,11 +187,15 @@ extension on Translations {
 			case 'gameState.foundDeclined': return 'Game declined';
 			case 'gameState.inGame': return 'In game';
 			case 'gameState.unknown': return 'Unknown';
+			case 'gameError.unableToConnectTitle': return 'Unable to connect';
+			case 'gameError.unableToConnectDescription': return 'The game client could not be reached. Make sure that it is running to interact with the game.';
+			case 'gameError.unknownTitle': return 'Unknown game state';
+			case 'gameError.unknownDescription': return 'The game\'s state could not be accessed due to an unexpected error.';
 			case 'connection.configurationRequiredTitle': return 'Configuration required';
-			case 'connection.configurationRequiredDescription': return 'Setup game connection in the settings panel';
+			case 'connection.configurationRequiredDescription': return 'Setup game connection in the settings panel.';
 			case 'connection.connecting': return 'Connecting...';
 			case 'connection.errorTitle': return 'Connection error';
-			case 'connection.errorDescription': return 'Unable to connect to the game client';
+			case 'connection.errorDescription': return 'Unable to connect to the game client.';
 			case 'connection.errorRetry': return 'Reconnect';
 			case 'home.createLobbyButton': return 'Create lobby';
 			case 'home.searchGameButton': return 'Search game';

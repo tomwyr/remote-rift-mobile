@@ -17,7 +17,7 @@ class HomeCubit extends Cubit<HomeState> {
   final RemoteRiftApi remoteRiftApi;
   final LocalStorage localStorage;
 
-  CancelableStream<RemoteRiftState>? _gameStateStream;
+  CancelableStream<RemoteRiftStateResponse>? _gameStateStream;
   RetryScheduler? _reconnectScheduler;
 
   void initialize() {
@@ -132,19 +132,33 @@ class HomeCubit extends Cubit<HomeState> {
     _listenGameState(stream);
   }
 
-  void _listenGameState(Stream<RemoteRiftState> gameStateStream) async {
+  void _listenGameState(Stream<RemoteRiftStateResponse> gameStateStream) async {
     try {
-      await for (var gameState in gameStateStream) {
+      await for (var response in gameStateStream) {
         if (state is ConnectionError) {
           _reconnectScheduler?.reset();
         }
-        emit(switch (state) {
-          Connecting() || ConnectionError() => Connected(state: gameState),
-          Connected connected => connected.produce((draft) => draft.state = gameState),
-          _ => throw StateError(
-            'Tried to emit game state without active connection to the game api (was ${state.runtimeType})',
-          ),
-        });
+
+        switch (state) {
+          case Connecting() || ConnectedWithError() || ConnectionError() || Connected():
+            // Can emit from the current state
+            break;
+          default:
+            throw StateError(
+              'Tried to emit game state without active connection to the game api (was ${state.runtimeType})',
+            );
+        }
+
+        switch (response) {
+          case RemoteRiftState gameState:
+            emit(switch (state) {
+              Connected connected => connected.produce((draft) => draft.state = gameState),
+              _ => Connected(state: gameState),
+            });
+
+          case RemoteRiftStateError gameError:
+            emit(ConnectedWithError(cause: gameError));
+        }
       }
     } catch (_) {
       if (state case Connecting() || Connected()) {

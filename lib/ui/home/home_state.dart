@@ -20,6 +20,12 @@ class Connected extends HomeState {
   final bool loading;
 }
 
+class ConnectedWithError extends HomeState {
+  ConnectedWithError({required this.cause});
+
+  final RemoteRiftStateError cause;
+}
+
 @draft
 class ConnectionError extends HomeState {
   ConnectionError({this.reconnectTriggered = false});
