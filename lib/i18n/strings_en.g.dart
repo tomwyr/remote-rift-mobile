@@ -129,6 +129,9 @@ class TranslationsConnectionEn {
 	/// en: 'Connecting...'
 	String get connecting => 'Connecting...';
 
+	/// en: 'Checking game state...'
+	String get loadingState => 'Checking game state...';
+
 	/// en: 'Connection error'
 	String get errorTitle => 'Connection error';
 
@@ -194,6 +197,7 @@ extension on Translations {
 			case 'connection.configurationRequiredTitle': return 'Configuration required';
 			case 'connection.configurationRequiredDescription': return 'Setup game connection in the settings panel.';
 			case 'connection.connecting': return 'Connecting...';
+			case 'connection.loadingState': return 'Checking game state...';
 			case 'connection.errorTitle': return 'Connection error';
 			case 'connection.errorDescription': return 'Unable to connect to the game client.';
 			case 'connection.errorRetry': return 'Reconnect';

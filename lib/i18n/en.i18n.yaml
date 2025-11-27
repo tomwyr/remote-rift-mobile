@@ -21,6 +21,7 @@ connection:
   configurationRequiredTitle: "Configuration required"
   configurationRequiredDescription: "Setup game connection in the settings panel."
   connecting: "Connecting..."
+  loadingState: "Checking game state..."
   errorTitle: "Connection error"
   errorDescription: "Unable to connect to the game client."
   errorRetry: "Reconnect"

@@ -14,10 +14,16 @@ class Connecting extends HomeState {}
 
 @draft
 class Connected extends HomeState {
-  Connected({required this.state, this.loading = false});
+  Connected({this.gameState, this.loading = false});
 
-  final RemoteRiftState state;
+  final RemoteRiftState? gameState;
   final bool loading;
+}
+
+class ConnectedWithError extends HomeState {
+  ConnectedWithError({required this.cause});
+
+  final RemoteRiftError cause;
 }
 
 @draft

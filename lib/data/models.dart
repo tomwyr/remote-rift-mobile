@@ -4,19 +4,17 @@ import '../i18n/strings.g.dart';
 
 part 'models.g.dart';
 
-abstract class RemoteRiftResponse {
-  static RemoteRiftResponse fromJson<T extends RemoteRiftResponse>(
-    Map<String, dynamic> json,
-    T Function(Map<String, dynamic>) dataFromJson,
-  ) {
-    final type = json['type'];
-    return switch (type) {
-      'data' => dataFromJson(json),
-      'error' => RemoteRiftStateError.fromJson(json),
-      _ => throw ArgumentError('Unexpected RemoteRiftResponse type $type'),
-    };
+@JsonEnum(alwaysCreate: true)
+enum RemoteRiftStatus {
+  ready,
+  unavailable;
+
+  factory RemoteRiftStatus.fromJson(Map<String, dynamic> json) {
+    return $enumDecode(_$RemoteRiftStatusEnumMap, json['value']);
   }
 }
+
+typedef RemoteRiftStatusResponse = RemoteRiftResponse<RemoteRiftStatus>;
 
 sealed class RemoteRiftState {
   RemoteRiftState();
@@ -77,13 +75,35 @@ enum GameLobbyState { idle, searching }
 
 enum GameFoundState { pending, accepted, declined }
 
+sealed class RemoteRiftResponse<T> {
+  RemoteRiftResponse();
+
+  factory RemoteRiftResponse.fromJson(
+    Map<String, dynamic> json,
+    T Function(Map<String, dynamic>) dataFromJson,
+  ) {
+    final type = json['type'];
+    return switch (type) {
+      'data' => RemoteRiftData(dataFromJson(json)),
+      'error' => RemoteRiftError.fromJson(json),
+      _ => throw ArgumentError('Unexpected RemoteRiftResponse type $type'),
+    };
+  }
+}
+
+class RemoteRiftData<T> extends RemoteRiftResponse<T> {
+  RemoteRiftData(this.value);
+
+  final T value;
+}
+
 @JsonEnum(alwaysCreate: true)
-enum RemoteRiftStateError implements RemoteRiftResponse {
+enum RemoteRiftError<T extends Never> implements RemoteRiftResponse<T> {
   unableToConnect,
   unknown;
 
-  factory RemoteRiftStateError.fromJson(Map<String, dynamic> json) {
-    return $enumDecode(_$RemoteRiftStateErrorEnumMap, json['value']);
+  factory RemoteRiftError.fromJson(Map<String, dynamic> json) {
+    return $enumDecode(_$RemoteRiftErrorEnumMap, json['value']);
   }
 
   String get title => switch (this) {

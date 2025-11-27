@@ -31,7 +31,12 @@ const _$GameFoundStateEnumMap = {
   GameFoundState.declined: 'declined',
 };
 
-const _$RemoteRiftStateErrorEnumMap = {
-  RemoteRiftStateError.unableToConnect: 'unableToConnect',
-  RemoteRiftStateError.unknown: 'unknown',
+const _$RemoteRiftStatusEnumMap = {
+  RemoteRiftStatus.ready: 'ready',
+  RemoteRiftStatus.unavailable: 'unavailable',
+};
+
+const _$RemoteRiftErrorEnumMap = {
+  RemoteRiftError.unableToConnect: 'unableToConnect',
+  RemoteRiftError.unknown: 'unknown',
 };

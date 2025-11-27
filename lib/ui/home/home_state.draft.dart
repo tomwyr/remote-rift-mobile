@@ -12,19 +12,19 @@ part of 'home_state.dart';
 
 class ConnectedDraft implements Connected {
   // Mutable fields
-  RemoteRiftState state;
+  RemoteRiftState? gameState;
   bool loading;
 
   // Getters and setters for nested draftable fields
 
-  ConnectedDraft({required this.state, required this.loading});
+  ConnectedDraft({required this.gameState, required this.loading});
 
-  Connected save() => Connected(state: state, loading: loading);
+  Connected save() => Connected(gameState: gameState, loading: loading);
 }
 
 extension ConnectedDraftExtension on Connected {
   ConnectedDraft draft() =>
-      ConnectedDraft(state: this.state, loading: this.loading);
+      ConnectedDraft(gameState: this.gameState, loading: this.loading);
   Connected produce(void Function(ConnectedDraft draft) producer) {
     final draft = this.draft();
     producer(draft);

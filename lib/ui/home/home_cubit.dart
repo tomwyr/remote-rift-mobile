@@ -17,6 +17,7 @@ class HomeCubit extends Cubit<HomeState> {
   final RemoteRiftApi remoteRiftApi;
   final LocalStorage localStorage;
 
+  CancelableStream<RemoteRiftStatusResponse>? _statusStream;
   CancelableStream<RemoteRiftState>? _gameStateStream;
   RetryScheduler? _reconnectScheduler;
 
@@ -59,7 +60,7 @@ class HomeCubit extends Cubit<HomeState> {
   void _connectToGameApiAt(String? apiAddress) {
     if (_verifyApiAddress(apiAddress) case var apiAddress?) {
       emit(Connecting());
-      _resetGameStateListener(apiAddress);
+      _resetStatusListener(apiAddress);
     }
   }
 
@@ -67,7 +68,7 @@ class HomeCubit extends Cubit<HomeState> {
     final apiAddress = await localStorage.getApiAddress();
     if (_verifyApiAddress(apiAddress) case var apiAddress?) {
       final completer = Completer<void>();
-      _resetGameStateListener(apiAddress, onConnectionAttempted: completer.complete);
+      _resetStatusListener(apiAddress, onConnectionAttempted: completer.complete);
       await completer.future;
     }
   }
@@ -82,6 +83,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   void _onApiAddressMissing() {
     emit(ConfigurationRequired());
+    _statusStream?.cancel();
     _gameStateStream?.cancel();
     _reconnectScheduler?.reset();
   }
@@ -122,37 +124,52 @@ class HomeCubit extends Cubit<HomeState> {
     });
   }
 
-  void _resetGameStateListener(String apiAddress, {VoidCallback? onConnectionAttempted}) {
+  void _resetStatusListener(String apiAddress, {VoidCallback? onConnectionAttempted}) {
     final stream = remoteRiftApi
-        .getCurrentStateStream()
+        .getStatusStream()
         .peek(onFirstOrError: onConnectionAttempted, onDone: _connectToCurrentGameApi)
         .cancelable();
     _gameStateStream?.cancel();
-    _gameStateStream = stream;
-    _listenGameState(stream);
+    _statusStream?.cancel();
+    _statusStream = stream;
+    _listenStatus(stream);
   }
 
-  void _listenGameState(Stream<RemoteRiftState> gameStateStream) async {
+  void _listenStatus(Stream<RemoteRiftStatusResponse> statusStream) async {
     try {
-      await for (var gameState in gameStateStream) {
+      await for (var response in statusStream) {
         if (state is ConnectionError) {
           _reconnectScheduler?.reset();
         }
 
         switch (state) {
-          case Connecting() || ConnectionError() || Connected():
+          case Connecting() || ConnectedWithError() || ConnectionError() || Connected():
             // Can emit from the current state
             break;
           default:
             throw StateError(
-              'Tried to emit game state without active connection to the game api (was ${state.runtimeType})',
+              'Tried to update connection status in an unexpected state: ${state.runtimeType}',
             );
         }
 
-        emit(switch (state) {
-          Connected connected => connected.produce((draft) => draft.state = gameState),
-          _ => Connected(state: gameState),
-        });
+        switch (response) {
+          case RemoteRiftData(value: .ready):
+            if (state is! Connected) {
+              emit(Connected());
+            }
+
+          case RemoteRiftData(value: .unavailable):
+            emit(ConnectedWithError(cause: .unableToConnect));
+
+          case RemoteRiftError error:
+            emit(ConnectedWithError(cause: error));
+        }
+
+        if (state is Connected && _gameStateStream == null) {
+          _listenGameState();
+        } else if (state is! Connected && _gameStateStream != null) {
+          _stopGameStateStream();
+        }
       }
     } catch (_) {
       if (state case Connecting() || Connected()) {
@@ -160,6 +177,24 @@ class HomeCubit extends Cubit<HomeState> {
       }
       emit(ConnectionError());
     }
+  }
+
+  void _listenGameState() async {
+    final stream = remoteRiftApi.getCurrentStateStream().cancelable();
+    _gameStateStream = stream;
+
+    await for (var gameState in stream) {
+      if (state case Connected state) {
+        emit(state.produce((draft) => draft..gameState = gameState));
+      } else {
+        throw StateError('Tried to update game state without active connection to the game api');
+      }
+    }
+  }
+
+  void _stopGameStateStream() {
+    _gameStateStream?.cancel();
+    _gameStateStream = null;
   }
 
   RetryScheduler _createReconnectScheduler() {
