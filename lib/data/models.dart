@@ -1,22 +1,24 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import '../i18n/strings.g.dart';
-import '../utils/map_extensions.dart';
 
 part 'models.g.dart';
 
-sealed class RemoteRiftStateResponse {
-  factory RemoteRiftStateResponse.fromJson(Map<String, dynamic> json) {
+abstract class RemoteRiftResponse {
+  static RemoteRiftResponse fromJson<T extends RemoteRiftResponse>(
+    Map<String, dynamic> json,
+    T Function(Map<String, dynamic>) dataFromJson,
+  ) {
     final type = json['type'];
     return switch (type) {
-      'data' => RemoteRiftState.fromJson(json),
+      'data' => dataFromJson(json),
       'error' => RemoteRiftStateError.fromJson(json),
-      _ => throw ArgumentError('Unexpected RemoteRiftStateResponse type $type'),
+      _ => throw ArgumentError('Unexpected RemoteRiftResponse type $type'),
     };
   }
 }
 
-sealed class RemoteRiftState implements RemoteRiftStateResponse {
+sealed class RemoteRiftState {
   RemoteRiftState();
 
   factory RemoteRiftState.fromJson(Map<String, dynamic> json) {
@@ -76,16 +78,12 @@ enum GameLobbyState { idle, searching }
 enum GameFoundState { pending, accepted, declined }
 
 @JsonEnum(alwaysCreate: true)
-enum RemoteRiftStateError implements RemoteRiftStateResponse {
+enum RemoteRiftStateError implements RemoteRiftResponse {
   unableToConnect,
   unknown;
 
   factory RemoteRiftStateError.fromJson(Map<String, dynamic> json) {
-    final value = json['value'];
-    for (var (error, json) in _$RemoteRiftStateErrorEnumMap.records) {
-      if (json == value) return error;
-    }
-    throw ArgumentError('Unexpected RemoteRiftStateError json value $value');
+    return $enumDecode(_$RemoteRiftStateErrorEnumMap, json['value']);
   }
 
   String get title => switch (this) {

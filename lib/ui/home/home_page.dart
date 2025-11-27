@@ -69,12 +69,6 @@ class HomePage extends StatelessWidget {
                     ],
                   ],
 
-                  ConnectedWithError(:var cause) => [
-                    Text(cause.title, style: Theme.of(context).textTheme.titleMedium),
-                    SizedBox(height: 4),
-                    Text(cause.description),
-                  ],
-
                   Connected(:var state, :var loading) => [
                     Text(state.displayName),
                     SizedBox(height: 12),
