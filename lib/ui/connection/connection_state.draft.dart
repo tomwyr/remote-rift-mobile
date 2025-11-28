@@ -4,33 +4,11 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark, must_be_immutable
 
-part of 'home_state.dart';
+part of 'connection_state.dart';
 
 // **************************************************************************
 // DraftGenerator
 // **************************************************************************
-
-class ConnectedDraft implements Connected {
-  // Mutable fields
-  RemoteRiftState? gameState;
-  bool loading;
-
-  // Getters and setters for nested draftable fields
-
-  ConnectedDraft({required this.gameState, required this.loading});
-
-  Connected save() => Connected(gameState: gameState, loading: loading);
-}
-
-extension ConnectedDraftExtension on Connected {
-  ConnectedDraft draft() =>
-      ConnectedDraft(gameState: this.gameState, loading: this.loading);
-  Connected produce(void Function(ConnectedDraft draft) producer) {
-    final draft = this.draft();
-    producer(draft);
-    return draft.save();
-  }
-}
 
 class ConnectionErrorDraft implements ConnectionError {
   // Mutable fields

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../dependencies.dart';
 import '../widgets/lifecycle.dart';
 import '../widgets/text_field.dart';
 import 'settings_cubit.dart';
@@ -8,6 +9,10 @@ import 'settings_state.dart';
 
 class SettingsDrawer extends StatelessWidget {
   const SettingsDrawer({super.key});
+
+  static Widget builder() {
+    return BlocProvider(create: Dependencies.settingsCubit, child: SettingsDrawer());
+  }
 
   @override
   Widget build(BuildContext context) {

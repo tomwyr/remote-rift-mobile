@@ -9,16 +9,15 @@ import '../../data/models.dart';
 import '../../data/remote_rift_api.dart';
 import '../../utils/retry_scheduler.dart';
 import '../../utils/stream_extensions.dart';
-import 'home_state.dart';
+import 'connection_state.dart';
 
-class HomeCubit extends Cubit<HomeState> {
-  HomeCubit({required this.remoteRiftApi, required this.localStorage}) : super(Initial());
+class ConnectionCubit extends Cubit<ConnectionState> {
+  ConnectionCubit({required this.remoteRiftApi, required this.localStorage}) : super(Initial());
 
   final RemoteRiftApi remoteRiftApi;
   final LocalStorage localStorage;
 
   CancelableStream<RemoteRiftStatusResponse>? _statusStream;
-  CancelableStream<RemoteRiftState>? _gameStateStream;
   RetryScheduler? _reconnectScheduler;
 
   void initialize() {
@@ -84,44 +83,7 @@ class HomeCubit extends Cubit<HomeState> {
   void _onApiAddressMissing() {
     emit(ConfigurationRequired());
     _statusStream?.cancel();
-    _gameStateStream?.cancel();
     _reconnectScheduler?.reset();
-  }
-
-  void createLobby() {
-    _runGameAction(() async {
-      await remoteRiftApi.createLobby();
-    });
-  }
-
-  void searchMatch() {
-    _runGameAction(() async {
-      await remoteRiftApi.searchMatch();
-    });
-  }
-
-  void leaveLobby() {
-    _runGameAction(() async {
-      await remoteRiftApi.leaveLobby();
-    });
-  }
-
-  void stopMatchSearch() {
-    _runGameAction(() async {
-      await remoteRiftApi.stopMatchSearch();
-    });
-  }
-
-  void acceptMatch() {
-    _runGameAction(() async {
-      await remoteRiftApi.acceptMatch();
-    });
-  }
-
-  void declineMatch() {
-    _runGameAction(() async {
-      await remoteRiftApi.declineMatch();
-    });
   }
 
   void _resetStatusListener(String apiAddress, {VoidCallback? onConnectionAttempted}) {
@@ -129,7 +91,6 @@ class HomeCubit extends Cubit<HomeState> {
         .getStatusStream()
         .peek(onFirstOrError: onConnectionAttempted, onDone: _connectToCurrentGameApi)
         .cancelable();
-    _gameStateStream?.cancel();
     _statusStream?.cancel();
     _statusStream = stream;
     _listenStatus(stream);
@@ -164,12 +125,6 @@ class HomeCubit extends Cubit<HomeState> {
           case RemoteRiftError error:
             emit(ConnectedWithError(cause: error));
         }
-
-        if (state is Connected && _gameStateStream == null) {
-          _listenGameState();
-        } else if (state is! Connected && _gameStateStream != null) {
-          _stopGameStateStream();
-        }
       }
     } catch (_) {
       if (state case Connecting() || Connected()) {
@@ -179,24 +134,6 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  void _listenGameState() async {
-    final stream = remoteRiftApi.getCurrentStateStream().cancelable();
-    _gameStateStream = stream;
-
-    await for (var gameState in stream) {
-      if (state case Connected state) {
-        emit(state.produce((draft) => draft..gameState = gameState));
-      } else {
-        throw StateError('Tried to update game state without active connection to the game api');
-      }
-    }
-  }
-
-  void _stopGameStateStream() {
-    _gameStateStream?.cancel();
-    _gameStateStream = null;
-  }
-
   RetryScheduler _createReconnectScheduler() {
     return RetryScheduler(
       startDelay: Duration(seconds: 1),
@@ -204,21 +141,5 @@ class HomeCubit extends Cubit<HomeState> {
       delayStep: Duration(seconds: 1),
       onRetry: _reconnectToGameApi,
     );
-  }
-
-  Future<void> _runGameAction(AsyncCallback action) async {
-    final currentState = switch (state) {
-      Connected data => data,
-      _ => throw StateError(
-        'Tried to run game action while not connected to the game api (was ${state.runtimeType})',
-      ),
-    };
-
-    try {
-      emit(currentState.produce((draft) => draft.loading = true));
-      await action();
-    } finally {
-      emit(currentState.produce((draft) => draft.loading = false));
-    }
   }
 }
