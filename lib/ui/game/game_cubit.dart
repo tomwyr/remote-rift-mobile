@@ -14,7 +14,7 @@ class GameCubit extends Cubit<GameState> {
   CancelableStream<RemoteRiftState>? _gameStateStream;
 
   void initialize() {
-    _listenGameState();
+    _listenGameStateWithRetry();
   }
 
   void dispose() {
@@ -57,7 +57,16 @@ class GameCubit extends Cubit<GameState> {
     });
   }
 
-  void _listenGameState() async {
+  Future<void> _listenGameStateWithRetry() async {
+    try {
+      await _listenGameState();
+    } catch (_) {
+      await Future.delayed(Duration(seconds: 1));
+      _listenGameStateWithRetry();
+    }
+  }
+
+  Future<void> _listenGameState() async {
     final stream = remoteRiftApi.getCurrentStateStream().cancelable();
     _gameStateStream = stream;
 
