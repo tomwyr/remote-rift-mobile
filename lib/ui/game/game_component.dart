@@ -9,11 +9,11 @@ import '../widgets/lifecycle.dart';
 import 'game_cubit.dart';
 import 'game_state.dart';
 
-class GamePage extends StatelessWidget {
-  const GamePage({super.key});
+class GameComponent extends StatelessWidget {
+  const GameComponent({super.key});
 
   static Widget builder() {
-    return BlocProvider(create: Dependencies.gameCubit, child: GamePage());
+    return BlocProvider(create: Dependencies.gameCubit, child: GameComponent());
   }
 
   @override

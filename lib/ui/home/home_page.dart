@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../i18n/strings.g.dart';
-import '../connection/connection_page.dart';
-import '../game/game_page.dart';
+import '../connection/connection_component.dart';
+import '../game/game_component.dart';
 import '../settings/settings_drawer.dart';
 import '../widgets/drawer.dart';
 
@@ -19,13 +19,11 @@ class HomePage extends StatelessWidget {
         actions: [EndDrawerIcon(icon: Icons.tune)],
       ),
       endDrawer: SettingsDrawer.builder(),
-      body: DefaultTextStyle(
-        textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.bodyMedium!,
-        child: Padding(
-          padding: const .all(24),
-          child: Center(
-            child: ConnectionPage.builder(connectedBuilder: (context) => GamePage.builder()),
+      body: Padding(
+        padding: const .all(24),
+        child: Center(
+          child: ConnectionComponent.builder(
+            connectedBuilder: (context) => GameComponent.builder(),
           ),
         ),
       ),

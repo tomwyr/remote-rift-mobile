@@ -8,15 +8,15 @@ import '../widgets/lifecycle.dart';
 import 'connection_cubit.dart';
 import 'connection_state.dart';
 
-class ConnectionPage extends StatelessWidget {
-  const ConnectionPage({super.key, required this.connectedBuilder});
+class ConnectionComponent extends StatelessWidget {
+  const ConnectionComponent({super.key, required this.connectedBuilder});
 
   final WidgetBuilder connectedBuilder;
 
   static Widget builder({required WidgetBuilder connectedBuilder}) {
     return BlocProvider(
       create: Dependencies.connectionCubit,
-      child: ConnectionPage(connectedBuilder: connectedBuilder),
+      child: ConnectionComponent(connectedBuilder: connectedBuilder),
     );
   }
 
