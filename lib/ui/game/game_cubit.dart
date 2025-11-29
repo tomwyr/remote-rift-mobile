@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:cancelable_stream/cancelable_stream.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models.dart';
 import '../../data/remote_rift_api.dart';
+import '../../utils/retry_scheduler.dart';
 import 'game_state.dart';
 
 class GameCubit extends Cubit<GameState> {
@@ -11,7 +14,9 @@ class GameCubit extends Cubit<GameState> {
 
   final RemoteRiftApi remoteRiftApi;
 
+  final _retryBackoff = RetryBackoff.standard;
   CancelableStream<RemoteRiftState>? _gameStateStream;
+  Timer? _retryTimer;
 
   void initialize() {
     _listenGameStateWithRetry();
@@ -61,8 +66,7 @@ class GameCubit extends Cubit<GameState> {
     try {
       await _listenGameState();
     } catch (_) {
-      await Future.delayed(Duration(seconds: 1));
-      _listenGameStateWithRetry();
+      _retryTimer = Timer(_retryBackoff.tick(), _listenGameStateWithRetry);
     }
   }
 
@@ -79,6 +83,8 @@ class GameCubit extends Cubit<GameState> {
   }
 
   void _stopGameStateStream() {
+    _retryTimer?.cancel();
+    _retryTimer = null;
     _gameStateStream?.cancel();
     _gameStateStream = null;
   }

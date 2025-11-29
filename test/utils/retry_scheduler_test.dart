@@ -163,7 +163,7 @@ void main() {
   );
 
   test(
-    'runs next retry after current step delay when trigger completes',
+    'does not increase next retry delay when triggered',
     () => fakeAsync((async) {
       var retries = 0;
 
@@ -195,13 +195,6 @@ void main() {
       expect(retries, 3);
     }),
   );
-
-  test(
-    'does not increase delay step when triggered',
-    () => fakeAsync((async) {
-      //
-    }),
-  );
 }
 
 RetryScheduler _createScheduler({
@@ -211,9 +204,11 @@ RetryScheduler _createScheduler({
   AsyncCallback? onRetry,
 }) {
   return RetryScheduler(
-    startDelay: Duration(seconds: startDelaySeconds),
-    maxDelay: maxDelaySeconds != null ? Duration(seconds: maxDelaySeconds) : null,
-    delayStep: Duration(seconds: delayStepSeconds),
+    backoff: .new(
+      startDelay: Duration(seconds: startDelaySeconds),
+      maxDelay: maxDelaySeconds != null ? Duration(seconds: maxDelaySeconds) : null,
+      delayStep: Duration(seconds: delayStepSeconds),
+    ),
     onRetry: onRetry ?? () async {},
   );
 }

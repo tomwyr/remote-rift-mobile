@@ -135,11 +135,6 @@ class ConnectionCubit extends Cubit<ConnectionState> {
   }
 
   RetryScheduler _createReconnectScheduler() {
-    return RetryScheduler(
-      startDelay: Duration(seconds: 1),
-      maxDelay: Duration(seconds: 5),
-      delayStep: Duration(seconds: 1),
-      onRetry: _reconnectToGameApi,
-    );
+    return RetryScheduler(backoff: .standard, onRetry: _reconnectToGameApi);
   }
 }
