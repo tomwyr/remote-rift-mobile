@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../dependencies.dart';
+import '../../i18n/strings.g.dart';
 import '../widgets/lifecycle.dart';
 import '../widgets/text_field.dart';
 import 'settings_cubit.dart';
@@ -27,7 +28,7 @@ class SettingsDrawer extends StatelessWidget {
             child: Column(
               crossAxisAlignment: .start,
               children: [
-                Text('Settings', style: Theme.of(context).textTheme.headlineMedium),
+                Text(t.settings.title, style: Theme.of(context).textTheme.headlineMedium),
                 SizedBox(height: 12),
                 switch (cubit.state) {
                   Initial() => Padding(
@@ -82,7 +83,7 @@ class _ApiAddressFieldState extends State<ApiAddressField> {
       controller: _controller,
       autocorrect: false,
       decoration: InputDecoration(
-        labelText: 'Api address',
+        labelText: t.settings.apiAddressLabel,
         suffixIconConstraints: const BoxConstraints(minWidth: 22, minHeight: 22),
         suffixIcon: _modified ? _suffixButtons() : null,
       ),

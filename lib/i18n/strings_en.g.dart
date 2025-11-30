@@ -44,6 +44,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final TranslationsGameErrorEn gameError = TranslationsGameErrorEn._(_root);
 	late final TranslationsConnectionEn connection = TranslationsConnectionEn._(_root);
 	late final TranslationsHomeEn home = TranslationsHomeEn._(_root);
+	late final TranslationsSettingsEn settings = TranslationsSettingsEn._(_root);
 }
 
 // Path: app
@@ -169,6 +170,21 @@ class TranslationsHomeEn {
 	String get declineGameButton => 'Decline game';
 }
 
+// Path: settings
+class TranslationsSettingsEn {
+	TranslationsSettingsEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Settings'
+	String get title => 'Settings';
+
+	/// en: 'Api address'
+	String get apiAddressLabel => 'Api address';
+}
+
 /// The flat map containing all translations for locale <en>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -207,6 +223,8 @@ extension on Translations {
 			case 'home.cancelSearchButton': return 'Cancel search';
 			case 'home.acceptGameButton': return 'Accept game';
 			case 'home.declineGameButton': return 'Decline game';
+			case 'settings.title': return 'Settings';
+			case 'settings.apiAddressLabel': return 'Api address';
 			default: return null;
 		}
 	}

@@ -33,3 +33,7 @@ home:
   cancelSearchButton: "Cancel search"
   acceptGameButton: "Accept game"
   declineGameButton: "Decline game"
+
+settings:
+  title: 'Settings'
+  apiAddressLabel: 'Api address'
