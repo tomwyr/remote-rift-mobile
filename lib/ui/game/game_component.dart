@@ -34,6 +34,7 @@ class GameComponent extends StatelessWidget {
               onPressed: !loading ? cubit.createLobby : null,
             ),
           ),
+
           Lobby(state: .idle) => BasicLayout(
             title: state.displayName,
             action: .new(
@@ -45,6 +46,7 @@ class GameComponent extends StatelessWidget {
               onPressed: !loading ? cubit.leaveLobby : null,
             ),
           ),
+
           Lobby(state: .searching) => BasicLayout(
             title: state.displayName,
             action: .new(
@@ -52,6 +54,7 @@ class GameComponent extends StatelessWidget {
               onPressed: !loading ? cubit.stopMatchSearch : null,
             ),
           ),
+
           Found(state: .pending) => BasicLayout(
             title: state.displayName,
             action: .new(

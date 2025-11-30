@@ -10,7 +10,7 @@ packages:
     source: hosted
     version: "90.0.0"
   analyzer:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: analyzer
       sha256: "711e3a890bb529bf55f07d73b8706f4b7504ad77e90d2f205626b116c048583f"

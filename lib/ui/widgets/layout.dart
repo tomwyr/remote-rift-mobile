@@ -18,30 +18,29 @@ class BasicLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTextStyle(
-      textAlign: TextAlign.center,
-      style: Theme.of(context).textTheme.bodyMedium!,
-      child: Column(
-        crossAxisAlignment: .center,
-        children: [
-          Text(title, style: Theme.of(context).textTheme.titleMedium),
-          if (description case var description?) ...[SizedBox(height: 4), Text(description)],
-          if (loading) ...[
-            SizedBox(height: 16),
-            CircularProgressIndicator(),
-          ] else ...[
-            if (action != null || secondaryAction != null) SizedBox(height: 4),
-            if (action case BasicLayoutAction(:var label, :var onPressed)) ...[
-              SizedBox(height: 4),
-              ElevatedButton(onPressed: onPressed, child: Text(label)),
-            ],
-            if (secondaryAction case BasicLayoutAction(:var label, :var onPressed)) ...[
-              SizedBox(height: 4),
-              TextButton(onPressed: onPressed, child: Text(label)),
-            ],
+    return Column(
+      crossAxisAlignment: .stretch,
+      children: [
+        Text(title, style: Theme.of(context).textTheme.titleLarge),
+        if (description case var description?) ...[
+          SizedBox(height: 4),
+          Text(description, style: Theme.of(context).textTheme.bodyLarge),
+        ],
+        if (loading) ...[
+          SizedBox(height: 16),
+          Center(child: CircularProgressIndicator()),
+        ] else ...[
+          if (action != null || secondaryAction != null) ...[Spacer(), SizedBox(height: 12)],
+          if (action case BasicLayoutAction(:var label, :var onPressed)) ...[
+            SizedBox(height: 12),
+            ElevatedButton(onPressed: onPressed, child: Text(label)),
+          ],
+          if (secondaryAction case BasicLayoutAction(:var label, :var onPressed)) ...[
+            SizedBox(height: 12),
+            OutlinedButton(onPressed: onPressed, child: Text(label)),
           ],
         ],
-      ),
+      ],
     );
   }
 }

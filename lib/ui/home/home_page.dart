@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../i18n/strings.g.dart';
+import '../app/app_theme.dart';
+import '../common/assets.dart';
 import '../connection/connection_component.dart';
 import '../game/game_component.dart';
 import '../settings/settings_drawer.dart';
@@ -13,15 +15,17 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Padding(
+          padding: AppThemeExtension.of(context).appBarLeadingPadding,
+          child: Image.asset(Assets.logo),
+        ),
         title: Text(t.app.title),
-        centerTitle: false,
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [EndDrawerIcon(icon: Icons.tune)],
       ),
       endDrawer: SettingsDrawer.builder(),
-      body: Padding(
-        padding: const .all(24),
-        child: Center(
+      body: SafeArea(
+        child: Padding(
+          padding: .symmetric(horizontal: 24, vertical: 12),
           child: ConnectionComponent.builder(
             connectedBuilder: (context) => GameComponent.builder(),
           ),

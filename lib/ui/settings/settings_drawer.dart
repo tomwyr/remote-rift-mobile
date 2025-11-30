@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../dependencies.dart';
 import '../../i18n/strings.g.dart';
+import '../app/app_theme.dart';
 import '../widgets/lifecycle.dart';
-import '../widgets/text_field.dart';
 import 'settings_cubit.dart';
 import 'settings_state.dart';
 
@@ -19,16 +19,20 @@ class SettingsDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.watch<SettingsCubit>();
 
+    const materialDrawerWidth = 304.0;
+    final safeAreaRight = MediaQuery.of(context).viewPadding.right;
+
     return Lifecycle(
       onInit: cubit.initialize,
       child: Drawer(
+        width: materialDrawerWidth + safeAreaRight,
         child: Padding(
           padding: .symmetric(horizontal: 24, vertical: 12),
           child: SafeArea(
             child: Column(
               crossAxisAlignment: .start,
               children: [
-                Text(t.settings.title, style: Theme.of(context).textTheme.headlineMedium),
+                Text(t.settings.title, style: Theme.of(context).appBarTheme.titleTextStyle),
                 SizedBox(height: 12),
                 switch (cubit.state) {
                   Initial() => Padding(
@@ -61,6 +65,7 @@ class ApiAddressField extends StatefulWidget {
 
 class _ApiAddressFieldState extends State<ApiAddressField> {
   final _controller = TextEditingController();
+  final _focusNode = FocusNode();
 
   bool get _modified => widget.initialValue != _controller.text;
 
@@ -77,39 +82,82 @@ class _ApiAddressFieldState extends State<ApiAddressField> {
     super.dispose();
   }
 
+  void _submitText() {
+    _controller.text = _controller.text.trim();
+    widget.onChanged(_controller.text);
+  }
+
+  void _dropFocus() {
+    _focusNode.unfocus();
+  }
+
   @override
   Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: .start,
+      children: [
+        _header(),
+        _inputField(),
+        if (_modified) ...[SizedBox(height: 12), _actionButtons()],
+      ],
+    );
+  }
+
+  Widget _header() {
+    return Column(
+      crossAxisAlignment: .start,
+      children: [
+        Text(t.settings.apiAddressTitle, style: Theme.of(context).textTheme.titleMedium),
+        const SizedBox(height: 4),
+        Text(t.settings.apiAddressDescription),
+      ],
+    );
+  }
+
+  Widget _inputField() {
     return TextField(
       controller: _controller,
+      focusNode: _focusNode,
       autocorrect: false,
       decoration: InputDecoration(
-        labelText: t.settings.apiAddressLabel,
-        suffixIconConstraints: const BoxConstraints(minWidth: 22, minHeight: 22),
-        suffixIcon: _modified ? _suffixButtons() : null,
+        hintText: t.settings.apiAddressHint,
+        hintStyle: TextStyle(color: Colors.grey),
       ),
+      onTapOutside: (_) => _dropFocus(),
       onSubmitted: (value) {
-        widget.onChanged(_controller.text);
-        FocusScope.of(context).unfocus();
+        _submitText();
+        _dropFocus();
       },
     );
   }
 
-  Widget _suffixButtons() {
+  Widget _actionButtons() {
+    final buttonSize = AppThemeExtension.buttonSize(.compact);
+
     return Row(
       mainAxisSize: .min,
       children: [
-        TextFieldSuffixButton(
-          icon: Icons.undo,
-          onTap: () {
-            _controller.text = widget.initialValue;
-          },
+        Expanded(
+          child: OutlinedButton.icon(
+            icon: Icon(Icons.undo),
+            label: Text(t.settings.undoButton),
+            style: OutlinedButton.styleFrom(minimumSize: buttonSize),
+            onPressed: () {
+              _controller.text = widget.initialValue;
+            },
+          ),
         ),
-        TextFieldSuffixButton(
-          icon: Icons.check,
-          onTap: () {
-            widget.onChanged(_controller.text);
-            FocusScope.of(context).unfocus();
-          },
+        SizedBox(width: 8),
+        Expanded(
+          child: ElevatedButton.icon(
+            icon: Icon(Icons.check),
+            label: Text(t.settings.saveButton),
+            style: ElevatedButton.styleFrom(minimumSize: buttonSize),
+            onPressed: () {
+              _submitText();
+              _dropFocus();
+            },
+          ),
         ),
       ],
     );

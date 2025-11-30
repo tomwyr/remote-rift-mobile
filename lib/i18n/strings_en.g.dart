@@ -181,8 +181,20 @@ class TranslationsSettingsEn {
 	/// en: 'Settings'
 	String get title => 'Settings';
 
+	/// en: 'Save'
+	String get saveButton => 'Save';
+
+	/// en: 'Undo'
+	String get undoButton => 'Undo';
+
 	/// en: 'Api address'
-	String get apiAddressLabel => 'Api address';
+	String get apiAddressTitle => 'Api address';
+
+	/// en: 'Enter the IP address and port of the Remote Rift desktop app running on your computer.'
+	String get apiAddressDescription => 'Enter the IP address and port of the Remote Rift desktop app running on your computer.';
+
+	/// en: 'IP:Port'
+	String get apiAddressHint => 'IP:Port';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -224,7 +236,11 @@ extension on Translations {
 			case 'home.acceptGameButton': return 'Accept game';
 			case 'home.declineGameButton': return 'Decline game';
 			case 'settings.title': return 'Settings';
-			case 'settings.apiAddressLabel': return 'Api address';
+			case 'settings.saveButton': return 'Save';
+			case 'settings.undoButton': return 'Undo';
+			case 'settings.apiAddressTitle': return 'Api address';
+			case 'settings.apiAddressDescription': return 'Enter the IP address and port of the Remote Rift desktop app running on your computer.';
+			case 'settings.apiAddressHint': return 'IP:Port';
 			default: return null;
 		}
 	}

@@ -35,5 +35,9 @@ home:
   declineGameButton: "Decline game"
 
 settings:
-  title: 'Settings'
-  apiAddressLabel: 'Api address'
+  title: "Settings"
+  saveButton: "Save"
+  undoButton: "Undo"
+  apiAddressTitle: "Api address"
+  apiAddressDescription: "Enter the IP address and port of the Remote Rift desktop app running on your computer."
+  apiAddressHint: "IP:Port"
