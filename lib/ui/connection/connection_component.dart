@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../dependencies.dart';
 import '../../i18n/strings.g.dart';
+import '../settings/settings_drawer.dart';
 import '../widgets/layout.dart';
 import '../widgets/lifecycle.dart';
 import 'connection_cubit.dart';
@@ -32,6 +33,10 @@ class ConnectionComponent extends StatelessWidget {
         ConfigurationRequired() => BasicLayout(
           title: t.connection.configurationRequiredTitle,
           description: t.connection.configurationRequiredDescription,
+          action: .new(
+            label: t.home.configureButton,
+            onPressed: () => SettingsDrawer.open(context, autofocus: true),
+          ),
         ),
 
         Connecting() => BasicLayout(title: t.connection.connecting, loading: true),

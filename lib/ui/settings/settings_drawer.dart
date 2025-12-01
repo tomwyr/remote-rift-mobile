@@ -15,6 +15,14 @@ class SettingsDrawer extends StatelessWidget {
     return BlocProvider(create: Dependencies.settingsCubit, child: SettingsDrawer());
   }
 
+  static void open(BuildContext context, {bool autofocus = false}) {
+    final scope = SettingsDrawerScope.of(context);
+    Scaffold.of(context).openEndDrawer();
+    if (autofocus) {
+      scope.apiAddressFocusNode.requestFocus();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final cubit = context.watch<SettingsCubit>();
@@ -53,6 +61,40 @@ class SettingsDrawer extends StatelessWidget {
   }
 }
 
+class SettingsDrawerScope extends StatefulWidget {
+  const SettingsDrawerScope({super.key, required this.child});
+
+  final Widget child;
+
+  static SettingsDrawerScopeState of(BuildContext context) {
+    final scope = context.findAncestorStateOfType<SettingsDrawerScopeState>();
+    if (scope == null) {
+      throw FlutterError(
+        'SettingsDrawerScope requested from a context that does not contain a SettingsDrawerScope widget.',
+      );
+    }
+    return scope;
+  }
+
+  @override
+  State<SettingsDrawerScope> createState() => SettingsDrawerScopeState();
+}
+
+class SettingsDrawerScopeState extends State<SettingsDrawerScope> {
+  final apiAddressFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    apiAddressFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
+  }
+}
+
 class ApiAddressField extends StatefulWidget {
   const ApiAddressField({super.key, required this.initialValue, required this.onChanged});
 
@@ -65,7 +107,8 @@ class ApiAddressField extends StatefulWidget {
 
 class _ApiAddressFieldState extends State<ApiAddressField> {
   final _controller = TextEditingController();
-  final _focusNode = FocusNode();
+
+  FocusNode get _focusNode => SettingsDrawerScope.of(context).apiAddressFocusNode;
 
   bool get _modified => widget.initialValue != _controller.text;
 

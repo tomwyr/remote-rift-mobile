@@ -13,21 +13,23 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: Padding(
-          padding: AppThemeExtension.of(context).appBarLeadingPadding,
-          child: Image.asset(Assets.logo),
+    return SettingsDrawerScope(
+      child: Scaffold(
+        appBar: AppBar(
+          leading: Padding(
+            padding: AppThemeExtension.of(context).appBarLeadingPadding,
+            child: Image.asset(Assets.logo),
+          ),
+          title: Text(t.app.title),
+          actions: [EndDrawerIcon(icon: Icons.tune)],
         ),
-        title: Text(t.app.title),
-        actions: [EndDrawerIcon(icon: Icons.tune)],
-      ),
-      endDrawer: SettingsDrawer.builder(),
-      body: SafeArea(
-        child: Padding(
-          padding: .symmetric(horizontal: 24, vertical: 12),
-          child: ConnectionComponent.builder(
-            connectedBuilder: (context) => GameComponent.builder(),
+        endDrawer: SettingsDrawer.builder(),
+        body: SafeArea(
+          child: Padding(
+            padding: .symmetric(horizontal: 24, vertical: 12),
+            child: ConnectionComponent.builder(
+              connectedBuilder: (context) => GameComponent.builder(),
+            ),
           ),
         ),
       ),

@@ -151,6 +151,9 @@ class TranslationsHomeEn {
 
 	// Translations
 
+	/// en: 'Configure'
+	String get configureButton => 'Configure';
+
 	/// en: 'Create lobby'
 	String get createLobbyButton => 'Create lobby';
 
@@ -229,6 +232,7 @@ extension on Translations {
 			case 'connection.errorTitle': return 'Connection error';
 			case 'connection.errorDescription': return 'Unable to connect to the game client.';
 			case 'connection.errorRetry': return 'Reconnect';
+			case 'home.configureButton': return 'Configure';
 			case 'home.createLobbyButton': return 'Create lobby';
 			case 'home.searchGameButton': return 'Search game';
 			case 'home.leaveLobbyButton': return 'Leave lobby';

@@ -27,6 +27,7 @@ connection:
   errorRetry: "Reconnect"
 
 home:
+  configureButton: "Configure"
   createLobbyButton: "Create lobby"
   searchGameButton: "Search game"
   leaveLobbyButton: "Leave lobby"
