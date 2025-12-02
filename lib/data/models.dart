@@ -30,21 +30,6 @@ sealed class RemoteRiftState {
       _ => throw ArgumentError('Unexpected RemoteRiftState type $type'),
     };
   }
-
-  String get displayName => switch (this) {
-    PreGame() => t.gameState.preGame,
-    Lobby(:var state) => switch (state) {
-      .idle => t.gameState.lobbyIdle,
-      .searching => t.gameState.lobbySearching,
-    },
-    Found(:var state) => switch (state) {
-      .pending => t.gameState.foundPending,
-      .accepted => t.gameState.foundAccepted,
-      .declined => t.gameState.foundDeclined,
-    },
-    InGame() => t.gameState.inGame,
-    Unknown() => t.gameState.unknown,
-  };
 }
 
 class PreGame extends RemoteRiftState {}

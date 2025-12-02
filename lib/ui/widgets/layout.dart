@@ -23,12 +23,14 @@ class BasicLayout extends StatelessWidget {
       children: [
         Text(title, style: Theme.of(context).textTheme.titleLarge),
         if (description case var description?) ...[
-          SizedBox(height: 4),
+          SizedBox(height: 8),
           Text(description, style: Theme.of(context).textTheme.bodyLarge),
         ],
         if (loading) ...[
-          SizedBox(height: 16),
+          Spacer(),
+          SizedBox(height: 12),
           Center(child: CircularProgressIndicator()),
+          SizedBox(height: 12),
         ] else ...[
           if (action != null || secondaryAction != null) ...[Spacer(), SizedBox(height: 12)],
           if (action case BasicLayoutAction(:var label, :var onPressed)) ...[
@@ -39,6 +41,7 @@ class BasicLayout extends StatelessWidget {
             SizedBox(height: 12),
             OutlinedButton(onPressed: onPressed, child: Text(label)),
           ],
+          if (action != null || secondaryAction != null) SizedBox(height: 12),
         ],
       ],
     );

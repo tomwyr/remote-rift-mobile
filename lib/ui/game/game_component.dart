@@ -24,11 +24,16 @@ class GameComponent extends StatelessWidget {
       onInit: cubit.initialize,
       onDispose: cubit.dispose,
       child: switch (cubit.state) {
-        Loading() => BasicLayout(title: t.connection.loadingState, loading: true),
+        Loading() => BasicLayout(
+          title: t.connection.loadingTitle,
+          description: t.connection.loadingDescription,
+          loading: true,
+        ),
 
         Data(gameState: var state, :var loading) => switch (state) {
           PreGame() => BasicLayout(
-            title: state.displayName,
+            title: t.gameState.preGameTitle,
+            description: t.gameState.preGameDescription,
             action: .new(
               label: t.home.createLobbyButton,
               onPressed: !loading ? cubit.createLobby : null,
@@ -36,7 +41,8 @@ class GameComponent extends StatelessWidget {
           ),
 
           Lobby(state: .idle) => BasicLayout(
-            title: state.displayName,
+            title: t.gameState.lobbyIdleTitle,
+            description: t.gameState.lobbyIdleDescription,
             action: .new(
               label: t.home.searchGameButton,
               onPressed: !loading ? cubit.searchMatch : null,
@@ -48,7 +54,8 @@ class GameComponent extends StatelessWidget {
           ),
 
           Lobby(state: .searching) => BasicLayout(
-            title: state.displayName,
+            title: t.gameState.lobbySearchingTitle,
+            description: t.gameState.lobbySearchingDescription,
             action: .new(
               label: t.home.cancelSearchButton,
               onPressed: !loading ? cubit.stopMatchSearch : null,
@@ -56,7 +63,8 @@ class GameComponent extends StatelessWidget {
           ),
 
           Found(state: .pending) => BasicLayout(
-            title: state.displayName,
+            title: t.gameState.foundPendingTitle,
+            description: t.gameState.foundPendingDescription,
             action: .new(
               label: t.home.acceptGameButton,
               onPressed: !loading ? cubit.acceptMatch : null,
@@ -64,7 +72,27 @@ class GameComponent extends StatelessWidget {
             secondaryAction: .new(label: t.home.declineGameButton, onPressed: cubit.declineMatch),
           ),
 
-          Found(state: .accepted || .declined) || InGame() || Unknown() => const SizedBox.shrink(),
+          Found(state: .accepted) => BasicLayout(
+            title: t.gameState.foundAcceptedTitle,
+            description: t.gameState.foundAcceptedDescription,
+            loading: true,
+          ),
+
+          Found(state: .declined) => BasicLayout(
+            title: t.gameState.foundDeclinedTitle,
+            description: t.gameState.foundDeclinedDescription,
+            loading: true,
+          ),
+
+          InGame() => BasicLayout(
+            title: t.gameState.inGameTitle,
+            description: t.gameState.inGameDescription,
+          ),
+
+          Unknown() => BasicLayout(
+            title: t.gameState.unknownTitle,
+            description: t.gameState.unknownDescription,
+          ),
         },
       },
     );

@@ -68,28 +68,52 @@ class TranslationsGameStateEn {
 	// Translations
 
 	/// en: 'Pre game'
-	String get preGame => 'Pre game';
+	String get preGameTitle => 'Pre game';
 
-	/// en: 'Lobby'
-	String get lobbyIdle => 'Lobby';
+	/// en: 'Create a lobby to start queuing for a game.'
+	String get preGameDescription => 'Create a lobby to start queuing for a game.';
+
+	/// en: 'In lobby'
+	String get lobbyIdleTitle => 'In lobby';
+
+	/// en: 'Start matchmaking to search for a game.'
+	String get lobbyIdleDescription => 'Start matchmaking to search for a game.';
 
 	/// en: 'Searching game'
-	String get lobbySearching => 'Searching game';
+	String get lobbySearchingTitle => 'Searching game';
+
+	/// en: 'Wait for matchmaking to find a suitable game.'
+	String get lobbySearchingDescription => 'Wait for matchmaking to find a suitable game.';
 
 	/// en: 'Game found'
-	String get foundPending => 'Game found';
+	String get foundPendingTitle => 'Game found';
+
+	/// en: 'Waiting for confirmation to join the game.'
+	String get foundPendingDescription => 'Waiting for confirmation to join the game.';
 
 	/// en: 'Game accepted'
-	String get foundAccepted => 'Game accepted';
+	String get foundAcceptedTitle => 'Game accepted';
+
+	/// en: 'Waiting for other players to join before starting the game.'
+	String get foundAcceptedDescription => 'Waiting for other players to join before starting the game.';
 
 	/// en: 'Game declined'
-	String get foundDeclined => 'Game declined';
+	String get foundDeclinedTitle => 'Game declined';
 
-	/// en: 'In game'
-	String get inGame => 'In game';
+	/// en: 'Waiting for the game to cancel before returning to the lobby.'
+	String get foundDeclinedDescription => 'Waiting for the game to cancel before returning to the lobby.';
 
-	/// en: 'Unknown'
-	String get unknown => 'Unknown';
+	/// en: 'Game in progress'
+	String get inGameTitle => 'Game in progress';
+
+	/// en: 'Wait for the current game to finish before queueing again.'
+	String get inGameDescription => 'Wait for the current game to finish before queueing again.';
+
+	/// en: 'Unknown game state'
+	String get unknownTitle => 'Unknown game state';
+
+	/// en: 'The game is running, but its current state can't be identified. Try restarting the client and the app, or join a game manually this time around.'
+	String get unknownDescription => 'The game is running, but its current state can\'t be identified.\nTry restarting the client and the app, or join a game manually this time around.';
 }
 
 // Path: gameError
@@ -128,10 +152,16 @@ class TranslationsConnectionEn {
 	String get configurationRequiredDescription => 'Setup game connection in the settings panel.';
 
 	/// en: 'Connecting...'
-	String get connecting => 'Connecting...';
+	String get connectingTitle => 'Connecting...';
+
+	/// en: 'Initializing communication with the game client.'
+	String get connectingDescription => 'Initializing communication with the game client.';
 
 	/// en: 'Checking game state...'
-	String get loadingState => 'Checking game state...';
+	String get loadingTitle => 'Checking game state...';
+
+	/// en: 'Awaiting details about the current game session.'
+	String get loadingDescription => 'Awaiting details about the current game session.';
 
 	/// en: 'Connection error'
 	String get errorTitle => 'Connection error';
@@ -213,22 +243,32 @@ extension on Translations {
 	dynamic _flatMapFunction$0(String path) {
 		switch (path) {
 			case 'app.title': return 'Remote Rift';
-			case 'gameState.preGame': return 'Pre game';
-			case 'gameState.lobbyIdle': return 'Lobby';
-			case 'gameState.lobbySearching': return 'Searching game';
-			case 'gameState.foundPending': return 'Game found';
-			case 'gameState.foundAccepted': return 'Game accepted';
-			case 'gameState.foundDeclined': return 'Game declined';
-			case 'gameState.inGame': return 'In game';
-			case 'gameState.unknown': return 'Unknown';
+			case 'gameState.preGameTitle': return 'Pre game';
+			case 'gameState.preGameDescription': return 'Create a lobby to start queuing for a game.';
+			case 'gameState.lobbyIdleTitle': return 'In lobby';
+			case 'gameState.lobbyIdleDescription': return 'Start matchmaking to search for a game.';
+			case 'gameState.lobbySearchingTitle': return 'Searching game';
+			case 'gameState.lobbySearchingDescription': return 'Wait for matchmaking to find a suitable game.';
+			case 'gameState.foundPendingTitle': return 'Game found';
+			case 'gameState.foundPendingDescription': return 'Waiting for confirmation to join the game.';
+			case 'gameState.foundAcceptedTitle': return 'Game accepted';
+			case 'gameState.foundAcceptedDescription': return 'Waiting for other players to join before starting the game.';
+			case 'gameState.foundDeclinedTitle': return 'Game declined';
+			case 'gameState.foundDeclinedDescription': return 'Waiting for the game to cancel before returning to the lobby.';
+			case 'gameState.inGameTitle': return 'Game in progress';
+			case 'gameState.inGameDescription': return 'Wait for the current game to finish before queueing again.';
+			case 'gameState.unknownTitle': return 'Unknown game state';
+			case 'gameState.unknownDescription': return 'The game is running, but its current state can\'t be identified.\nTry restarting the client and the app, or join a game manually this time around.';
 			case 'gameError.unableToConnectTitle': return 'Unable to connect';
 			case 'gameError.unableToConnectDescription': return 'The game client could not be reached. Make sure that it is running to interact with the game.';
 			case 'gameError.unknownTitle': return 'Unknown game state';
 			case 'gameError.unknownDescription': return 'The game\'s state could not be accessed due to an unexpected error.';
 			case 'connection.configurationRequiredTitle': return 'Configuration required';
 			case 'connection.configurationRequiredDescription': return 'Setup game connection in the settings panel.';
-			case 'connection.connecting': return 'Connecting...';
-			case 'connection.loadingState': return 'Checking game state...';
+			case 'connection.connectingTitle': return 'Connecting...';
+			case 'connection.connectingDescription': return 'Initializing communication with the game client.';
+			case 'connection.loadingTitle': return 'Checking game state...';
+			case 'connection.loadingDescription': return 'Awaiting details about the current game session.';
 			case 'connection.errorTitle': return 'Connection error';
 			case 'connection.errorDescription': return 'Unable to connect to the game client.';
 			case 'connection.errorRetry': return 'Reconnect';

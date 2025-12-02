@@ -39,7 +39,11 @@ class ConnectionComponent extends StatelessWidget {
           ),
         ),
 
-        Connecting() => BasicLayout(title: t.connection.connecting, loading: true),
+        Connecting() => BasicLayout(
+          title: t.connection.connectingTitle,
+          description: t.connection.connectingDescription,
+          loading: true,
+        ),
 
         ConnectionError(:var reconnectTriggered) => BasicLayout(
           title: t.connection.errorTitle,
