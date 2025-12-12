@@ -1,16 +1,9 @@
-# remote_rift_mobile
+# Remote Rift Mobile
 
-A new Flutter project.
+Mobile application for **Remote Rift**, an application that lets you queue for League of Legends games from your phone.
 
-## Getting Started
+## Related Projects
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [Remote Rift Website](https://github.com/tomwyr/remote-rift-website) — A landing page showcasing the application and guiding users on getting started.
+- [Remote Rift Connector](https://github.com/tomwyr/remote-rift-connector) — A local service that connects to and communicates with the League Client API.
+- [Remote Rift Desktop](https://github.com/tomwyr/remote-rift-desktop) — A desktop application that launches and manages the local connector service.
