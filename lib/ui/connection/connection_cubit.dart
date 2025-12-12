@@ -1,7 +1,7 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:cancelable_stream/cancelable_stream.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/local_storage.dart';
@@ -9,6 +9,7 @@ import '../../data/models.dart';
 import '../../data/remote_rift_api.dart';
 import '../../utils/retry_scheduler.dart';
 import '../../utils/stream_extensions.dart';
+import '../common/app_lifecycle_listener.dart';
 import 'connection_state.dart';
 
 class ConnectionCubit extends Cubit<ConnectionState> {
@@ -19,11 +20,13 @@ class ConnectionCubit extends Cubit<ConnectionState> {
 
   CancelableStream<RemoteRiftStatusResponse>? _statusStream;
   RetryScheduler? _reconnectScheduler;
+  AppLifecycleListener? _lifecycleListener;
 
   void initialize() {
     if (state is! Initial) {
       throw StateError('Tried to initialize while not in initial state (was ${state.runtimeType})');
     }
+    _initLifecycleListener();
     _initConnectingToGameApi();
   }
 
@@ -107,7 +110,7 @@ class ConnectionCubit extends Cubit<ConnectionState> {
           case Connecting() || ConnectedWithError() || ConnectionError() || Connected():
             // Can emit from the current state
             break;
-          default:
+          case Initial() || ConfigurationRequired():
             throw StateError(
               'Tried to update connection status in an unexpected state: ${state.runtimeType}',
             );
@@ -128,13 +131,42 @@ class ConnectionCubit extends Cubit<ConnectionState> {
       }
     } catch (_) {
       if (state case Connecting() || Connected()) {
-        _reconnectScheduler = _createReconnectScheduler()..start();
+        _initReconnectScheduler();
       }
       emit(ConnectionError());
     }
   }
 
-  RetryScheduler _createReconnectScheduler() {
-    return RetryScheduler(backoff: .standard, onRetry: _reconnectToGameApi);
+  void _initLifecycleListener() {
+    _lifecycleListener = AppLifecycleListener(listener: _onAppLifecycleChanged)..register();
+  }
+
+  void _onAppLifecycleChanged(AppLifecycleState from, AppLifecycleState to) {
+    if (from == .paused) {
+      switch (state) {
+        case ConnectionError():
+          _initReconnectScheduler();
+        case Connecting() || Connected() || ConnectedWithError():
+          _connectToCurrentGameApi();
+        case Initial() || ConfigurationRequired():
+          // No need to resume the connection at this point.
+          break;
+      }
+    } else if (to == .paused) {
+      _statusStream?.cancel();
+      _reconnectScheduler?.reset();
+    }
+  }
+
+  void _initReconnectScheduler() {
+    _reconnectScheduler = RetryScheduler(backoff: .standard, onRetry: _reconnectToGameApi)..start();
+  }
+
+  @override
+  Future<void> close() {
+    _statusStream?.cancel();
+    _reconnectScheduler?.reset();
+    _lifecycleListener?.unregister();
+    return super.close();
   }
 }
