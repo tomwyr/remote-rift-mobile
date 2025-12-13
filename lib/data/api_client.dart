@@ -7,8 +7,8 @@ import 'package:web_socket_channel/io.dart';
 
 import 'models.dart';
 
-class RemoteRiftApi {
-  RemoteRiftApi({required HttpClient client})
+class RemoteRiftApiClient {
+  RemoteRiftApiClient({required HttpClient client})
     : httpClient = IOClient(client),
       webSocketClient = client;
 

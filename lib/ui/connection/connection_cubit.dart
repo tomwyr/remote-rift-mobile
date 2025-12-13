@@ -6,16 +6,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/local_storage.dart';
 import '../../data/models.dart';
-import '../../data/remote_rift_api.dart';
+import '../../data/api_client.dart';
 import '../../utils/retry_scheduler.dart';
 import '../../utils/stream_extensions.dart';
 import '../common/app_lifecycle_listener.dart';
 import 'connection_state.dart';
 
 class ConnectionCubit extends Cubit<ConnectionState> {
-  ConnectionCubit({required this.remoteRiftApi, required this.localStorage}) : super(Initial());
+  ConnectionCubit({required this.apiClient, required this.localStorage}) : super(Initial());
 
-  final RemoteRiftApi remoteRiftApi;
+  final RemoteRiftApiClient apiClient;
   final LocalStorage localStorage;
 
   CancelableStream<RemoteRiftStatusResponse>? _statusStream;
@@ -49,7 +49,7 @@ class ConnectionCubit extends Cubit<ConnectionState> {
 
   void _initConnectingToGameApi() async {
     await for (var apiAddress in localStorage.apiAddressStream) {
-      remoteRiftApi.setApiAddress(apiAddress);
+      apiClient.setApiAddress(apiAddress);
       _connectToGameApiAt(apiAddress);
     }
   }
@@ -90,7 +90,7 @@ class ConnectionCubit extends Cubit<ConnectionState> {
   }
 
   void _resetStatusListener(String apiAddress, {VoidCallback? onConnectionAttempted}) {
-    final stream = remoteRiftApi
+    final stream = apiClient
         .getStatusStream()
         .peek(onFirstOrError: onConnectionAttempted, onDone: _connectToCurrentGameApi)
         .cancelable();

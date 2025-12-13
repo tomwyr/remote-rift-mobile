@@ -5,14 +5,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models.dart';
-import '../../data/remote_rift_api.dart';
+import '../../data/api_client.dart';
 import '../../utils/retry_scheduler.dart';
 import 'game_state.dart';
 
 class GameCubit extends Cubit<GameState> {
-  GameCubit({required this.remoteRiftApi}) : super(Loading());
+  GameCubit({required this.apiClient}) : super(Loading());
 
-  final RemoteRiftApi remoteRiftApi;
+  final RemoteRiftApiClient apiClient;
 
   final _retryBackoff = RetryBackoff.standard;
   CancelableStream<RemoteRiftState>? _gameStateStream;
@@ -28,37 +28,37 @@ class GameCubit extends Cubit<GameState> {
 
   void createLobby() {
     _runGameAction(() async {
-      await remoteRiftApi.createLobby();
+      await apiClient.createLobby();
     });
   }
 
   void searchMatch() {
     _runGameAction(() async {
-      await remoteRiftApi.searchMatch();
+      await apiClient.searchMatch();
     });
   }
 
   void leaveLobby() {
     _runGameAction(() async {
-      await remoteRiftApi.leaveLobby();
+      await apiClient.leaveLobby();
     });
   }
 
   void stopMatchSearch() {
     _runGameAction(() async {
-      await remoteRiftApi.stopMatchSearch();
+      await apiClient.stopMatchSearch();
     });
   }
 
   void acceptMatch() {
     _runGameAction(() async {
-      await remoteRiftApi.acceptMatch();
+      await apiClient.acceptMatch();
     });
   }
 
   void declineMatch() {
     _runGameAction(() async {
-      await remoteRiftApi.declineMatch();
+      await apiClient.declineMatch();
     });
   }
 
@@ -71,7 +71,7 @@ class GameCubit extends Cubit<GameState> {
   }
 
   Future<void> _listenGameState() async {
-    final stream = remoteRiftApi.getCurrentStateStream().cancelable();
+    final stream = apiClient.getCurrentStateStream().cancelable();
     _gameStateStream = stream;
 
     await for (var gameState in stream) {
