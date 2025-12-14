@@ -32,10 +32,8 @@ This section describes selected third-party packages relevant to the application
 To run the application on a mobile device:
 
 1. Download and install the application:
-
    - **Android**: Download the latest APK from the [GitHub releases page](https://github.com/tomwyr/remote-rift-mobile/releases) and install it on the device. You may need to enable installation from unknown sources in your device settings.
    - **iOS**: Clone the repository, open it in Xcode, and build and run the application locally.
-
 2. Run the Remote Rift Connector following the [setup instructions](https://github.com/tomwyr/remote-rift-connector?tab=readme-ov-file#usage).
 3. Start the League of Legends client.
 4. Launch the mobile application and wait for the connection to be established.
@@ -48,7 +46,6 @@ To run the project locally:
 2. Run `flutter pub get` to install dependencies.
 3. Run `dart run slang` to generate localization source files.
 4. Run the application using `flutter run` or an IDE.
-
 5. After modifying source files, restart the application or use hot reload.
 
 ### Localization
