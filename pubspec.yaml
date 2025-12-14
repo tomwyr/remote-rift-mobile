@@ -1,5 +1,5 @@
 name: remote_rift_mobile
-description: "A new Flutter project."
+description: "A mobile application that allows remote interaction with the League client."
 publish_to: "none"
 
 version: 1.0.0+1
