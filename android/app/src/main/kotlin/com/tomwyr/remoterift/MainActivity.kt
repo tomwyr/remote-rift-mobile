@@ -1,4 +1,4 @@
-package com.example.remote_rift_mobile
+package com.tomwyr.remoterift
 
 import io.flutter.embedding.android.FlutterActivity
 

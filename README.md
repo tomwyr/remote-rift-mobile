@@ -48,6 +48,10 @@ To run the project locally:
 4. Run the application using `flutter run` or an IDE.
 5. After modifying source files, restart the application or use hot reload.
 
+### Building project
+
+Run `flutter build apk` or `flutter build ios` to compile the application for the target platform.
+
 ### Localization
 
 To update localized strings:
