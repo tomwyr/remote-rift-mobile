@@ -4,9 +4,9 @@ import 'dart:ui';
 import 'package:cancelable_stream/cancelable_stream.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../data/api_client.dart';
 import '../../data/local_storage.dart';
 import '../../data/models.dart';
-import '../../data/api_client.dart';
 import '../../utils/retry_scheduler.dart';
 import '../../utils/stream_extensions.dart';
 import '../common/app_lifecycle_listener.dart';
