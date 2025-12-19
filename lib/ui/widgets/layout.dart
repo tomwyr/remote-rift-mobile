@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 class BasicLayout extends StatelessWidget {
   const BasicLayout({
     super.key,
-    required this.title,
+    this.title,
     this.description,
     this.loading = false,
     this.action,
     this.secondaryAction,
   });
 
-  final String title;
+  final String? title;
   final String? description;
   final bool loading;
   final BasicLayoutAction? action;
@@ -21,11 +21,10 @@ class BasicLayout extends StatelessWidget {
     return Column(
       crossAxisAlignment: .stretch,
       children: [
-        Text(title, style: Theme.of(context).textTheme.titleLarge),
-        if (description case var description?) ...[
-          SizedBox(height: 8),
+        if (title case var title?) Text(title, style: Theme.of(context).textTheme.titleLarge),
+        if (title != null || description != null) SizedBox(height: 8),
+        if (description case var description?)
           Text(description, style: Theme.of(context).textTheme.bodyLarge),
-        ],
         if (loading) ...[
           Spacer(),
           SizedBox(height: 12),

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../dependencies.dart';
 import '../../i18n/strings.g.dart';
 import '../settings/settings_drawer.dart';
+import '../widgets/delayed_display.dart';
 import '../widgets/layout.dart';
 import '../widgets/lifecycle.dart';
 import 'connection_cubit.dart';
@@ -39,10 +40,15 @@ class ConnectionComponent extends StatelessWidget {
           ),
         ),
 
-        Connecting() => BasicLayout(
-          title: t.connection.connectingTitle,
-          description: t.connection.connectingDescription,
-          loading: true,
+        // Delay showing content to avoid flicker when loading appears for a single frame
+        Connecting() => DelayedDisplay(
+          delay: Duration(milliseconds: 200),
+          placeholder: BasicLayout(loading: true),
+          child: BasicLayout(
+            title: t.connection.connectingTitle,
+            description: t.connection.connectingDescription,
+            loading: true,
+          ),
         ),
 
         ConnectionError(:var reconnectTriggered) => BasicLayout(

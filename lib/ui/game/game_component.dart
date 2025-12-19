@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/models.dart';
 import '../../dependencies.dart';
 import '../../i18n/strings.g.dart';
+import '../widgets/delayed_display.dart';
 import '../widgets/layout.dart';
 import '../widgets/lifecycle.dart';
 import 'game_cubit.dart';
@@ -24,10 +25,15 @@ class GameComponent extends StatelessWidget {
       onInit: cubit.initialize,
       onDispose: cubit.dispose,
       child: switch (cubit.state) {
-        Loading() => BasicLayout(
-          title: t.connection.loadingTitle,
-          description: t.connection.loadingDescription,
-          loading: true,
+        // Delay showing content to avoid flicker when loading appears for a single frame
+        Loading() => DelayedDisplay(
+          delay: Duration(milliseconds: 200),
+          placeholder: BasicLayout(loading: true),
+          child: BasicLayout(
+            title: t.connection.loadingTitle,
+            description: t.connection.loadingDescription,
+            loading: true,
+          ),
         ),
 
         Data(gameState: var state, :var loading) => switch (state) {
