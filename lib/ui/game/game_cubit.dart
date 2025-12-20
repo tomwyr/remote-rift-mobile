@@ -76,8 +76,8 @@ class GameCubit extends Cubit<GameState> {
 
     await for (var gameState in stream) {
       emit(switch (state) {
-        Data data => data.produce((draft) => draft..gameState = gameState),
-        Loading() => Data(gameState: gameState),
+        Data data => data.produce((draft) => draft..state = gameState),
+        Loading() => Data(state: gameState),
       });
     }
   }

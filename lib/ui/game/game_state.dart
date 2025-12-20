@@ -10,8 +10,8 @@ class Loading extends GameState {}
 
 @draft
 class Data extends GameState {
-  Data({required this.gameState, this.loading = false});
+  Data({required this.state, this.loading = false});
 
-  final RemoteRiftState gameState;
+  final RemoteRiftState state;
   final bool loading;
 }

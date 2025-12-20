@@ -40,7 +40,7 @@ class ConnectionCubit extends Cubit<ConnectionState> {
 
     final scheduler = _reconnectScheduler;
     if (scheduler == null || scheduler.status == .idle) {
-      throw StateError('Reconnect scheduler was not running while in connection erro state');
+      throw StateError('Reconnect scheduler was not running while in connection error state');
     }
 
     emit(connectionError.produce((draft) => draft.reconnectTriggered = true));

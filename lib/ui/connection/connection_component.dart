@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ConnectionState;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../dependencies.dart';
 import '../../i18n/strings.g.dart';
+import '../common/utils.dart';
 import '../settings/settings_drawer.dart';
+import '../widgets/bloc_listener.dart';
 import '../widgets/delayed_display.dart';
 import '../widgets/layout.dart';
 import '../widgets/lifecycle.dart';
@@ -28,43 +30,57 @@ class ConnectionComponent extends StatelessWidget {
 
     return Lifecycle(
       onInit: cubit.initialize,
-      child: switch (cubit.state) {
-        Initial() => SizedBox.shrink(),
+      child: BlocTransitionListener(
+        bloc: cubit,
+        listener: _vibrateOnStateChange,
+        child: switch (cubit.state) {
+          Initial() => SizedBox.shrink(),
 
-        ConfigurationRequired() => BasicLayout(
-          title: t.connection.configurationRequiredTitle,
-          description: t.connection.configurationRequiredDescription,
-          action: .new(
-            label: t.home.configureButton,
-            onPressed: () => SettingsDrawer.open(context, autofocus: true),
+          ConfigurationRequired() => BasicLayout(
+            title: t.connection.configurationRequiredTitle,
+            description: t.connection.configurationRequiredDescription,
+            action: .new(
+              label: t.home.configureButton,
+              onPressed: () => SettingsDrawer.open(context, autofocus: true),
+            ),
           ),
-        ),
 
-        // Delay showing content to avoid flicker when loading appears for a single frame
-        Connecting() => DelayedDisplay(
-          delay: Duration(milliseconds: 200),
-          placeholder: BasicLayout(loading: true),
-          child: BasicLayout(
-            title: t.connection.connectingTitle,
-            description: t.connection.connectingDescription,
-            loading: true,
+          // Delay showing content to avoid flicker when loading appears for a single frame
+          Connecting() => DelayedDisplay(
+            delay: Duration(milliseconds: 200),
+            placeholder: BasicLayout(loading: true),
+            child: BasicLayout(
+              title: t.connection.connectingTitle,
+              description: t.connection.connectingDescription,
+              loading: true,
+            ),
           ),
-        ),
 
-        ConnectionError(:var reconnectTriggered) => BasicLayout(
-          title: t.connection.errorTitle,
-          description: t.connection.errorDescription,
-          loading: reconnectTriggered,
-          action: .new(label: t.connection.errorRetry, onPressed: cubit.reconnect),
-        ),
+          ConnectionError(:var reconnectTriggered) => BasicLayout(
+            title: t.connection.errorTitle,
+            description: t.connection.errorDescription,
+            loading: reconnectTriggered,
+            action: .new(label: t.connection.errorRetry, onPressed: cubit.reconnect),
+          ),
 
-        ConnectedWithError(:var cause) => BasicLayout(
-          title: cause.title,
-          description: cause.description,
-        ),
+          ConnectedWithError(:var cause) => BasicLayout(
+            title: cause.title,
+            description: cause.description,
+          ),
 
-        Connected() => connectedBuilder(context),
-      },
+          Connected() => connectedBuilder(context),
+        },
+      ),
     );
+  }
+
+  void _vibrateOnStateChange(ConnectionState previous, ConnectionState current) {
+    bool changedTo<T extends ConnectionState>() {
+      return previous is! T && current is T;
+    }
+
+    if (changedTo<ConnectionError>() || changedTo<ConnectedWithError>()) {
+      vibrateMillis(300);
+    }
   }
 }
