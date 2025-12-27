@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  static ThemeData get light {
+  static ThemeData light({AppThemeButtonVariant buttonVariant = .medium}) {
     const white = Colors.white;
     const black = Colors.black;
 
-    final buttonMinSize = AppThemeExtension.buttonSize(.regular);
+    final buttonMinSize = AppThemeExtension.buttonSize(buttonVariant);
 
     return ThemeData(
-      extensions: [AppThemeExtension(appBarLeadingPadding: EdgeInsets.only(left: 8))],
+      extensions: [
+        AppThemeExtension(
+          buttonVariant: buttonVariant,
+          appBarLeadingPadding: .only(left: 8),
+          colorScheme: .light(),
+        ),
+      ],
       colorSchemeSeed: white,
       scaffoldBackgroundColor: white,
       appBarTheme: AppBarTheme(
@@ -17,7 +23,7 @@ class AppTheme {
         leadingWidth: 64,
         titleSpacing: 8,
         centerTitle: false,
-        actionsPadding: EdgeInsets.only(right: 8),
+        actionsPadding: .only(right: 8),
       ),
       drawerTheme: DrawerThemeData(backgroundColor: white),
       inputDecorationTheme: InputDecorationTheme(
@@ -48,8 +54,11 @@ class AppTheme {
 
   static Widget builder(BuildContext context, Widget? child) {
     final theme = Theme.of(context);
+    final appTheme = AppThemeExtension.of(context);
 
-    final buttonTextStyle = WidgetStateProperty.all(theme.textTheme.titleMedium!);
+    final buttonTextStyle = WidgetStateProperty.all(
+      AppThemeExtension.buttonTextStyle(appTheme.buttonVariant, theme),
+    );
 
     final modifiedTheme = theme.copyWith(
       appBarTheme: theme.appBarTheme.copyWith(titleTextStyle: theme.textTheme.headlineSmall),
@@ -65,12 +74,65 @@ class AppTheme {
   }
 }
 
-enum AppThemeButtonVariant { regular, compact }
+class AppThemeColorScheme {
+  AppThemeColorScheme({
+    required this.neutral,
+    required this.success,
+    required this.warning,
+    required this.error,
+  });
+
+  final Color neutral;
+  final Color success;
+  final Color warning;
+  final Color error;
+
+  factory AppThemeColorScheme.light() => AppThemeColorScheme(
+    neutral: const .fromARGB(255, 92, 184, 227),
+    success: const .fromARGB(255, 139, 195, 74),
+    warning: const .fromARGB(255, 249, 199, 50),
+    error: const .fromARGB(255, 235, 98, 88),
+  );
+
+  static AppThemeColorScheme? lerp(AppThemeColorScheme? a, AppThemeColorScheme? b, double t) {
+    if (identical(a, b)) {
+      return a;
+    }
+    if (a == null) {
+      return t < 0.5 ? null : b;
+    }
+    if (b == null) {
+      return t < 0.5 ? a : null;
+    }
+    return AppThemeColorScheme(
+      neutral: .lerp(a.neutral, b.neutral, t)!,
+      success: .lerp(a.success, b.success, t)!,
+      warning: .lerp(a.warning, b.warning, t)!,
+      error: .lerp(a.error, b.error, t)!,
+    );
+  }
+}
+
+enum AppThemeButtonVariant {
+  large,
+  medium,
+  small;
+
+  static AppThemeButtonVariant? lerp(AppThemeButtonVariant? a, AppThemeButtonVariant? b, double t) {
+    return t <= 0.5 ? a : b;
+  }
+}
 
 class AppThemeExtension implements ThemeExtension<AppThemeExtension> {
-  AppThemeExtension({required this.appBarLeadingPadding});
+  AppThemeExtension({
+    required this.buttonVariant,
+    required this.appBarLeadingPadding,
+    required this.colorScheme,
+  });
 
+  final AppThemeButtonVariant buttonVariant;
   final EdgeInsets appBarLeadingPadding;
+  final AppThemeColorScheme colorScheme;
 
   static AppThemeExtension of(BuildContext context) {
     return Theme.of(context).extension<AppThemeExtension>()!;
@@ -78,23 +140,40 @@ class AppThemeExtension implements ThemeExtension<AppThemeExtension> {
 
   static Size buttonSize(AppThemeButtonVariant variant) {
     return switch (variant) {
-      .regular => Size(double.infinity, 48),
-      .compact => Size(double.infinity, 44),
+      .large => Size(double.infinity, 48),
+      .medium => Size(double.infinity, 44),
+      .small => Size(double.infinity, 40),
+    };
+  }
+
+  static TextStyle buttonTextStyle(AppThemeButtonVariant variant, ThemeData theme) {
+    return switch (variant) {
+      .large => theme.textTheme.titleMedium!,
+      .medium => theme.textTheme.titleMedium!,
+      .small => theme.textTheme.titleSmall!,
     };
   }
 
   @override
-  ThemeExtension<AppThemeExtension> copyWith({EdgeInsets? appBarLeadingPadding}) {
+  ThemeExtension<AppThemeExtension> copyWith({
+    AppThemeButtonVariant? buttonVariant,
+    EdgeInsets? appBarLeadingPadding,
+    AppThemeColorScheme? colorScheme,
+  }) {
     return AppThemeExtension(
+      buttonVariant: buttonVariant ?? this.buttonVariant,
       appBarLeadingPadding: appBarLeadingPadding ?? this.appBarLeadingPadding,
+      colorScheme: colorScheme ?? this.colorScheme,
     );
   }
 
   @override
   ThemeExtension<AppThemeExtension> lerp(AppThemeExtension? other, double t) {
     return AppThemeExtension(
+      buttonVariant: .lerp(buttonVariant, other?.buttonVariant, t) ?? buttonVariant,
       appBarLeadingPadding:
           .lerp(appBarLeadingPadding, other?.appBarLeadingPadding, t) ?? appBarLeadingPadding,
+      colorScheme: .lerp(colorScheme, other?.colorScheme, t) ?? colorScheme,
     );
   }
 

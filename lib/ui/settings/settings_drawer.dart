@@ -175,7 +175,7 @@ class _ApiAddressFieldState extends State<ApiAddressField> {
   }
 
   Widget _actionButtons() {
-    final buttonSize = AppThemeExtension.buttonSize(.compact);
+    final buttonSize = AppThemeExtension.buttonSize(.medium);
 
     return Row(
       mainAxisSize: .min,
