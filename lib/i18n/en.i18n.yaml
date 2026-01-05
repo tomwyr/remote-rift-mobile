@@ -26,29 +26,19 @@ gameError:
   unknownDescription: "The game's state could not be accessed due to an unexpected error."
 
 connection:
-  configurationRequiredTitle: "Configuration required"
-  configurationRequiredDescription: "Setup game connection in the settings panel."
   connectingTitle: "Connecting..."
   connectingDescription: "Initializing communication with the game client."
   loadingTitle: "Checking game state..."
   loadingDescription: "Awaiting details about the current game session."
   errorTitle: "Connection error"
-  errorDescription: "Unable to connect to the game client."
+  errorServiceNotFoundDescription: "Unable to connect to the desktop app. Make sure it's running and that both devices are on the same network."
+  errorUnknownDescription: "Unable to connect to the desktop app."
   errorRetry: "Reconnect"
 
 home:
-  configureButton: "Configure"
   createLobbyButton: "Create lobby"
   searchGameButton: "Search game"
   leaveLobbyButton: "Leave lobby"
   cancelSearchButton: "Cancel search"
   acceptGameButton: "Accept game"
   declineGameButton: "Decline game"
-
-settings:
-  title: "Settings"
-  saveButton: "Save"
-  undoButton: "Undo"
-  apiAddressTitle: "Api address"
-  apiAddressDescription: "Enter the IP address and port of the Remote Rift desktop app running on your computer."
-  apiAddressHint: "IP:Port"

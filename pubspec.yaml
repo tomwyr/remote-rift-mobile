@@ -14,11 +14,17 @@ dependencies:
   flutter_bloc: ^9.1.1
   http: ^1.5.0
   json_annotation: ^4.9.0
-  shared_preferences: ^2.5.3
   slang: ^4.8.1
   slang_flutter: ^4.8.0
   vibration: ^3.1.5
   web_socket_channel: ^3.0.3
+
+  remote_rift_connector_api:
+    path: ../remote-rift-connector/packages/api
+    # git:
+    #   url: https://github.com/tomwyr/remote-rift-connector.git
+    #   ref: 0.5.1
+    #   path: packages/api
 
 dev_dependencies:
   flutter_test:

@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../dependencies.dart';
 import '../../i18n/strings.g.dart';
 import '../common/utils.dart';
-import '../settings/settings_drawer.dart';
 import '../widgets/bloc_listener.dart';
 import '../widgets/delayed_display.dart';
 import '../widgets/layout.dart';
@@ -36,15 +35,6 @@ class ConnectionComponent extends StatelessWidget {
         child: switch (cubit.state) {
           Initial() => SizedBox.shrink(),
 
-          ConfigurationRequired() => BasicLayout(
-            title: t.connection.configurationRequiredTitle,
-            description: t.connection.configurationRequiredDescription,
-            action: .new(
-              label: t.home.configureButton,
-              onPressed: () => SettingsDrawer.open(context, autofocus: true),
-            ),
-          ),
-
           // Delay showing content to avoid flicker when loading appears for a single frame
           Connecting() => DelayedDisplay(
             delay: Duration(milliseconds: 200),
@@ -56,9 +46,9 @@ class ConnectionComponent extends StatelessWidget {
             ),
           ),
 
-          ConnectionError(:var reconnectTriggered) => BasicLayout(
+          ConnectionError(:var cause, :var reconnectTriggered) => BasicLayout(
             title: t.connection.errorTitle,
-            description: t.connection.errorDescription,
+            description: cause.description,
             loading: reconnectTriggered,
             action: .new(label: t.connection.errorRetry, onPressed: cubit.reconnect),
           ),

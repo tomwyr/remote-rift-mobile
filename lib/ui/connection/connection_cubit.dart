@@ -3,9 +3,9 @@ import 'dart:ui';
 
 import 'package:cancelable_stream/cancelable_stream.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:remote_rift_connector_api/remote_rift_connector_api.dart';
 
 import '../../data/api_client.dart';
-import '../../data/local_storage.dart';
 import '../../data/models.dart';
 import '../../utils/retry_scheduler.dart';
 import '../../utils/stream_extensions.dart';
@@ -13,10 +13,10 @@ import '../common/app_lifecycle_listener.dart';
 import 'connection_state.dart';
 
 class ConnectionCubit extends Cubit<ConnectionState> {
-  ConnectionCubit({required this.apiClient, required this.localStorage}) : super(Initial());
+  ConnectionCubit({required this.apiClient, required this.apiService}) : super(Initial());
 
   final RemoteRiftApiClient apiClient;
-  final LocalStorage localStorage;
+  final RemoteRiftApiService apiService;
 
   CancelableStream<RemoteRiftStatusResponse>? _statusStream;
   RetryScheduler? _reconnectScheduler;
@@ -27,7 +27,7 @@ class ConnectionCubit extends Cubit<ConnectionState> {
       throw StateError('Tried to initialize while not in initial state (was ${state.runtimeType})');
     }
     _initLifecycleListener();
-    _initConnectingToGameApi();
+    _connectToGameApi();
   }
 
   void reconnect() {
@@ -47,52 +47,37 @@ class ConnectionCubit extends Cubit<ConnectionState> {
     scheduler.trigger();
   }
 
-  void _initConnectingToGameApi() async {
-    await for (var apiAddress in localStorage.apiAddressStream) {
-      apiClient.setApiAddress(apiAddress);
-      _connectToGameApiAt(apiAddress);
-    }
-  }
-
-  void _connectToCurrentGameApi() async {
-    final apiAddress = await localStorage.getApiAddress();
-    _connectToGameApiAt(apiAddress);
-  }
-
-  void _connectToGameApiAt(String? apiAddress) {
-    if (_verifyApiAddress(apiAddress) case var apiAddress?) {
+  void _connectToGameApi() async {
+    if (await _resolveApiAddress()) {
       emit(Connecting());
-      _resetStatusListener(apiAddress);
+      _resetStatusListener();
     }
   }
 
   Future<void> _reconnectToGameApi() async {
-    final apiAddress = await localStorage.getApiAddress();
-    if (_verifyApiAddress(apiAddress) case var apiAddress?) {
+    if (await _resolveApiAddress()) {
       final completer = Completer<void>();
-      _resetStatusListener(apiAddress, onConnectionAttempted: completer.complete);
+      _resetStatusListener(onConnectionAttempted: completer.complete);
       await completer.future;
     }
   }
 
-  String? _verifyApiAddress(String? apiAddress) {
-    if (apiAddress case null || '') {
-      _onApiAddressMissing();
-      return null;
+  Future<bool> _resolveApiAddress() async {
+    final apiAddress = await apiService.findAddress();
+    apiClient.setApiAddress(apiAddress?.toAddressString());
+
+    if (apiAddress == null) {
+      _initReconnectScheduler();
+      emit(ConnectionError(cause: .serviceNotFound));
     }
-    return apiAddress;
+
+    return apiAddress != null;
   }
 
-  void _onApiAddressMissing() {
-    emit(ConfigurationRequired());
-    _statusStream?.cancel();
-    _reconnectScheduler?.reset();
-  }
-
-  void _resetStatusListener(String apiAddress, {VoidCallback? onConnectionAttempted}) {
+  void _resetStatusListener({VoidCallback? onConnectionAttempted}) {
     final stream = apiClient
         .getStatusStream()
-        .peek(onFirstOrError: onConnectionAttempted, onDone: _connectToCurrentGameApi)
+        .peek(onFirstOrError: onConnectionAttempted, onDone: _connectToGameApi)
         .cancelable();
     _statusStream?.cancel();
     _statusStream = stream;
@@ -110,7 +95,7 @@ class ConnectionCubit extends Cubit<ConnectionState> {
           case Connecting() || ConnectedWithError() || ConnectionError() || Connected():
             // Can emit from the current state
             break;
-          case Initial() || ConfigurationRequired():
+          case Initial():
             throw StateError(
               'Tried to update connection status in an unexpected state: ${state.runtimeType}',
             );
@@ -133,7 +118,7 @@ class ConnectionCubit extends Cubit<ConnectionState> {
       if (state case Connecting() || Connected()) {
         _initReconnectScheduler();
       }
-      emit(ConnectionError());
+      emit(ConnectionError(cause: .unknown));
     }
   }
 
@@ -147,8 +132,8 @@ class ConnectionCubit extends Cubit<ConnectionState> {
         case ConnectionError():
           _initReconnectScheduler();
         case Connecting() || Connected() || ConnectedWithError():
-          _connectToCurrentGameApi();
-        case Initial() || ConfigurationRequired():
+          _connectToGameApi();
+        case Initial():
           // No need to resume the connection at this point.
           break;
       }

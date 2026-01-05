@@ -44,7 +44,6 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final TranslationsGameErrorEn gameError = TranslationsGameErrorEn._(_root);
 	late final TranslationsConnectionEn connection = TranslationsConnectionEn._(_root);
 	late final TranslationsHomeEn home = TranslationsHomeEn._(_root);
-	late final TranslationsSettingsEn settings = TranslationsSettingsEn._(_root);
 }
 
 // Path: app
@@ -145,12 +144,6 @@ class TranslationsConnectionEn {
 
 	// Translations
 
-	/// en: 'Configuration required'
-	String get configurationRequiredTitle => 'Configuration required';
-
-	/// en: 'Setup game connection in the settings panel.'
-	String get configurationRequiredDescription => 'Setup game connection in the settings panel.';
-
 	/// en: 'Connecting...'
 	String get connectingTitle => 'Connecting...';
 
@@ -166,8 +159,11 @@ class TranslationsConnectionEn {
 	/// en: 'Connection error'
 	String get errorTitle => 'Connection error';
 
-	/// en: 'Unable to connect to the game client.'
-	String get errorDescription => 'Unable to connect to the game client.';
+	/// en: 'Unable to connect to the desktop app. Make sure it's running and that both devices are on the same network.'
+	String get errorServiceNotFoundDescription => 'Unable to connect to the desktop app. Make sure it\'s running and that both devices are on the same network.';
+
+	/// en: 'Unable to connect to the desktop app.'
+	String get errorUnknownDescription => 'Unable to connect to the desktop app.';
 
 	/// en: 'Reconnect'
 	String get errorRetry => 'Reconnect';
@@ -180,9 +176,6 @@ class TranslationsHomeEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-
-	/// en: 'Configure'
-	String get configureButton => 'Configure';
 
 	/// en: 'Create lobby'
 	String get createLobbyButton => 'Create lobby';
@@ -201,33 +194,6 @@ class TranslationsHomeEn {
 
 	/// en: 'Decline game'
 	String get declineGameButton => 'Decline game';
-}
-
-// Path: settings
-class TranslationsSettingsEn {
-	TranslationsSettingsEn._(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Settings'
-	String get title => 'Settings';
-
-	/// en: 'Save'
-	String get saveButton => 'Save';
-
-	/// en: 'Undo'
-	String get undoButton => 'Undo';
-
-	/// en: 'Api address'
-	String get apiAddressTitle => 'Api address';
-
-	/// en: 'Enter the IP address and port of the Remote Rift desktop app running on your computer.'
-	String get apiAddressDescription => 'Enter the IP address and port of the Remote Rift desktop app running on your computer.';
-
-	/// en: 'IP:Port'
-	String get apiAddressHint => 'IP:Port';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -263,28 +229,20 @@ extension on Translations {
 			case 'gameError.unableToConnectDescription': return 'The game client could not be reached. Make sure that it is running to interact with the game.';
 			case 'gameError.unknownTitle': return 'Unknown game state';
 			case 'gameError.unknownDescription': return 'The game\'s state could not be accessed due to an unexpected error.';
-			case 'connection.configurationRequiredTitle': return 'Configuration required';
-			case 'connection.configurationRequiredDescription': return 'Setup game connection in the settings panel.';
 			case 'connection.connectingTitle': return 'Connecting...';
 			case 'connection.connectingDescription': return 'Initializing communication with the game client.';
 			case 'connection.loadingTitle': return 'Checking game state...';
 			case 'connection.loadingDescription': return 'Awaiting details about the current game session.';
 			case 'connection.errorTitle': return 'Connection error';
-			case 'connection.errorDescription': return 'Unable to connect to the game client.';
+			case 'connection.errorServiceNotFoundDescription': return 'Unable to connect to the desktop app. Make sure it\'s running and that both devices are on the same network.';
+			case 'connection.errorUnknownDescription': return 'Unable to connect to the desktop app.';
 			case 'connection.errorRetry': return 'Reconnect';
-			case 'home.configureButton': return 'Configure';
 			case 'home.createLobbyButton': return 'Create lobby';
 			case 'home.searchGameButton': return 'Search game';
 			case 'home.leaveLobbyButton': return 'Leave lobby';
 			case 'home.cancelSearchButton': return 'Cancel search';
 			case 'home.acceptGameButton': return 'Accept game';
 			case 'home.declineGameButton': return 'Decline game';
-			case 'settings.title': return 'Settings';
-			case 'settings.saveButton': return 'Save';
-			case 'settings.undoButton': return 'Undo';
-			case 'settings.apiAddressTitle': return 'Api address';
-			case 'settings.apiAddressDescription': return 'Enter the IP address and port of the Remote Rift desktop app running on your computer.';
-			case 'settings.apiAddressHint': return 'IP:Port';
 			default: return null;
 		}
 	}

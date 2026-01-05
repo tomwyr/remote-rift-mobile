@@ -12,19 +12,22 @@ part of 'connection_state.dart';
 
 class ConnectionErrorDraft implements ConnectionError {
   // Mutable fields
+  ConnectionErrorCause cause;
   bool reconnectTriggered;
 
   // Getters and setters for nested draftable fields
 
-  ConnectionErrorDraft({required this.reconnectTriggered});
+  ConnectionErrorDraft({required this.cause, required this.reconnectTriggered});
 
   ConnectionError save() =>
-      ConnectionError(reconnectTriggered: reconnectTriggered);
+      ConnectionError(cause: cause, reconnectTriggered: reconnectTriggered);
 }
 
 extension ConnectionErrorDraftExtension on ConnectionError {
-  ConnectionErrorDraft draft() =>
-      ConnectionErrorDraft(reconnectTriggered: this.reconnectTriggered);
+  ConnectionErrorDraft draft() => ConnectionErrorDraft(
+    cause: this.cause,
+    reconnectTriggered: this.reconnectTriggered,
+  );
   ConnectionError produce(void Function(ConnectionErrorDraft draft) producer) {
     final draft = this.draft();
     producer(draft);
