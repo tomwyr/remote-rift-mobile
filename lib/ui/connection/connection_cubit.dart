@@ -48,9 +48,12 @@ class ConnectionCubit extends Cubit<ConnectionState> {
   }
 
   void _connectToGameApi() async {
+    emit(Connecting());
     if (await _resolveApiAddress()) {
-      emit(Connecting());
       _resetStatusListener();
+    } else {
+      _initReconnectScheduler();
+      emit(ConnectionError(cause: .serviceNotFound));
     }
   }
 
@@ -59,18 +62,14 @@ class ConnectionCubit extends Cubit<ConnectionState> {
       final completer = Completer<void>();
       _resetStatusListener(onConnectionAttempted: completer.complete);
       await completer.future;
+    } else {
+      emit(ConnectionError(cause: .serviceNotFound));
     }
   }
 
   Future<bool> _resolveApiAddress() async {
-    final apiAddress = await apiService.findAddress();
+    final apiAddress = await apiService.findAddress(timeLimit: Duration(seconds: 5));
     apiClient.setApiAddress(apiAddress?.toAddressString());
-
-    if (apiAddress == null) {
-      _initReconnectScheduler();
-      emit(ConnectionError(cause: .serviceNotFound));
-    }
-
     return apiAddress != null;
   }
 
@@ -115,7 +114,7 @@ class ConnectionCubit extends Cubit<ConnectionState> {
         }
       }
     } catch (_) {
-      if (state case Connecting() || Connected()) {
+      if (state case Connecting() || Connected() || ConnectedWithError()) {
         _initReconnectScheduler();
       }
       emit(ConnectionError(cause: .unknown));

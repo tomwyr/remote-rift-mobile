@@ -23,8 +23,7 @@ class RemoteRiftApiClient {
   Stream<RemoteRiftResponse<RemoteRiftStatus>> getStatusStream() async* {
     final url = '${await _webSocketBaseUrl}/status/watch';
     final ws = IOWebSocketChannel.connect(Uri.parse(url), customClient: webSocketClient);
-    const timeout = Duration(seconds: 5);
-    await for (var message in ws.stream.timeout(timeout)) {
+    await for (var message in ws.stream) {
       yield .fromJson(jsonDecode(message), RemoteRiftStatus.fromJson);
     }
   }

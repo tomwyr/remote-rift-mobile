@@ -5,7 +5,6 @@ import '../app/app_theme.dart';
 import '../common/assets.dart';
 import '../connection/connection_component.dart';
 import '../game/game_component.dart';
-import '../widgets/drawer.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -19,7 +18,6 @@ class HomePage extends StatelessWidget {
           child: Image.asset(Assets.logo),
         ),
         title: Text(t.app.title),
-        actions: [EndDrawerIcon(icon: Icons.tune)],
       ),
       body: SafeArea(
         child: Padding(

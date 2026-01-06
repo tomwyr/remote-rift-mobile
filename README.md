@@ -17,7 +17,7 @@ The project is organized into the following main layers:
 - **Data** - Provides model definitions and services for interacting with the Remote Rift Connector API and local device storage.
 - **UI** - Contains widgets paired with cubits and state classes, where applicable, to manage feature-specific state and logic.
 
-When launched, the application attempts to connect to the Remote Rift Connector API using the address configured in the settings panel. If the address changes or the connection is lost, the application attempts to re-establish communication with the Connector service.
+When launched, the application attempts to connect to the Remote Rift Connector API by resolving its address via mDNS on the local network. If the service is not reachable on the network or the connection is lost, the application attempts to re-establish communication with the Connector service.
 
 ### Dependencies
 
