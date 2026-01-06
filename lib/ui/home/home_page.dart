@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:remote_rift_foundation_ui/remote_rift_foundation_ui.dart';
 
 import '../../i18n/strings.g.dart';
-import '../app/app_theme.dart';
 import '../common/assets.dart';
 import '../connection/connection_component.dart';
 import '../game/game_component.dart';
@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
-          padding: AppThemeExtension.of(context).appBarLeadingPadding,
+          padding: context.remoteRiftTheme.appBarLeadingPadding,
           child: Image.asset(Assets.logo),
         ),
         title: Text(t.app.title),

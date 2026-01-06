@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' hide ConnectionState;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:remote_rift_foundation_ui/remote_rift_foundation_ui.dart';
 
 import '../../dependencies.dart';
 import '../../i18n/strings.g.dart';
@@ -7,7 +8,6 @@ import '../common/utils.dart';
 import '../widgets/bloc_listener.dart';
 import '../widgets/delayed_display.dart';
 import '../widgets/layout.dart';
-import '../widgets/lifecycle.dart';
 import 'connection_cubit.dart';
 import 'connection_state.dart';
 

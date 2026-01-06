@@ -26,6 +26,12 @@ dependencies:
     #   ref: 0.5.1
     #   path: packages/api
 
+  remote_rift_foundation_ui:
+    path: ../remote-rift-foundation/packages/ui
+
+  remote_rift_foundation_utils:
+    path: ../remote-rift-foundation/packages/utils
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -33,7 +39,6 @@ dev_dependencies:
   json_serializable: ^6.10.0
   build_runner: ^2.7.0
   draft_builder: ^0.0.4
-  fake_async: ^1.3.3
 
 flutter:
   uses-material-design: true

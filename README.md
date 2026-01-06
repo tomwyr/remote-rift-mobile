@@ -62,6 +62,7 @@ To update localized strings:
 
 ## Related Projects
 
-- [Remote Rift Website](https://github.com/tomwyr/remote-rift-website) — A landing page showcasing the application and guiding users on getting started.
-- [Remote Rift Connector](https://github.com/tomwyr/remote-rift-connector) — A local service that connects to and communicates with the League Client API.
-- [Remote Rift Desktop](https://github.com/tomwyr/remote-rift-desktop) — A desktop application that launches and manages the local connector service.
+- [Remote Rift Website](https://github.com/tomwyr/remote-rift-website) - A landing page showcasing the application and guiding users on getting started.
+- [Remote Rift Connector](https://github.com/tomwyr/remote-rift-connector) - A local service that connects to and communicates with the League Client API.
+- [Remote Rift Desktop](https://github.com/tomwyr/remote-rift-desktop) - A desktop application that launches and manages the local connector service.
+- [Remote Rift Foundation](https://github.com/tomwyr/remote-rift-foundation) - A shared library containing common UI, utilities, and core logic used across Remote Rift projects.

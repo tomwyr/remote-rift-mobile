@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:cancelable_stream/cancelable_stream.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:remote_rift_foundation_utils/remote_rift_foundation_utils.dart';
 
 import '../../data/api_client.dart';
 import '../../data/models.dart';
-import '../../utils/retry_scheduler.dart';
 import 'game_state.dart';
 
 class GameCubit extends Cubit<GameState> {

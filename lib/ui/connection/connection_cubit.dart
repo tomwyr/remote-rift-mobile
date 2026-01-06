@@ -4,12 +4,11 @@ import 'dart:ui';
 import 'package:cancelable_stream/cancelable_stream.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:remote_rift_connector_api/remote_rift_connector_api.dart';
+import 'package:remote_rift_foundation_ui/remote_rift_foundation_ui.dart';
+import 'package:remote_rift_foundation_utils/remote_rift_foundation_utils.dart';
 
 import '../../data/api_client.dart';
 import '../../data/models.dart';
-import '../../utils/retry_scheduler.dart';
-import '../../utils/stream_extensions.dart';
-import '../common/app_lifecycle_listener.dart';
 import 'connection_state.dart';
 
 class ConnectionCubit extends Cubit<ConnectionState> {
