@@ -19,17 +19,17 @@ dependencies:
   vibration: ^3.1.5
   web_socket_channel: ^3.0.3
 
-  remote_rift_connector_api:
+  remote_rift_api:
     path: ../remote-rift-connector/packages/api
     # git:
     #   url: https://github.com/tomwyr/remote-rift-connector.git
     #   ref: 0.5.1
     #   path: packages/api
 
-  remote_rift_foundation_ui:
+  remote_rift_ui:
     path: ../remote-rift-foundation/packages/ui
 
-  remote_rift_foundation_utils:
+  remote_rift_utils:
     path: ../remote-rift-foundation/packages/utils
 
 dev_dependencies:

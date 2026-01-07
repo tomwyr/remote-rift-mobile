@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:remote_rift_foundation_ui/remote_rift_foundation_ui.dart';
+import 'package:remote_rift_ui/remote_rift_ui.dart';
 
 import '../../i18n/strings.g.dart';
 import '../common/assets.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:remote_rift_foundation_ui/remote_rift_foundation_ui.dart';
+import 'package:remote_rift_ui/remote_rift_ui.dart';
 
 import '../../data/models.dart';
 import '../../dependencies.dart';
