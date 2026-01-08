@@ -21,6 +21,16 @@ class ConnectionErrorDraft implements ConnectionError {
 
   ConnectionError save() =>
       ConnectionError(cause: cause, reconnectTriggered: reconnectTriggered);
+
+  @override
+  List<Object?> get props => save().props;
+  @override
+  bool? get stringify => save().stringify;
+  @override
+  int get hashCode => save().hashCode;
+
+  @override
+  String toString() => save().toString();
 }
 
 extension ConnectionErrorDraftExtension on ConnectionError {

@@ -20,6 +20,16 @@ class DataDraft implements Data {
   DataDraft({required this.state, required this.loading});
 
   Data save() => Data(state: state, loading: loading);
+
+  @override
+  List<Object?> get props => save().props;
+  @override
+  bool? get stringify => save().stringify;
+  @override
+  int get hashCode => save().hashCode;
+
+  @override
+  String toString() => save().toString();
 }
 
 extension DataDraftExtension on Data {

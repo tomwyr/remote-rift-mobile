@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../i18n/strings.g.dart';
@@ -16,8 +17,8 @@ enum RemoteRiftStatus {
 
 typedef RemoteRiftStatusResponse = RemoteRiftResponse<RemoteRiftStatus>;
 
-sealed class RemoteRiftState {
-  RemoteRiftState();
+sealed class RemoteRiftState extends Equatable {
+  const RemoteRiftState();
 
   factory RemoteRiftState.fromJson(Map<String, dynamic> json) {
     final type = json['value'];
@@ -30,26 +31,35 @@ sealed class RemoteRiftState {
       _ => throw ArgumentError('Unexpected RemoteRiftState type $type'),
     };
   }
+
+  @override
+  List<Object?> get props => [];
 }
 
 class PreGame extends RemoteRiftState {}
 
 @JsonSerializable()
 class Lobby extends RemoteRiftState {
-  Lobby({required this.state});
+  const Lobby({required this.state});
 
   final GameLobbyState state;
 
   factory Lobby.fromJson(Map<String, dynamic> json) => _$LobbyFromJson(json);
+
+  @override
+  List<Object?> get props => [state];
 }
 
 @JsonSerializable()
 class Found extends RemoteRiftState {
-  Found({required this.state});
+  const Found({required this.state});
 
   final GameFoundState state;
 
   factory Found.fromJson(Map<String, dynamic> json) => _$FoundFromJson(json);
+
+  @override
+  List<Object?> get props => [state];
 }
 
 class InGame extends RemoteRiftState {}
