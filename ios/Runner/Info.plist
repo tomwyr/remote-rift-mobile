@@ -46,7 +46,7 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>Describe here why you want to use Bonsoir.</string>
+	<string>Lets the mobile application detect and communicate with the League of Legends client on the same network.</string>
 	<key>NSBonjourServices</key>
 	<array>
 		<string>_remoterift._tcp</string>
