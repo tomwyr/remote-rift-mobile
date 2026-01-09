@@ -18,23 +18,31 @@ dependencies:
   slang_flutter: ^4.8.0
   vibration: ^3.1.5
   web_socket_channel: ^3.0.3
+  equatable: ^2.0.8
 
   remote_rift_api:
-    path: ../remote-rift-connector/packages/api
-    # git:
-    #   url: https://github.com/tomwyr/remote-rift-connector.git
-    #   ref: 0.5.1
-    #   path: packages/api
+    git:
+      url: https://github.com/tomwyr/remote-rift-connector.git
+      ref: 0.6.0
+      path: packages/api
 
   remote_rift_core:
-    path: ../remote-rift-connector/packages/core
+    git:
+      url: https://github.com/tomwyr/remote-rift-connector.git
+      ref: 0.6.0
+      path: packages/core
 
   remote_rift_ui:
-    path: ../remote-rift-foundation/packages/ui
+    git:
+      url: https://github.com/tomwyr/remote-rift-foundation.git
+      ref: 0.5.0
+      path: packages/ui
 
   remote_rift_utils:
-    path: ../remote-rift-foundation/packages/utils
-  equatable: ^2.0.8
+    git:
+      url: https://github.com/tomwyr/remote-rift-foundation.git
+      ref: 0.5.0
+      path: packages/utils
 
 dev_dependencies:
   flutter_test:
