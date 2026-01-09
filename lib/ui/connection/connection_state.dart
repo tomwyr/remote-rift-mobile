@@ -1,7 +1,7 @@
 import 'package:draft/draft.dart';
 import 'package:equatable/equatable.dart';
+import 'package:remote_rift_core/remote_rift_core.dart';
 
-import '../../data/models.dart';
 import '../../i18n/strings.g.dart';
 
 part 'connection_state.draft.dart';

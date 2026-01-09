@@ -3,9 +3,8 @@ import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:http/io_client.dart';
+import 'package:remote_rift_core/remote_rift_core.dart';
 import 'package:web_socket_channel/io.dart';
-
-import 'models.dart';
 
 class RemoteRiftApiClient {
   RemoteRiftApiClient({required HttpClient client})

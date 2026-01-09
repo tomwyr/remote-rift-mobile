@@ -1,7 +1,6 @@
 import 'package:draft/draft.dart';
 import 'package:equatable/equatable.dart';
-
-import '../../data/models.dart';
+import 'package:remote_rift_core/remote_rift_core.dart';
 
 part 'game_state.draft.dart';
 

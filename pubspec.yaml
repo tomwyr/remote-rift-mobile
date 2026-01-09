@@ -26,6 +26,9 @@ dependencies:
     #   ref: 0.5.1
     #   path: packages/api
 
+  remote_rift_core:
+    path: ../remote-rift-connector/packages/core
+
   remote_rift_ui:
     path: ../remote-rift-foundation/packages/ui
 
