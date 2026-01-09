@@ -1,3 +1,8 @@
+## [0.6.0] - 2026-01-09
+
+- Added automatic detection of the API address
+- Added vibration on game state changes
+
 ## [0.5.1] - 2025-12-15
 
 - Fixed endless connecting state being displayed when the connector isn’t running

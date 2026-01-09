@@ -1,6 +1,6 @@
 name: remote_rift_mobile
 description: "A mobile application that allows remote interaction with the League client."
-version: 0.5.1+1
+version: 0.6.0+1
 publish_to: "none"
 
 environment:
