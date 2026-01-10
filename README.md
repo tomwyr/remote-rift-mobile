@@ -21,12 +21,12 @@ When launched, the application attempts to connect to the Remote Rift Connector 
 
 ### Dependencies
 
-This section describes selected third-party packages relevant to the application architecture:
+This section describes selected third-party packages used throughout the application:
 
-**State management** - Implemented using the [bloc](https://pub.dev/packages/bloc) package and cubits, providing clear separation of UI and state logic with minimal boilerplate.
+- [bloc](https://pub.dev/packages/bloc) - State management using blocs and cubits, providing clear separation of UI and state logic with minimal boilerplate.
 
-**Localization** - Leverages the [slang](https://pub.dev/packages/slang) package, which generates strongly typed localization code from YAML files while supporting advanced translation features.
-
+- [slang](https://pub.dev/packages/slang) - Localization via strongly typed code generation from YAML files, with support for advanced translation features.
+ 
 ## Usage
 
 To run the application on a mobile device:
