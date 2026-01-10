@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:cancelable_stream/cancelable_stream.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:remote_rift_api/remote_rift_api.dart';
 import 'package:remote_rift_core/remote_rift_core.dart';
 import 'package:remote_rift_ui/remote_rift_ui.dart';
 import 'package:remote_rift_utils/remote_rift_utils.dart';
@@ -12,10 +11,10 @@ import '../../data/api_client.dart';
 import 'connection_state.dart';
 
 class ConnectionCubit extends Cubit<ConnectionState> {
-  ConnectionCubit({required this.apiClient, required this.apiService}) : super(Initial());
+  ConnectionCubit({required this.apiClient, required this.serviceRegistry}) : super(Initial());
 
   final RemoteRiftApiClient apiClient;
-  final RemoteRiftApiService apiService;
+  final ServiceRegistry serviceRegistry;
 
   CancelableStream<RemoteRiftStatusResponse>? _statusStream;
   RetryScheduler? _reconnectScheduler;
@@ -67,7 +66,7 @@ class ConnectionCubit extends Cubit<ConnectionState> {
   }
 
   Future<bool> _resolveApiAddress() async {
-    final apiAddress = await apiService.findAddress(timeLimit: Duration(seconds: 5));
+    final apiAddress = await serviceRegistry.discover(timeLimit: Duration(seconds: 5));
     apiClient.setApiAddress(apiAddress?.toAddressString());
     return apiAddress != null;
   }

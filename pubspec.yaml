@@ -23,25 +23,25 @@ dependencies:
   remote_rift_api:
     git:
       url: https://github.com/tomwyr/remote-rift-connector.git
-      ref: 0.6.0
+      ref: 0.6.1
       path: packages/api
 
   remote_rift_core:
     git:
       url: https://github.com/tomwyr/remote-rift-connector.git
-      ref: 0.6.0
+      ref: 0.6.1
       path: packages/core
 
   remote_rift_ui:
     git:
       url: https://github.com/tomwyr/remote-rift-foundation.git
-      ref: 0.5.0
+      ref: 0.5.1
       path: packages/ui
 
   remote_rift_utils:
     git:
       url: https://github.com/tomwyr/remote-rift-foundation.git
-      ref: 0.5.0
+      ref: 0.5.1
       path: packages/utils
 
 dev_dependencies:

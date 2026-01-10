@@ -593,8 +593,8 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/api"
-      ref: "0.6.0"
-      resolved-ref: "76fa5a8a64d25bc9298ae0d3bb95e9e71418c6f4"
+      ref: "0.6.1"
+      resolved-ref: "04e525b54871e69f03c6d45b8714be68a13b2531"
       url: "https://github.com/tomwyr/remote-rift-connector.git"
     source: git
     version: "0.0.0"
@@ -602,8 +602,8 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/core"
-      ref: "0.6.0"
-      resolved-ref: "76fa5a8a64d25bc9298ae0d3bb95e9e71418c6f4"
+      ref: "0.6.1"
+      resolved-ref: "04e525b54871e69f03c6d45b8714be68a13b2531"
       url: "https://github.com/tomwyr/remote-rift-connector.git"
     source: git
     version: "0.0.0"
@@ -611,8 +611,8 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/ui"
-      ref: "0.5.0"
-      resolved-ref: "0ad31643583482fb25bdf61022b2308c956791fc"
+      ref: "0.5.1"
+      resolved-ref: "7305ef09ca51358ba11f61fc9a56e18d39e30a73"
       url: "https://github.com/tomwyr/remote-rift-foundation.git"
     source: git
     version: "0.0.0"
@@ -620,8 +620,8 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/utils"
-      ref: "0.5.0"
-      resolved-ref: "0ad31643583482fb25bdf61022b2308c956791fc"
+      ref: "0.5.1"
+      resolved-ref: "7305ef09ca51358ba11f61fc9a56e18d39e30a73"
       url: "https://github.com/tomwyr/remote-rift-foundation.git"
     source: git
     version: "0.0.0"
