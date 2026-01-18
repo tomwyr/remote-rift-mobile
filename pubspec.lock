@@ -389,14 +389,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.6.0"
-  http_methods:
-    dependency: transitive
-    description:
-      name: http_methods
-      sha256: "6bccce8f1ec7b5d701e7921dca35e202d425b57e317ba1a37f2638590e29e566"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.1"
   http_multi_server:
     dependency: transitive
     description:
@@ -589,15 +581,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.0"
-  remote_rift_api:
-    dependency: "direct main"
-    description:
-      path: "packages/api"
-      ref: "0.6.1"
-      resolved-ref: "04e525b54871e69f03c6d45b8714be68a13b2531"
-      url: "https://github.com/tomwyr/remote-rift-connector.git"
-    source: git
-    version: "0.0.0"
   remote_rift_core:
     dependency: "direct main"
     description:
@@ -633,14 +616,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.2"
-  shelf_router:
-    dependency: transitive
-    description:
-      name: shelf_router
-      sha256: f5e5d492440a7fb165fe1e2e1a623f31f734d3370900070b2b1e0d0428d59864
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.4"
   shelf_web_socket:
     dependency: transitive
     description:

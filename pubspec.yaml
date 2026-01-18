@@ -20,12 +20,6 @@ dependencies:
   web_socket_channel: ^3.0.3
   equatable: ^2.0.8
 
-  remote_rift_api:
-    git:
-      url: https://github.com/tomwyr/remote-rift-connector.git
-      ref: 0.6.1
-      path: packages/api
-
   remote_rift_core:
     git:
       url: https://github.com/tomwyr/remote-rift-connector.git
