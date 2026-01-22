@@ -111,8 +111,8 @@ class TranslationsGameStateEn {
 	/// en: 'Unknown game state'
 	String get unknownTitle => 'Unknown game state';
 
-	/// en: 'The game is running, but its current state can't be identified. Try restarting the client and the app, or join a game manually this time around.'
-	String get unknownDescription => 'The game is running, but its current state can\'t be identified.\nTry restarting the client and the app, or join a game manually this time around.';
+	/// en: 'The game is running, but its current state can't be identified. Try restarting the client and the application, or join a game manually this time around.'
+	String get unknownDescription => 'The game is running, but its current state can\'t be identified.\nTry restarting the client and the application, or join a game manually this time around.';
 }
 
 // Path: gameError
@@ -159,11 +159,11 @@ class TranslationsConnectionEn {
 	/// en: 'Connection error'
 	String get errorTitle => 'Connection error';
 
-	/// en: 'Unable to connect to the desktop app. Make sure it's running and that both devices are on the same network.'
-	String get errorServiceNotFoundDescription => 'Unable to connect to the desktop app. Make sure it\'s running and that both devices are on the same network.';
+	/// en: 'Unable to connect to the desktop application Make sure it's running and that both devices are on the same network.'
+	String get errorServiceNotFoundDescription => 'Unable to connect to the desktop application Make sure it\'s running and that both devices are on the same network.';
 
-	/// en: 'Unable to connect to the desktop app.'
-	String get errorUnknownDescription => 'Unable to connect to the desktop app.';
+	/// en: 'Unable to connect to the desktop application.'
+	String get errorUnknownDescription => 'Unable to connect to the desktop application.';
 
 	/// en: 'Reconnect'
 	String get errorRetry => 'Reconnect';
@@ -224,7 +224,7 @@ extension on Translations {
 			case 'gameState.inGameTitle': return 'Game in progress';
 			case 'gameState.inGameDescription': return 'Wait for the current game to finish before queueing again.';
 			case 'gameState.unknownTitle': return 'Unknown game state';
-			case 'gameState.unknownDescription': return 'The game is running, but its current state can\'t be identified.\nTry restarting the client and the app, or join a game manually this time around.';
+			case 'gameState.unknownDescription': return 'The game is running, but its current state can\'t be identified.\nTry restarting the client and the application, or join a game manually this time around.';
 			case 'gameError.unableToConnectTitle': return 'Unable to connect';
 			case 'gameError.unableToConnectDescription': return 'The game client could not be reached. Make sure that it is running to interact with the game.';
 			case 'gameError.unknownTitle': return 'Unknown game state';
@@ -234,8 +234,8 @@ extension on Translations {
 			case 'connection.loadingTitle': return 'Checking game state...';
 			case 'connection.loadingDescription': return 'Awaiting details about the current game session.';
 			case 'connection.errorTitle': return 'Connection error';
-			case 'connection.errorServiceNotFoundDescription': return 'Unable to connect to the desktop app. Make sure it\'s running and that both devices are on the same network.';
-			case 'connection.errorUnknownDescription': return 'Unable to connect to the desktop app.';
+			case 'connection.errorServiceNotFoundDescription': return 'Unable to connect to the desktop application Make sure it\'s running and that both devices are on the same network.';
+			case 'connection.errorUnknownDescription': return 'Unable to connect to the desktop application.';
 			case 'connection.errorRetry': return 'Reconnect';
 			case 'home.createLobbyButton': return 'Create lobby';
 			case 'home.searchGameButton': return 'Search game';

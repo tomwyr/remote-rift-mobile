@@ -17,7 +17,7 @@ gameState:
   inGameTitle: "Game in progress"
   inGameDescription: "Wait for the current game to finish before queueing again."
   unknownTitle: "Unknown game state"
-  unknownDescription: "The game is running, but its current state can't be identified.\nTry restarting the client and the app, or join a game manually this time around."
+  unknownDescription: "The game is running, but its current state can't be identified.\nTry restarting the client and the application, or join a game manually this time around."
 
 gameError:
   unableToConnectTitle: "Unable to connect"
@@ -31,8 +31,8 @@ connection:
   loadingTitle: "Checking game state..."
   loadingDescription: "Awaiting details about the current game session."
   errorTitle: "Connection error"
-  errorServiceNotFoundDescription: "Unable to connect to the desktop app. Make sure it's running and that both devices are on the same network."
-  errorUnknownDescription: "Unable to connect to the desktop app."
+  errorServiceNotFoundDescription: "Unable to connect to the desktop application Make sure it's running and that both devices are on the same network."
+  errorUnknownDescription: "Unable to connect to the desktop application."
   errorRetry: "Reconnect"
 
 home:
