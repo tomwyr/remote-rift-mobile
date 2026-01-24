@@ -90,6 +90,9 @@ class TranslationsGameStateEn {
 	/// en: 'Waiting for confirmation to join the game.'
 	String get foundPendingDescription => 'Waiting for confirmation to join the game.';
 
+	/// en: 'Time left'
+	String get foundPendingTimeLeft => 'Time left';
+
 	/// en: 'Game accepted'
 	String get foundAcceptedTitle => 'Game accepted';
 
@@ -217,6 +220,7 @@ extension on Translations {
 			case 'gameState.lobbySearchingDescription': return 'Wait for matchmaking to find a suitable game.';
 			case 'gameState.foundPendingTitle': return 'Game found';
 			case 'gameState.foundPendingDescription': return 'Waiting for confirmation to join the game.';
+			case 'gameState.foundPendingTimeLeft': return 'Time left';
 			case 'gameState.foundAcceptedTitle': return 'Game accepted';
 			case 'gameState.foundAcceptedDescription': return 'Waiting for other players to join before starting the game.';
 			case 'gameState.foundDeclinedTitle': return 'Game declined';

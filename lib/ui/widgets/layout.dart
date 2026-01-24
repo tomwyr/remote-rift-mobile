@@ -5,6 +5,7 @@ class BasicLayout extends StatelessWidget {
     super.key,
     this.title,
     this.description,
+    this.body,
     this.loading = false,
     this.action,
     this.secondaryAction,
@@ -12,6 +13,7 @@ class BasicLayout extends StatelessWidget {
 
   final String? title;
   final String? description;
+  final Widget? body;
   final bool loading;
   final BasicLayoutAction? action;
   final BasicLayoutAction? secondaryAction;
@@ -25,6 +27,7 @@ class BasicLayout extends StatelessWidget {
         if (title != null || description != null) SizedBox(height: 8),
         if (description case var description?)
           Text(description, style: Theme.of(context).textTheme.bodyLarge),
+        if (body case var body?) ...[SizedBox(height: 12), body],
         if (loading) ...[
           Spacer(),
           SizedBox(height: 12),

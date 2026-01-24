@@ -10,6 +10,7 @@ gameState:
   lobbySearchingDescription: "Wait for matchmaking to find a suitable game."
   foundPendingTitle: "Game found"
   foundPendingDescription: "Waiting for confirmation to join the game."
+  foundPendingTimeLeft: "Time left"
   foundAcceptedTitle: "Game accepted"
   foundAcceptedDescription: "Waiting for other players to join before starting the game."
   foundDeclinedTitle: "Game declined"

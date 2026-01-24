@@ -11,6 +11,7 @@ import '../widgets/delayed_display.dart';
 import '../widgets/layout.dart';
 import 'game_cubit.dart';
 import 'game_state.dart';
+import 'widgets/game_found_countdown.dart';
 
 class GameComponent extends StatelessWidget {
   const GameComponent({super.key});
@@ -73,9 +74,10 @@ class GameComponent extends StatelessWidget {
               ),
             ),
 
-            Found(state: .pending) => BasicLayout(
+            Found(state: .pending, :var answerMaxTime, :var answerTimeLeft) => BasicLayout(
               title: t.gameState.foundPendingTitle,
               description: t.gameState.foundPendingDescription,
+              body: GameFoundCountdown(maxTime: answerMaxTime, timeLeft: answerTimeLeft),
               action: .new(
                 label: t.home.acceptGameButton,
                 onPressed: !loading ? cubit.acceptMatch : null,
