@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../common/duration.dart';
+import '../common/duration.dart';
 
 typedef TimeCountdownBuilder = Widget Function(double progress, double seconds);
 
@@ -36,19 +36,12 @@ class TimeCountdown extends StatefulWidget {
 class _TimeCountdownState extends State<TimeCountdown> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
-  double get _currenProgress => _controller.value;
-  double get _currentSeconds => _controller.value * widget.start;
+  double get _controllerCurrent => _controller.value * widget.start;
 
   @override
   void initState() {
     super.initState();
     _controller = _createController();
-    _controller.addStatusListener((state) {
-      if (state == .dismissed) {
-        _controller.duration = DurationFrom.secondsDouble(widget.start);
-        _controller.reverse(from: 1);
-      }
-    });
   }
 
   @override
@@ -60,7 +53,7 @@ class _TimeCountdownState extends State<TimeCountdown> with SingleTickerProvider
 
     currentChangeExceedsDrift() {
       if (oldWidget.current != widget.current) {
-        final currentDiff = (widget.current - _currentSeconds).abs();
+        final currentDiff = (widget.current - _controllerCurrent).abs();
         return currentDiff > widget.drift;
       }
       return false;
@@ -82,12 +75,12 @@ class _TimeCountdownState extends State<TimeCountdown> with SingleTickerProvider
 
   @override
   void dispose() {
-    super.dispose();
     _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return widget.builder(_currenProgress, _currentSeconds);
+    return widget.builder(_controller.value, _controllerCurrent);
   }
 }

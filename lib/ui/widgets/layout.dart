@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'fit_viewport_scroll_view.dart';
+
 class BasicLayout extends StatelessWidget {
   const BasicLayout({
     super.key,
@@ -20,21 +22,40 @@ class BasicLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return FitViewportScrollView(
+      child: Column(
+        crossAxisAlignment: .stretch,
+        mainAxisAlignment: .spaceBetween,
+        children: [_topContent(context), ?_bottomContent(context)],
+      ),
+    );
+  }
+
+  Widget _topContent(BuildContext context) {
     return Column(
-      crossAxisAlignment: .stretch,
+      crossAxisAlignment: .start,
       children: [
         if (title case var title?) Text(title, style: Theme.of(context).textTheme.titleLarge),
         if (title != null || description != null) SizedBox(height: 8),
         if (description case var description?)
           Text(description, style: Theme.of(context).textTheme.bodyLarge),
         if (body case var body?) ...[SizedBox(height: 12), body],
-        if (loading) ...[
-          Spacer(),
-          SizedBox(height: 12),
-          Center(child: CircularProgressIndicator()),
-          SizedBox(height: 12),
-        ] else ...[
-          if (action != null || secondaryAction != null) ...[Spacer(), SizedBox(height: 12)],
+      ],
+    );
+  }
+
+  Widget? _bottomContent(BuildContext context) {
+    final hasAction = action != null || secondaryAction != null;
+
+    if (!loading && !hasAction) return null;
+
+    return Column(
+      crossAxisAlignment: .start,
+      children: [
+        SizedBox(height: 12),
+        if (loading)
+          Center(child: CircularProgressIndicator())
+        else if (hasAction) ...[
           if (action case BasicLayoutAction(:var label, :var onPressed)) ...[
             SizedBox(height: 12),
             ElevatedButton(onPressed: onPressed, child: Text(label)),
@@ -43,8 +64,8 @@ class BasicLayout extends StatelessWidget {
             SizedBox(height: 12),
             OutlinedButton(onPressed: onPressed, child: Text(label)),
           ],
-          if (action != null || secondaryAction != null) SizedBox(height: 12),
         ],
+        SizedBox(height: 12),
       ],
     );
   }
