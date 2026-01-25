@@ -12,14 +12,19 @@ part of 'game_state.dart';
 
 class DataDraft implements Data {
   // Mutable fields
+  String? queueName;
   RemoteRiftState state;
   bool loading;
 
   // Getters and setters for nested draftable fields
 
-  DataDraft({required this.state, required this.loading});
+  DataDraft({
+    required this.queueName,
+    required this.state,
+    required this.loading,
+  });
 
-  Data save() => Data(state: state, loading: loading);
+  Data save() => Data(queueName: queueName, state: state, loading: loading);
 
   @override
   List<Object?> get props => save().props;
@@ -33,7 +38,11 @@ class DataDraft implements Data {
 }
 
 extension DataDraftExtension on Data {
-  DataDraft draft() => DataDraft(state: this.state, loading: this.loading);
+  DataDraft draft() => DataDraft(
+    queueName: this.queueName,
+    state: this.state,
+    loading: this.loading,
+  );
   Data produce(void Function(DataDraft draft) producer) {
     final draft = this.draft();
     producer(draft);

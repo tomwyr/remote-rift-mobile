@@ -27,14 +27,8 @@ class RemoteRiftApiClient {
     }
   }
 
-  Future<RemoteRiftState> getCurrentState() async {
-    final url = '${await _httpBaseUrl}/state/current';
-    final response = await httpClient.get(.parse(url));
-    return .fromJson(jsonDecode(response.body));
-  }
-
-  Stream<RemoteRiftState> getCurrentStateStream() async* {
-    final url = '${await _webSocketBaseUrl}/state/watch';
+  Stream<RemoteRiftSession> getCurrentSessionStream() async* {
+    final url = '${await _webSocketBaseUrl}/session/watch';
     final ws = IOWebSocketChannel.connect(Uri.parse(url), customClient: webSocketClient);
     await for (var message in ws.stream) {
       yield .fromJson(jsonDecode(message));

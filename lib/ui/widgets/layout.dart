@@ -7,6 +7,7 @@ class BasicLayout extends StatelessWidget {
     super.key,
     this.title,
     this.description,
+    this.header,
     this.body,
     this.loading = false,
     this.action,
@@ -15,6 +16,7 @@ class BasicLayout extends StatelessWidget {
 
   final String? title;
   final String? description;
+  final Widget? header;
   final Widget? body;
   final bool loading;
   final BasicLayoutAction? action;
@@ -35,8 +37,9 @@ class BasicLayout extends StatelessWidget {
     return Column(
       crossAxisAlignment: .start,
       children: [
-        if (title case var title?) Text(title, style: Theme.of(context).textTheme.titleLarge),
-        if (title != null || description != null) SizedBox(height: 8),
+        if (header case var header?) ...[header, SizedBox(height: 12)],
+        if (title case var title?) Text(title, style: Theme.of(context).textTheme.headlineLarge),
+        if (title != null || description != null) SizedBox(height: 4),
         if (description case var description?)
           Text(description, style: Theme.of(context).textTheme.bodyLarge),
         if (body case var body?) ...[SizedBox(height: 12), body],

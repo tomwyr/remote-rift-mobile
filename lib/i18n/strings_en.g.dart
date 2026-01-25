@@ -180,6 +180,9 @@ class TranslationsHomeEn {
 
 	// Translations
 
+	/// en: 'Game mode'
+	String get gameModeTitle => 'Game mode';
+
 	/// en: 'Create lobby'
 	String get createLobbyButton => 'Create lobby';
 
@@ -241,6 +244,7 @@ extension on Translations {
 			case 'connection.errorServiceNotFoundDescription': return 'Unable to connect to the desktop application Make sure it\'s running and that both devices are on the same network.';
 			case 'connection.errorUnknownDescription': return 'Unable to connect to the desktop application.';
 			case 'connection.errorRetry': return 'Reconnect';
+			case 'home.gameModeTitle': return 'Game mode';
 			case 'home.createLobbyButton': return 'Create lobby';
 			case 'home.searchGameButton': return 'Search game';
 			case 'home.leaveLobbyButton': return 'Leave lobby';

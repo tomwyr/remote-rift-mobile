@@ -13,11 +13,12 @@ class Loading extends GameState {}
 
 @draft
 class Data extends GameState {
-  Data({required this.state, this.loading = false});
+  Data({required this.queueName, required this.state, this.loading = false});
 
+  final String? queueName;
   final RemoteRiftState state;
   final bool loading;
 
   @override
-  List<Object?> get props => [state, loading];
+  List<Object?> get props => [queueName, state, loading];
 }

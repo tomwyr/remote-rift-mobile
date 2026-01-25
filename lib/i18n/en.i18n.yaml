@@ -37,6 +37,7 @@ connection:
   errorRetry: "Reconnect"
 
 home:
+  gameModeTitle: "Game mode"
   createLobbyButton: "Create lobby"
   searchGameButton: "Search game"
   leaveLobbyButton: "Leave lobby"

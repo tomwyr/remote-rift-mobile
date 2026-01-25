@@ -15,7 +15,7 @@ class GameCubit extends Cubit<GameState> {
   final RemoteRiftApiClient apiClient;
 
   final _retryBackoff = RetryBackoff.standard;
-  CancelableStream<RemoteRiftState>? _gameStateStream;
+  CancelableStream<RemoteRiftSession>? _gameSessionStream;
   Timer? _retryTimer;
 
   void initialize() {
@@ -71,13 +71,17 @@ class GameCubit extends Cubit<GameState> {
   }
 
   Future<void> _listenGameState() async {
-    final stream = apiClient.getCurrentStateStream().cancelable();
-    _gameStateStream = stream;
+    final stream = apiClient.getCurrentSessionStream().cancelable();
+    _gameSessionStream = stream;
 
-    await for (var gameState in stream) {
+    await for (var gameSession in stream) {
       emit(switch (state) {
-        Data data => data.produce((draft) => draft..state = gameState),
-        Loading() => Data(state: gameState),
+        Data data => data.produce(
+          (draft) => draft
+            ..queueName = gameSession.queueName
+            ..state = gameSession.state,
+        ),
+        Loading() => Data(queueName: gameSession.queueName, state: gameSession.state),
       });
     }
   }
@@ -85,8 +89,8 @@ class GameCubit extends Cubit<GameState> {
   void _stopGameStateStream() {
     _retryTimer?.cancel();
     _retryTimer = null;
-    _gameStateStream?.cancel();
-    _gameStateStream = null;
+    _gameSessionStream?.cancel();
+    _gameSessionStream = null;
   }
 
   Future<void> _runGameAction(AsyncCallback action) async {
