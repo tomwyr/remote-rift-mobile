@@ -180,26 +180,29 @@ class TranslationsHomeEn {
 
 	// Translations
 
-	/// en: 'Game mode'
-	String get gameModeTitle => 'Game mode';
+	/// en: 'Game Mode'
+	String get gameModeLabel => 'Game Mode';
 
-	/// en: 'Create lobby'
-	String get createLobbyButton => 'Create lobby';
+	/// en: 'Game State'
+	String get gameStateLabel => 'Game State';
 
-	/// en: 'Search game'
-	String get searchGameButton => 'Search game';
+	/// en: 'Create Lobby'
+	String get createLobbyButton => 'Create Lobby';
 
-	/// en: 'Leave lobby'
-	String get leaveLobbyButton => 'Leave lobby';
+	/// en: 'Search Game'
+	String get searchGameButton => 'Search Game';
 
-	/// en: 'Cancel search'
-	String get cancelSearchButton => 'Cancel search';
+	/// en: 'Leave Lobby'
+	String get leaveLobbyButton => 'Leave Lobby';
 
-	/// en: 'Accept game'
-	String get acceptGameButton => 'Accept game';
+	/// en: 'Cancel Search'
+	String get cancelSearchButton => 'Cancel Search';
 
-	/// en: 'Decline game'
-	String get declineGameButton => 'Decline game';
+	/// en: 'Accept Game'
+	String get acceptGameButton => 'Accept Game';
+
+	/// en: 'Decline Game'
+	String get declineGameButton => 'Decline Game';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -244,13 +247,14 @@ extension on Translations {
 			case 'connection.errorServiceNotFoundDescription': return 'Unable to connect to the desktop application Make sure it\'s running and that both devices are on the same network.';
 			case 'connection.errorUnknownDescription': return 'Unable to connect to the desktop application.';
 			case 'connection.errorRetry': return 'Reconnect';
-			case 'home.gameModeTitle': return 'Game mode';
-			case 'home.createLobbyButton': return 'Create lobby';
-			case 'home.searchGameButton': return 'Search game';
-			case 'home.leaveLobbyButton': return 'Leave lobby';
-			case 'home.cancelSearchButton': return 'Cancel search';
-			case 'home.acceptGameButton': return 'Accept game';
-			case 'home.declineGameButton': return 'Decline game';
+			case 'home.gameModeLabel': return 'Game Mode';
+			case 'home.gameStateLabel': return 'Game State';
+			case 'home.createLobbyButton': return 'Create Lobby';
+			case 'home.searchGameButton': return 'Search Game';
+			case 'home.leaveLobbyButton': return 'Leave Lobby';
+			case 'home.cancelSearchButton': return 'Cancel Search';
+			case 'home.acceptGameButton': return 'Accept Game';
+			case 'home.declineGameButton': return 'Decline Game';
 			default: return null;
 		}
 	}

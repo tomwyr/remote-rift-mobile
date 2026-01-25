@@ -11,6 +11,7 @@ import '../widgets/delayed_display.dart';
 import '../widgets/layout.dart';
 import 'game_cubit.dart';
 import 'game_state.dart';
+import 'widgets/game_data_body.dart';
 import 'widgets/game_found_countdown.dart';
 
 class GameComponent extends StatelessWidget {
@@ -44,8 +45,11 @@ class GameComponent extends StatelessWidget {
 
           Data(:var queueName, :var state, :var loading) => switch (state) {
             PreGame() => BasicLayout(
-              title: t.gameState.preGameTitle,
-              description: t.gameState.preGameDescription,
+              body: GameDataBody(
+                queueName: queueName,
+                title: t.gameState.preGameTitle,
+                description: t.gameState.preGameDescription,
+              ),
               action: .new(
                 label: t.home.createLobbyButton,
                 onPressed: !loading ? cubit.createLobby : null,
@@ -53,9 +57,11 @@ class GameComponent extends StatelessWidget {
             ),
 
             Lobby(state: .idle) => BasicLayout(
-              title: t.gameState.lobbyIdleTitle,
-              description: t.gameState.lobbyIdleDescription,
-              header: _gameModeHeader(context, queueName),
+              body: GameDataBody(
+                queueName: queueName,
+                title: t.gameState.lobbyIdleTitle,
+                description: t.gameState.lobbyIdleDescription,
+              ),
               action: .new(
                 label: t.home.searchGameButton,
                 onPressed: !loading ? cubit.searchMatch : null,
@@ -67,9 +73,11 @@ class GameComponent extends StatelessWidget {
             ),
 
             Lobby(state: .searching) => BasicLayout(
-              title: t.gameState.lobbySearchingTitle,
-              description: t.gameState.lobbySearchingDescription,
-              header: _gameModeHeader(context, queueName),
+              body: GameDataBody(
+                queueName: queueName,
+                title: t.gameState.lobbySearchingTitle,
+                description: t.gameState.lobbySearchingDescription,
+              ),
               action: .new(
                 label: t.home.cancelSearchButton,
                 onPressed: !loading ? cubit.stopMatchSearch : null,
@@ -77,10 +85,12 @@ class GameComponent extends StatelessWidget {
             ),
 
             Found(state: .pending, :var answerMaxTime, :var answerTimeLeft) => BasicLayout(
-              title: t.gameState.foundPendingTitle,
-              description: t.gameState.foundPendingDescription,
-              header: _gameModeHeader(context, queueName),
-              body: GameFoundCountdown(maxTime: answerMaxTime, timeLeft: answerTimeLeft),
+              body: GameDataBody(
+                queueName: queueName,
+                title: t.gameState.foundPendingTitle,
+                description: t.gameState.foundPendingDescription,
+                child: GameFoundCountdown(maxTime: answerMaxTime, timeLeft: answerTimeLeft),
+              ),
               action: .new(
                 label: t.home.acceptGameButton,
                 onPressed: !loading ? cubit.acceptMatch : null,
@@ -89,45 +99,41 @@ class GameComponent extends StatelessWidget {
             ),
 
             Found(state: .accepted) => BasicLayout(
-              title: t.gameState.foundAcceptedTitle,
-              description: t.gameState.foundAcceptedDescription,
-              header: _gameModeHeader(context, queueName),
+              body: GameDataBody(
+                queueName: queueName,
+                title: t.gameState.foundAcceptedTitle,
+                description: t.gameState.foundAcceptedDescription,
+              ),
               loading: true,
             ),
 
             Found(state: .declined) => BasicLayout(
-              title: t.gameState.foundDeclinedTitle,
-              description: t.gameState.foundDeclinedDescription,
-              header: _gameModeHeader(context, queueName),
+              body: GameDataBody(
+                queueName: queueName,
+                title: t.gameState.foundDeclinedTitle,
+                description: t.gameState.foundDeclinedDescription,
+              ),
               loading: true,
             ),
 
             InGame() => BasicLayout(
-              title: t.gameState.inGameTitle,
-              description: t.gameState.inGameDescription,
-              header: _gameModeHeader(context, queueName),
+              body: GameDataBody(
+                queueName: queueName,
+                title: t.gameState.inGameTitle,
+                description: t.gameState.inGameDescription,
+              ),
             ),
 
             Unknown() => BasicLayout(
-              title: t.gameState.unknownTitle,
-              description: t.gameState.unknownDescription,
-              header: _gameModeHeader(context, queueName),
+              body: GameDataBody(
+                queueName: queueName,
+                title: t.gameState.unknownTitle,
+                description: t.gameState.unknownDescription,
+              ),
             ),
           },
         },
       ),
-    );
-  }
-
-  Widget? _gameModeHeader(BuildContext context, String? queueName) {
-    if (queueName == null) return null;
-
-    return Column(
-      crossAxisAlignment: .start,
-      children: [
-        Text(t.home.gameModeTitle, style: TextStyle(fontWeight: .w300)),
-        Text(queueName, style: Theme.of(context).textTheme.titleMedium),
-      ],
     );
   }
 

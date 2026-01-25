@@ -7,16 +7,17 @@ class BasicLayout extends StatelessWidget {
     super.key,
     this.title,
     this.description,
-    this.header,
     this.body,
     this.loading = false,
     this.action,
     this.secondaryAction,
-  });
+  }) : assert(
+         title != null || description == null,
+         'Description must not be provided unless the title is set.',
+       );
 
   final String? title;
   final String? description;
-  final Widget? header;
   final Widget? body;
   final bool loading;
   final BasicLayoutAction? action;
@@ -37,11 +38,8 @@ class BasicLayout extends StatelessWidget {
     return Column(
       crossAxisAlignment: .start,
       children: [
-        if (header case var header?) ...[header, SizedBox(height: 12)],
-        if (title case var title?) Text(title, style: Theme.of(context).textTheme.headlineLarge),
-        if (title != null || description != null) SizedBox(height: 4),
-        if (description case var description?)
-          Text(description, style: Theme.of(context).textTheme.bodyLarge),
+        if (title case var title?)
+          BasicLayoutSection(title: title, titleFontSize: .large, description: description),
         if (body case var body?) ...[SizedBox(height: 12), body],
       ],
     );
@@ -79,4 +77,44 @@ class BasicLayoutAction {
 
   final String label;
   final VoidCallback? onPressed;
+}
+
+enum BasicLayoutSectionFontSize { medium, large }
+
+class BasicLayoutSection extends StatelessWidget {
+  const BasicLayoutSection({
+    super.key,
+    this.label,
+    required this.title,
+    this.titleFontSize = .medium,
+    this.description,
+  });
+
+  final String? label;
+  final String title;
+  final BasicLayoutSectionFontSize titleFontSize;
+  final String? description;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Column(
+      crossAxisAlignment: .start,
+      children: [
+        if (label case var label?) Text(label, style: TextStyle(fontWeight: .w300)),
+        Text(
+          title,
+          style: switch (titleFontSize) {
+            .medium => textTheme.titleMedium,
+            .large => textTheme.headlineMedium,
+          },
+        ),
+        if (description case var description?) ...[
+          SizedBox(height: 2),
+          Text(description, style: Theme.of(context).textTheme.bodyLarge),
+        ],
+      ],
+    );
+  }
 }

@@ -37,10 +37,11 @@ connection:
   errorRetry: "Reconnect"
 
 home:
-  gameModeTitle: "Game mode"
-  createLobbyButton: "Create lobby"
-  searchGameButton: "Search game"
-  leaveLobbyButton: "Leave lobby"
-  cancelSearchButton: "Cancel search"
-  acceptGameButton: "Accept game"
-  declineGameButton: "Decline game"
+  gameModeLabel: "Game Mode"
+  gameStateLabel: "Game State"
+  createLobbyButton: "Create Lobby"
+  searchGameButton: "Search Game"
+  leaveLobbyButton: "Leave Lobby"
+  cancelSearchButton: "Cancel Search"
+  acceptGameButton: "Accept Game"
+  declineGameButton: "Decline Game"
