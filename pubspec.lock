@@ -585,11 +585,11 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/core"
-      ref: "0.9.0"
-      resolved-ref: "862752e896f7ae1ee0a1946c7905828f6925fa1b"
+      ref: "0.10.0"
+      resolved-ref: "136cfe4649b3b77910140a87c524097bb86f206b"
       url: "https://github.com/tomwyr/remote-rift-connector.git"
     source: git
-    version: "0.9.0"
+    version: "0.10.0"
   remote_rift_ui:
     dependency: "direct main"
     description:

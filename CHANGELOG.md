@@ -1,3 +1,8 @@
+## [0.7.0] - 2026-01-26
+
+- Added displaying time left to answer pending games
+- Added displaying active game mode
+
 ## [0.6.1] - 2026-01-10
 
 - Switched to using service registry from foundation
