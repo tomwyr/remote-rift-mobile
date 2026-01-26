@@ -102,7 +102,8 @@ class BasicLayoutSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: .start,
       children: [
-        if (label case var label?) Text(label, style: TextStyle(fontWeight: .w300)),
+        if (label case var label?)
+          Text(label, style: Theme.of(context).textTheme.labelMedium?.copyWith(fontWeight: .w300)),
         Text(
           title,
           style: switch (titleFontSize) {

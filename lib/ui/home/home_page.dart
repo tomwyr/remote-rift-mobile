@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
       ),
       body: SafeArea(
         child: Padding(
-          padding: .symmetric(horizontal: 24, vertical: 12),
+          padding: .symmetric(horizontal: 24),
           child: ConnectionComponent.builder(
             connectedBuilder: (context) => GameComponent.builder(),
           ),
