@@ -35,8 +35,8 @@ class RemoteRiftApiClient {
     }
   }
 
-  Future<void> createLobby() async {
-    final url = '${await _httpBaseUrl}/lobby/create';
+  Future<void> createLobby({required int queueId}) async {
+    final url = '${await _httpBaseUrl}/lobby/create?queueId=$queueId';
     await httpClient.post(.parse(url));
   }
 

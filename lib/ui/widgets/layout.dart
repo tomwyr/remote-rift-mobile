@@ -85,13 +85,18 @@ class BasicLayoutSection extends StatelessWidget {
   const BasicLayoutSection({
     super.key,
     this.label,
-    required this.title,
+    this.title,
+    this.titlePlaceholder,
     this.titleFontSize = .medium,
     this.description,
-  });
+  }) : assert(
+         title != null || titlePlaceholder != null,
+         'Either the title or title placeholder must be provided.',
+       );
 
   final String? label;
-  final String title;
+  final String? title;
+  final Widget? titlePlaceholder;
   final BasicLayoutSectionFontSize titleFontSize;
   final String? description;
 
@@ -103,14 +108,23 @@ class BasicLayoutSection extends StatelessWidget {
       crossAxisAlignment: .start,
       children: [
         if (label case var label?)
-          Text(label, style: Theme.of(context).textTheme.labelMedium?.copyWith(fontWeight: .w300)),
-        Text(
-          title,
-          style: switch (titleFontSize) {
-            .medium => textTheme.titleMedium,
-            .large => textTheme.headlineMedium,
-          },
-        ),
+          Text(label, style: Theme.of(context).textTheme.labelMedium?.copyWith(fontWeight: .w300))
+        else
+          const SizedBox(height: 4),
+
+        if (title case var title?)
+          Text(
+            title,
+            style: switch (titleFontSize) {
+              .medium => textTheme.titleMedium,
+              .large => textTheme.headlineMedium,
+            },
+          )
+        else if (titlePlaceholder case var titleWidget?) ...[
+          const SizedBox(height: 4),
+          titleWidget,
+        ],
+
         if (description case var description?) ...[
           SizedBox(height: 2),
           Text(description, style: Theme.of(context).textTheme.bodyLarge),

@@ -42,6 +42,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final TranslationsAppEn app = TranslationsAppEn._(_root);
 	late final TranslationsGameStateEn gameState = TranslationsGameStateEn._(_root);
 	late final TranslationsGameErrorEn gameError = TranslationsGameErrorEn._(_root);
+	late final TranslationsGameQueueEn gameQueue = TranslationsGameQueueEn._(_root);
 	late final TranslationsConnectionEn connection = TranslationsConnectionEn._(_root);
 	late final TranslationsHomeEn home = TranslationsHomeEn._(_root);
 }
@@ -139,6 +140,29 @@ class TranslationsGameErrorEn {
 	String get unknownDescription => 'The game\'s state could not be accessed due to an unexpected error.';
 }
 
+// Path: gameQueue
+class TranslationsGameQueueEn {
+	TranslationsGameQueueEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Unknown'
+	String get unknownPlaceholder => 'Unknown';
+
+	/// en: 'Select Game Queue'
+	String get selectButton => 'Select Game Queue';
+
+	/// en: 'Available Queues'
+	String get selectionTitle => 'Available Queues';
+
+	/// en: 'CO-OP vs. AI'
+	String get selectionAiTitle => 'CO-OP vs. AI';
+
+	late final TranslationsGameQueueGroupLabelEn groupLabel = TranslationsGameQueueGroupLabelEn._(_root);
+}
+
 // Path: connection
 class TranslationsConnectionEn {
 	TranslationsConnectionEn._(this._root);
@@ -205,6 +229,27 @@ class TranslationsHomeEn {
 	String get declineGameButton => 'Decline Game';
 }
 
+// Path: gameQueue.groupLabel
+class TranslationsGameQueueGroupLabelEn {
+	TranslationsGameQueueGroupLabelEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Summonter's Rift'
+	String get summonersRift => 'Summonter\'s Rift';
+
+	/// en: 'ARAM'
+	String get aram => 'ARAM';
+
+	/// en: 'Alternative'
+	String get alternative => 'Alternative';
+
+	/// en: 'Other'
+	String get other => 'Other';
+}
+
 /// The flat map containing all translations for locale <en>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -239,6 +284,14 @@ extension on Translations {
 			case 'gameError.unableToConnectDescription': return 'The game client could not be reached. Make sure that it is running to interact with the game.';
 			case 'gameError.unknownTitle': return 'Unknown game state';
 			case 'gameError.unknownDescription': return 'The game\'s state could not be accessed due to an unexpected error.';
+			case 'gameQueue.unknownPlaceholder': return 'Unknown';
+			case 'gameQueue.selectButton': return 'Select Game Queue';
+			case 'gameQueue.selectionTitle': return 'Available Queues';
+			case 'gameQueue.selectionAiTitle': return 'CO-OP vs. AI';
+			case 'gameQueue.groupLabel.summonersRift': return 'Summonter\'s Rift';
+			case 'gameQueue.groupLabel.aram': return 'ARAM';
+			case 'gameQueue.groupLabel.alternative': return 'Alternative';
+			case 'gameQueue.groupLabel.other': return 'Other';
 			case 'connection.connectingTitle': return 'Connecting...';
 			case 'connection.connectingDescription': return 'Initializing communication with the game client.';
 			case 'connection.loadingTitle': return 'Checking game state...';

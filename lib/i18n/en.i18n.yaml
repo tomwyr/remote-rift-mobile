@@ -26,6 +26,17 @@ gameError:
   unknownTitle: "Unknown game state"
   unknownDescription: "The game's state could not be accessed due to an unexpected error."
 
+gameQueue:
+  unknownPlaceholder: "Unknown"
+  selectButton: "Select Game Queue"
+  selectionTitle: "Available Queues"
+  selectionAiTitle: "CO-OP vs. AI"
+  groupLabel:
+    summonersRift: "Summonter's Rift"
+    aram: "ARAM"
+    alternative: "Alternative"
+    other: "Other"
+
 connection:
   connectingTitle: "Connecting..."
   connectingDescription: "Initializing communication with the game client."

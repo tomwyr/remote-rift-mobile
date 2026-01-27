@@ -13,3 +13,12 @@ extension RemoteRiftErrorStrings on RemoteRiftError {
     .unknown => t.gameError.unknownDescription,
   };
 }
+
+extension GameQueueGroupStrings on GameQueueGroup {
+  String get displayName => switch (this) {
+    .summonersRift => t.gameQueue.groupLabel.summonersRift,
+    .aram => t.gameQueue.groupLabel.aram,
+    .alternative => t.gameQueue.groupLabel.alternative,
+    .other => t.gameQueue.groupLabel.other,
+  };
+}

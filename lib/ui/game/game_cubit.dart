@@ -26,9 +26,9 @@ class GameCubit extends Cubit<GameState> {
     _stopGameStateStream();
   }
 
-  void createLobby() {
+  void createLobby({required int queueId}) {
     _runGameAction(() async {
-      await apiClient.createLobby();
+      await apiClient.createLobby(queueId: queueId);
     });
   }
 

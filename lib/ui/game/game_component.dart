@@ -13,6 +13,7 @@ import 'game_cubit.dart';
 import 'game_state.dart';
 import 'widgets/game_data_body.dart';
 import 'widgets/game_found_countdown.dart';
+import 'widgets/game_queue_selection.dart';
 
 class GameComponent extends StatelessWidget {
   const GameComponent({super.key});
@@ -44,15 +45,20 @@ class GameComponent extends StatelessWidget {
           ),
 
           Data(:var queueName, :var state, :var loading) => switch (state) {
-            PreGame() => BasicLayout(
+            PreGame(:var availableQueues) => BasicLayout(
               body: GameDataBody(
-                queueName: queueName,
+                queueNamePlaceholder: GameQueueSelectionButton(availableQueues: availableQueues),
                 title: t.gameState.preGameTitle,
                 description: t.gameState.preGameDescription,
               ),
               action: .new(
                 label: t.home.createLobbyButton,
-                onPressed: !loading ? cubit.createLobby : null,
+                onPressed: !loading
+                    ? () => GameQueueSelectionModal.selectAndUpdateQueue(
+                        context,
+                        availableQueues: availableQueues,
+                      )
+                    : null,
               ),
             ),
 
