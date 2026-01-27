@@ -79,7 +79,8 @@ class GameCubit extends Cubit<GameState> {
         Data data => data.produce(
           (draft) => draft
             ..queueName = gameSession.queueName
-            ..state = gameSession.state,
+            ..state = gameSession.state
+            ..loading = false,
         ),
         Loading() => Data(queueName: gameSession.queueName, state: gameSession.state),
       });
@@ -104,8 +105,9 @@ class GameCubit extends Cubit<GameState> {
     try {
       emit(currentState.produce((draft) => draft.loading = true));
       await action();
-    } finally {
+    } catch (_) {
       emit(currentState.produce((draft) => draft.loading = false));
+      rethrow;
     }
   }
 }
