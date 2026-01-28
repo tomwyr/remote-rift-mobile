@@ -1,3 +1,10 @@
+## [0.8.0] - 2026-01-28
+
+- Added support for game queue selection
+- Improved displaying connection state when game client connection becomes unstable
+- Extended loading state duration after user actions until state changes
+- Updated internal dependencies
+
 ## [0.7.0] - 2026-01-26
 
 - Added displaying time left to answer pending games
