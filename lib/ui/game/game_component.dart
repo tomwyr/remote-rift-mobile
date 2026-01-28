@@ -47,7 +47,10 @@ class GameComponent extends StatelessWidget {
           Data(:var queueName, :var state, :var loading) => switch (state) {
             PreGame(:var availableQueues) => BasicLayout(
               body: GameDataBody(
-                queueNamePlaceholder: GameQueueSelectionButton(availableQueues: availableQueues),
+                queueNamePlaceholder: GameQueueSelectionButton(
+                  loading: loading,
+                  availableQueues: availableQueues,
+                ),
                 title: t.gameState.preGameTitle,
                 description: t.gameState.preGameDescription,
               ),

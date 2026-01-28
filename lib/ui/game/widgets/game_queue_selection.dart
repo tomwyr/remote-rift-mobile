@@ -8,8 +8,9 @@ import '../../../i18n/strings.g.dart';
 import '../game_cubit.dart';
 
 class GameQueueSelectionButton extends StatelessWidget {
-  const GameQueueSelectionButton({super.key, required this.availableQueues});
+  const GameQueueSelectionButton({super.key, required this.loading, required this.availableQueues});
 
+  final bool loading;
   final List<GameQueue> availableQueues;
 
   @override
@@ -27,8 +28,12 @@ class GameQueueSelectionButton extends StatelessWidget {
           backgroundColor: Colors.grey[200],
           foregroundColor: textTheme.bodyMedium?.color,
         ),
-        onPressed: () =>
-            GameQueueSelectionModal.selectAndUpdateQueue(context, availableQueues: availableQueues),
+        onPressed: !loading && availableQueues.isNotEmpty
+            ? () => GameQueueSelectionModal.selectAndUpdateQueue(
+                context,
+                availableQueues: availableQueues,
+              )
+            : null,
         child: Text(t.gameQueue.selectButton),
       ),
     );
