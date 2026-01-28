@@ -19,10 +19,11 @@ class RemoteRiftApiClient {
     _apiAddress = value;
   }
 
-  Stream<RemoteRiftResponse<RemoteRiftStatus>> getStatusStream() async* {
+  Stream<RemoteRiftResponse<RemoteRiftStatus>> getStatusStream({Duration? timeLimit}) async* {
     final url = '${await _webSocketBaseUrl}/status/watch';
     final ws = IOWebSocketChannel.connect(Uri.parse(url), customClient: webSocketClient);
-    await for (var message in ws.stream) {
+    final stream = _applyTimeLimit(ws.stream, timeLimit);
+    await for (var message in stream) {
       yield .fromJson(jsonDecode(message), RemoteRiftStatus.fromJson);
     }
   }
@@ -82,8 +83,22 @@ class RemoteRiftApiClient {
       throw ApiAddressNotSet();
     }
   }
+
+  Stream<T> _applyTimeLimit<T>(Stream<T> stream, Duration? timeLimit) {
+    if (timeLimit == null) return stream;
+
+    return stream.timeout(
+      timeLimit,
+      onTimeout: (sink) {
+        sink.addError(ApiConnectionTimeout());
+        sink.close();
+      },
+    );
+  }
 }
 
 sealed class RemoteRiftApiError implements Exception {}
 
 class ApiAddressNotSet extends RemoteRiftApiError {}
+
+class ApiConnectionTimeout extends RemoteRiftApiError {}

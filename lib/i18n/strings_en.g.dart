@@ -187,7 +187,7 @@ class TranslationsConnectionEn {
 	String get errorTitle => 'Connection error';
 
 	/// en: 'Unable to connect to the desktop application. Make sure it's running and that both devices are on the same network.'
-	String get errorServiceNotFoundDescription => 'Unable to connect to the desktop application. Make sure it\'s running and that both devices are on the same network.';
+	String get errorUnableToConnectDescription => 'Unable to connect to the desktop application. Make sure it\'s running and that both devices are on the same network.';
 
 	/// en: 'Unable to connect to the desktop application.'
 	String get errorUnknownDescription => 'Unable to connect to the desktop application.';
@@ -297,7 +297,7 @@ extension on Translations {
 			case 'connection.loadingTitle': return 'Checking game state...';
 			case 'connection.loadingDescription': return 'Awaiting details about the current game session.';
 			case 'connection.errorTitle': return 'Connection error';
-			case 'connection.errorServiceNotFoundDescription': return 'Unable to connect to the desktop application. Make sure it\'s running and that both devices are on the same network.';
+			case 'connection.errorUnableToConnectDescription': return 'Unable to connect to the desktop application. Make sure it\'s running and that both devices are on the same network.';
 			case 'connection.errorUnknownDescription': return 'Unable to connect to the desktop application.';
 			case 'connection.errorRetry': return 'Reconnect';
 			case 'home.gameModeLabel': return 'Game Mode';

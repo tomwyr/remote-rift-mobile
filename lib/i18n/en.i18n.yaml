@@ -43,7 +43,7 @@ connection:
   loadingTitle: "Checking game state..."
   loadingDescription: "Awaiting details about the current game session."
   errorTitle: "Connection error"
-  errorServiceNotFoundDescription: "Unable to connect to the desktop application. Make sure it's running and that both devices are on the same network."
+  errorUnableToConnectDescription: "Unable to connect to the desktop application. Make sure it's running and that both devices are on the same network."
   errorUnknownDescription: "Unable to connect to the desktop application."
   errorRetry: "Reconnect"
 

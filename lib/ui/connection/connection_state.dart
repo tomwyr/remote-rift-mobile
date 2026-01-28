@@ -39,10 +39,11 @@ class ConnectionError extends ConnectionState {
 
 enum ConnectionErrorCause {
   serviceNotFound,
+  connectionLost,
   unknown;
 
   String get description => switch (this) {
-    .serviceNotFound => t.connection.errorServiceNotFoundDescription,
+    .serviceNotFound || .connectionLost => t.connection.errorUnableToConnectDescription,
     .unknown => t.connection.errorUnknownDescription,
   };
 }

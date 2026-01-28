@@ -73,7 +73,7 @@ class ConnectionCubit extends Cubit<ConnectionState> {
 
   void _resetStatusListener({VoidCallback? onConnectionAttempted}) {
     final stream = apiClient
-        .getStatusStream()
+        .getStatusStream(timeLimit: Duration(seconds: 10))
         .peek(onFirstOrError: onConnectionAttempted, onDone: _connectToGameApi)
         .cancelable();
     _statusStream?.cancel();
@@ -111,11 +111,16 @@ class ConnectionCubit extends Cubit<ConnectionState> {
             emit(ConnectedWithError(cause: error));
         }
       }
-    } catch (_) {
+    } catch (error) {
       if (state case Connecting() || Connected() || ConnectedWithError()) {
         _initReconnectScheduler();
       }
-      emit(ConnectionError(cause: .unknown));
+
+      final ConnectionErrorCause cause = switch (error) {
+        ApiConnectionTimeout() => .connectionLost,
+        _ => .unknown,
+      };
+      emit(ConnectionError(cause: cause));
     }
   }
 
