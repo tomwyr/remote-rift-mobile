@@ -1,3 +1,8 @@
+## [0.8.1] - 2026-01-28
+
+- Improved displaying loading state while lobby is being created
+- Added detection of lost desktop application connections
+
 ## [0.8.0] - 2026-01-28
 
 - Added support for game queue selection
