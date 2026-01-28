@@ -105,7 +105,7 @@ class ConnectionCubit extends Cubit<ConnectionState> {
             }
 
           case RemoteRiftData(value: .unavailable):
-            emit(ConnectedWithError(cause: .unableToConnect));
+            emit(Connecting());
 
           case RemoteRiftError error:
             emit(ConnectedWithError(cause: error));
