@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:http/http.dart';
 import 'package:http/io_client.dart';
 import 'package:remote_rift_core/remote_rift_core.dart';
+import 'package:remote_rift_utils/remote_rift_utils.dart';
 import 'package:web_socket_channel/io.dart';
 
 class RemoteRiftApiClient {
@@ -17,6 +18,12 @@ class RemoteRiftApiClient {
   String? _apiAddress;
   void setApiAddress(String? value) {
     _apiAddress = value;
+  }
+
+  Future<RemoteRiftApiServiceInfo> getServiceInfo() async {
+    final url = '${await _httpBaseUrl}/service/info';
+    final response = await httpClient.get(.parse(url));
+    return .fromJson(jsonDecode(response.body));
   }
 
   Stream<RemoteRiftResponse<RemoteRiftStatus>> getStatusStream({Duration? timeLimit}) async* {

@@ -51,13 +51,15 @@ class ConnectionComponent extends StatelessWidget {
             title: t.connection.errorTitle,
             description: cause.description,
             loading: reconnectTriggered,
-            action: .new(label: t.connection.errorRetry, onPressed: cubit.reconnect),
+            action: .new(label: t.connection.errorRetry, onPressed: cubit.reconnectAfterError),
           ),
 
           ConnectedWithError(:var cause) => BasicLayout(
             title: cause.title,
             description: cause.description,
           ),
+
+          ConnectedIncompatible() => Placeholder(),
 
           Connected() => connectedBuilder(context),
         },

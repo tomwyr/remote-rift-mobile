@@ -8,11 +8,14 @@ import 'package:remote_rift_ui/remote_rift_ui.dart';
 import 'package:remote_rift_utils/remote_rift_utils.dart';
 
 import '../../data/api_client.dart';
+import '../../data/app_config.dart';
 import 'connection_state.dart';
 
 class ConnectionCubit extends Cubit<ConnectionState> {
-  ConnectionCubit({required this.apiClient, required this.serviceRegistry}) : super(Initial());
+  ConnectionCubit({required this.appConfig, required this.apiClient, required this.serviceRegistry})
+    : super(Initial());
 
+  final AppConfig appConfig;
   final RemoteRiftApiClient apiClient;
   final ServiceRegistry serviceRegistry;
 
@@ -28,7 +31,16 @@ class ConnectionCubit extends Cubit<ConnectionState> {
     _connectToGameApi();
   }
 
-  void reconnect() {
+  void reconnectAfterIncompatibility() {
+    if (state is! ConnectedIncompatible) {
+      throw StateError(
+        'Tried to reconnect while not in incompatible state (was ${state.runtimeType})',
+      );
+    }
+    _connectToGameApi();
+  }
+
+  void reconnectAfterError() {
     final connectionError = switch (state) {
       ConnectionError state => state,
       _ => throw StateError(
@@ -48,7 +60,14 @@ class ConnectionCubit extends Cubit<ConnectionState> {
   void _connectToGameApi() async {
     emit(Connecting());
     if (await _resolveApiAddress()) {
-      _resetStatusListener();
+      switch (await _verifyApiConnection()) {
+        case .allowed:
+          _initStatusListener();
+        case .apiVersionToLow:
+          emit(ConnectedIncompatible(cause: .apiVersionTooLow));
+        case .unsuccessful:
+          break;
+      }
     } else {
       _initReconnectScheduler();
       emit(ConnectionError(cause: .serviceNotFound));
@@ -57,9 +76,14 @@ class ConnectionCubit extends Cubit<ConnectionState> {
 
   Future<void> _reconnectToGameApi() async {
     if (await _resolveApiAddress()) {
-      final completer = Completer<void>();
-      _resetStatusListener(onConnectionAttempted: completer.complete);
-      await completer.future;
+      switch (await _verifyApiConnection()) {
+        case .allowed:
+          _initStatusListener();
+        case .apiVersionToLow:
+          emit(ConnectedIncompatible(cause: .apiVersionTooLow));
+        case .unsuccessful:
+          break;
+      }
     } else {
       emit(ConnectionError(cause: .serviceNotFound));
     }
@@ -71,10 +95,33 @@ class ConnectionCubit extends Cubit<ConnectionState> {
     return apiAddress != null;
   }
 
-  void _resetStatusListener({VoidCallback? onConnectionAttempted}) {
+  Future<ApiConnectionVerificationResult> _verifyApiConnection() async {
+    final serviceInfo = await _connectApiCatching(apiClient.getServiceInfo);
+    if (serviceInfo == null) {
+      return .unsuccessful;
+    }
+    if (_verifyApiMinVersion(serviceInfo)) {
+      return .allowed;
+    } else {
+      return .apiVersionToLow;
+    }
+  }
+
+  bool _verifyApiMinVersion(RemoteRiftApiServiceInfo info) {
+    try {
+      final apiVersion = Version.parse(info.version);
+      final minVersion = Version.parse(appConfig.apiMinVersion);
+      return apiVersion.isAtLeast(minVersion);
+    } on VersionError {
+      // Give the benefit of the doubt and allow connection attempt.
+      return true;
+    }
+  }
+
+  void _initStatusListener() {
     final stream = apiClient
         .getStatusStream(timeLimit: Duration(seconds: 10))
-        .peek(onFirstOrError: onConnectionAttempted, onDone: _connectToGameApi)
+        .peek(onDone: _connectToGameApi)
         .cancelable();
     _statusStream?.cancel();
     _statusStream = stream;
@@ -82,20 +129,10 @@ class ConnectionCubit extends Cubit<ConnectionState> {
   }
 
   void _listenStatus(Stream<RemoteRiftStatusResponse> statusStream) async {
-    try {
+    _connectApiCatching(() async {
       await for (var response in statusStream) {
         if (state is ConnectionError) {
           _reconnectScheduler?.reset();
-        }
-
-        switch (state) {
-          case Connecting() || ConnectedWithError() || ConnectionError() || Connected():
-            // Can emit from the current state
-            break;
-          case Initial():
-            throw StateError(
-              'Tried to update connection status in an unexpected state: ${state.runtimeType}',
-            );
         }
 
         switch (response) {
@@ -109,6 +146,12 @@ class ConnectionCubit extends Cubit<ConnectionState> {
             emit(ConnectedWithError(cause: error));
         }
       }
+    });
+  }
+
+  Future<T?> _connectApiCatching<T>(FutureOr<T> Function() callback) async {
+    try {
+      return await callback();
     } catch (error) {
       if (state case Connecting() || Connected() || ConnectedWithError()) {
         _initReconnectScheduler();
@@ -120,6 +163,8 @@ class ConnectionCubit extends Cubit<ConnectionState> {
       };
       emit(ConnectionError(cause: cause));
     }
+
+    return null;
   }
 
   void _initLifecycleListener() {
@@ -131,7 +176,7 @@ class ConnectionCubit extends Cubit<ConnectionState> {
       switch (state) {
         case ConnectionError():
           _initReconnectScheduler();
-        case Connecting() || Connected() || ConnectedWithError():
+        case Connecting() || Connected() || ConnectedWithError() || ConnectedIncompatible():
           _connectToGameApi();
         case Initial():
           // No need to resume the connection at this point.
@@ -155,3 +200,5 @@ class ConnectionCubit extends Cubit<ConnectionState> {
     return super.close();
   }
 }
+
+enum ApiConnectionVerificationResult { allowed, apiVersionToLow, unsuccessful }

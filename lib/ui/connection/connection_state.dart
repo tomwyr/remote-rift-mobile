@@ -17,6 +17,15 @@ class Connecting extends ConnectionState {}
 
 class Connected extends ConnectionState {}
 
+class ConnectedIncompatible extends ConnectionState {
+  ConnectedIncompatible({required this.cause});
+
+  final ConnectionIncompatibility cause;
+
+  @override
+  List<Object?> get props => [cause];
+}
+
 class ConnectedWithError extends ConnectionState {
   ConnectedWithError({required this.cause});
 
@@ -36,6 +45,8 @@ class ConnectionError extends ConnectionState {
   @override
   List<Object?> get props => [cause, reconnectTriggered];
 }
+
+enum ConnectionIncompatibility { apiVersionTooLow }
 
 enum ConnectionErrorCause {
   serviceNotFound,
