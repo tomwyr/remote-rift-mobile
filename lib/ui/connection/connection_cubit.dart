@@ -59,66 +59,27 @@ class ConnectionCubit extends Cubit<ConnectionState> {
 
   void _connectToGameApi() async {
     emit(Connecting());
-    if (await _resolveApiAddress()) {
-      switch (await _verifyApiConnection()) {
-        case .allowed:
-          _initStatusListener();
-        case .apiVersionToLow:
-          emit(ConnectedIncompatible(cause: .apiVersionTooLow));
-        case .unsuccessful:
-          break;
-      }
-    } else {
+    await _verifyAndConnectGameApi();
+    if (state case ConnectionError(cause: .serviceNotFound)) {
       _initReconnectScheduler();
-      emit(ConnectionError(cause: .serviceNotFound));
     }
   }
 
-  Future<void> _reconnectToGameApi() async {
-    if (await _resolveApiAddress()) {
-      switch (await _verifyApiConnection()) {
-        case .allowed:
-          _initStatusListener();
-        case .apiVersionToLow:
-          emit(ConnectedIncompatible(cause: .apiVersionTooLow));
-        case .unsuccessful:
-          break;
-      }
-    } else {
-      emit(ConnectionError(cause: .serviceNotFound));
+  Future<void> _verifyAndConnectGameApi() async {
+    switch (await _verifyApiConnection()) {
+      case .allowed:
+        _restartStatusStream();
+      case .addressUnknown:
+        emit(ConnectionError(cause: .serviceNotFound));
+      case .apiVersionToLow:
+        emit(ConnectedIncompatible(cause: .apiVersionTooLow));
+      case .apiVersionUnknown:
+        // Already handled in `_connectApiCatching`
+        break;
     }
   }
 
-  Future<bool> _resolveApiAddress() async {
-    final apiAddress = await serviceRegistry.discover(timeLimit: Duration(seconds: 5));
-    apiClient.setApiAddress(apiAddress?.toAddressString());
-    return apiAddress != null;
-  }
-
-  Future<ApiConnectionVerificationResult> _verifyApiConnection() async {
-    final serviceInfo = await _connectApiCatching(apiClient.getServiceInfo);
-    if (serviceInfo == null) {
-      return .unsuccessful;
-    }
-    if (_verifyApiMinVersion(serviceInfo)) {
-      return .allowed;
-    } else {
-      return .apiVersionToLow;
-    }
-  }
-
-  bool _verifyApiMinVersion(RemoteRiftApiServiceInfo info) {
-    try {
-      final apiVersion = Version.parse(info.version);
-      final minVersion = Version.parse(appConfig.apiMinVersion);
-      return apiVersion.isAtLeast(minVersion);
-    } on VersionError {
-      // Give the benefit of the doubt and allow connection attempt.
-      return true;
-    }
-  }
-
-  void _initStatusListener() {
+  void _restartStatusStream() {
     final stream = apiClient
         .getStatusStream(timeLimit: Duration(seconds: 10))
         .peek(onDone: _connectToGameApi)
@@ -167,6 +128,21 @@ class ConnectionCubit extends Cubit<ConnectionState> {
     return null;
   }
 
+  void _initReconnectScheduler() {
+    _reconnectScheduler = RetryScheduler(backoff: .standard, onRetry: _verifyAndConnectGameApi)
+      ..start();
+  }
+
+  @override
+  Future<void> close() {
+    _statusStream?.cancel();
+    _reconnectScheduler?.reset();
+    _lifecycleListener?.unregister();
+    return super.close();
+  }
+}
+
+extension ConnectionLifecycleListener on ConnectionCubit {
   void _initLifecycleListener() {
     _lifecycleListener = AppLifecycleListener(listener: _onAppLifecycleChanged)..register();
   }
@@ -187,18 +163,39 @@ class ConnectionCubit extends Cubit<ConnectionState> {
       _reconnectScheduler?.reset();
     }
   }
+}
 
-  void _initReconnectScheduler() {
-    _reconnectScheduler = RetryScheduler(backoff: .standard, onRetry: _reconnectToGameApi)..start();
+extension ConnectionApiVerification on ConnectionCubit {
+  Future<ConnectionApiVerificationResult> _verifyApiConnection() async {
+    if (!await _resolveApiAddress()) {
+      return .addressUnknown;
+    }
+    final serviceInfo = await _connectApiCatching(apiClient.getServiceInfo);
+    if (serviceInfo == null) {
+      return .apiVersionUnknown;
+    }
+    if (!_verifyApiMinVersion(serviceInfo)) {
+      return .apiVersionToLow;
+    }
+    return .allowed;
   }
 
-  @override
-  Future<void> close() {
-    _statusStream?.cancel();
-    _reconnectScheduler?.reset();
-    _lifecycleListener?.unregister();
-    return super.close();
+  Future<bool> _resolveApiAddress() async {
+    final apiAddress = await serviceRegistry.discover(timeLimit: Duration(seconds: 5));
+    apiClient.setApiAddress(apiAddress?.toAddressString());
+    return apiAddress != null;
+  }
+
+  bool _verifyApiMinVersion(RemoteRiftApiServiceInfo info) {
+    try {
+      final apiVersion = Version.parse(info.version);
+      final minVersion = Version.parse(appConfig.apiMinVersion);
+      return apiVersion.isAtLeast(minVersion);
+    } on VersionError {
+      // Give the benefit of the doubt and allow connection attempt
+      return true;
+    }
   }
 }
 
-enum ApiConnectionVerificationResult { allowed, apiVersionToLow, unsuccessful }
+enum ConnectionApiVerificationResult { addressUnknown, apiVersionToLow, allowed, apiVersionUnknown }
