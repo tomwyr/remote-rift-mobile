@@ -183,6 +183,15 @@ class TranslationsConnectionEn {
 	/// en: 'Awaiting details about the current game session.'
 	String get loadingDescription => 'Awaiting details about the current game session.';
 
+	/// en: 'Update required'
+	String get incompatibleTitle => 'Update required';
+
+	/// en: 'Your desktop application is out of date and isn't compatible anymore. Please update it to continue.'
+	String get incompatibleDescription => 'Your desktop application is out of date and isn\'t compatible anymore. Please update it to continue.';
+
+	/// en: 'Refresh'
+	String get incompatibleRetry => 'Refresh';
+
 	/// en: 'Connection error'
 	String get errorTitle => 'Connection error';
 
@@ -296,6 +305,9 @@ extension on Translations {
 			case 'connection.connectingDescription': return 'Initializing communication with the game client.';
 			case 'connection.loadingTitle': return 'Checking game state...';
 			case 'connection.loadingDescription': return 'Awaiting details about the current game session.';
+			case 'connection.incompatibleTitle': return 'Update required';
+			case 'connection.incompatibleDescription': return 'Your desktop application is out of date and isn\'t compatible anymore. Please update it to continue.';
+			case 'connection.incompatibleRetry': return 'Refresh';
 			case 'connection.errorTitle': return 'Connection error';
 			case 'connection.errorUnableToConnectDescription': return 'Unable to connect to the desktop application. Make sure it\'s running and that both devices are on the same network.';
 			case 'connection.errorUnknownDescription': return 'Unable to connect to the desktop application.';

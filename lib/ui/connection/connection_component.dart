@@ -59,7 +59,14 @@ class ConnectionComponent extends StatelessWidget {
             description: cause.description,
           ),
 
-          ConnectedIncompatible() => Placeholder(),
+          ConnectedIncompatible() => BasicLayout(
+            title: t.connection.incompatibleTitle,
+            description: t.connection.incompatibleDescription,
+            action: .new(
+              label: t.connection.incompatibleRetry,
+              onPressed: cubit.reconnectAfterIncompatibility,
+            ),
+          ),
 
           Connected() => connectedBuilder(context),
         },
