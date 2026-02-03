@@ -168,7 +168,7 @@ class GameComponent extends StatelessWidget {
     } else if (changedTo<Unknown>()) {
       vibrateMillis(300);
     } else if (changedTo<Found>(matching: (value) => value.state == .pending)) {
-      vibrateMillis(700);
+      vibrateMillis(500);
     }
   }
 }
