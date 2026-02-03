@@ -24,35 +24,18 @@ class ConnectionCubit extends Cubit<ConnectionState> {
   AppLifecycleListener? _lifecycleListener;
 
   void initialize() {
-    if (state is! Initial) {
-      throw StateError('Tried to initialize while not in initial state (was ${state.runtimeType})');
-    }
+    _assertInitializeState();
     _initLifecycleListener();
     _connectToGameApi();
   }
 
   void reconnectAfterIncompatibility() {
-    if (state is! ConnectedIncompatible) {
-      throw StateError(
-        'Tried to reconnect while not in incompatible state (was ${state.runtimeType})',
-      );
-    }
+    _assertRetryAfterIncompatibilityState();
     _connectToGameApi();
   }
 
   void reconnectAfterError() {
-    final connectionError = switch (state) {
-      ConnectionError state => state,
-      _ => throw StateError(
-        'Tried to reconnect while not in error state (was ${state.runtimeType})',
-      ),
-    };
-
-    final scheduler = _reconnectScheduler;
-    if (scheduler == null || scheduler.status == .idle) {
-      throw StateError('Reconnect scheduler was not running while in connection error state');
-    }
-
+    final (connectionError, scheduler) = _assertRetryAfterErrorState();
     emit(connectionError.produce((draft) => draft.reconnectTriggered = true));
     scheduler.trigger();
   }
@@ -199,3 +182,35 @@ extension ConnectionApiVerification on ConnectionCubit {
 }
 
 enum ConnectionApiVerificationResult { addressUnknown, apiVersionToLow, allowed, apiVersionUnknown }
+
+extension ConnectionCubitAssertions on ConnectionCubit {
+  void _assertInitializeState() {
+    if (state is! Initial) {
+      throw StateError('Tried to initialize while not in initial state (was ${state.runtimeType})');
+    }
+  }
+
+  void _assertRetryAfterIncompatibilityState() {
+    if (state is! ConnectedIncompatible) {
+      throw StateError(
+        'Tried to reconnect while not in incompatible state (was ${state.runtimeType})',
+      );
+    }
+  }
+
+  (ConnectionError, RetryScheduler) _assertRetryAfterErrorState() {
+    final connectionError = switch (state) {
+      ConnectionError state => state,
+      _ => throw StateError(
+        'Tried to reconnect while not in error state (was ${state.runtimeType})',
+      ),
+    };
+
+    final scheduler = _reconnectScheduler;
+    if (scheduler == null || scheduler.status == .idle) {
+      throw StateError('Reconnect scheduler was not running while in connection error state');
+    }
+
+    return (connectionError, scheduler);
+  }
+}
