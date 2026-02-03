@@ -17,7 +17,7 @@ class Dependencies {
 
   static GameCubit gameCubit(BuildContext context) => GameCubit(apiClient: _apiClient);
 
-  static final _appConfig = AppConfig.fromEnvironment();
+  static final _appConfig = AppConfig.defaults();
   static final _apiClient = RemoteRiftApiClient(client: HttpClient());
   static final _serviceRegistry = ServiceRegistry.remoteRift();
 }
