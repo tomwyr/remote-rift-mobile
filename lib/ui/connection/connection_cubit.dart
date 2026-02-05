@@ -193,7 +193,7 @@ extension ConnectionCubitAssertions on ConnectionCubit {
   void _assertRetryAfterIncompatibilityState() {
     if (state is! ConnectedIncompatible) {
       throw StateError(
-        'Tried to reconnect while not in incompatible state (was ${state.runtimeType})',
+        'Tried to reconnect while not in incompatibility state (was ${state.runtimeType})',
       );
     }
   }
