@@ -19,6 +19,12 @@ The project is organized into the following main layers:
 
 When launched, the application attempts to connect to the Remote Rift Connector API by resolving its address via mDNS on the local network. If the service is not reachable on the network or the connection is lost, the application attempts to re-establish communication with the Connector service.
 
+### API compatibility
+
+The application requires a minimum Connector API version to function properly. On launch, it compares versions retrieved from the application config and the `/service/info` endpoint. If the API version is too low, users are prompted to update their desktop application.
+
+API changes are assumed to be backward compatible. Any new requirements should be accompanied by a version increase in the application config. To check or modify the current minimum API version, refer to [app_config.dart](./lib/data/app_config.dart).
+
 ### Dependencies
 
 This section describes selected third-party packages used throughout the application:

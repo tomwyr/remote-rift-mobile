@@ -1,3 +1,8 @@
+## [0.9.0] - 2026-02-16
+
+- Added check for connector API version compatibility
+- Disabled vibration when application is not in foreground
+
 ## [0.8.1] - 2026-01-28
 
 - Improved displaying loading state while lobby is being created
